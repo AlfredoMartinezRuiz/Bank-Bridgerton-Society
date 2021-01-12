@@ -46,7 +46,7 @@ public class Cliente {
     public Cuenta buscadorClabe(String noclabe){
         return null;
     }
-    public int realizarTransferencia(String numero, String emisor, float cantidad, int numerotransferencia, String motivo, int noCajero, Date fecha){
+    public int realizarTransferencia(String numero, String emisor, float cantidad, int numerotransferencia, String motivo, int noCajero, Date fecha, int clave){
         
         return 0;
     }
@@ -54,15 +54,15 @@ public class Cliente {
         
         return this.nombre; 
     }
-    public int realizarRetiro(float cantidad, int numeroretiro, Date fecha){
+    public int realizarRetiro(String nocuenta, float cantidad, int numeroretiro, Date fecha, int noCajero, int clave){
         
         return 0;
     }
-    public String recibirDeposito(float cantidad, int numerodeposito, String motivo, Date fecha_emision, int noCajero, Date fecha){
+    public String recibirDeposito(String nocuenta, float cantidad, int numerodeposito, String motivo, Date fecha_emision, int noCajero, Date fecha){
     
         return this.nombre;
     }
-    public float saldo(String numero){
+    public float saldo(String nocuenta, int clave){
         return 0;
     }
     public int cambiarClave(int cvv_atm, int clave_atm, int nclave){
