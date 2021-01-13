@@ -6,7 +6,7 @@ import java.util.Date;
 public class Transaccion {
     private int notrans;
     private Date fecha;
-    private String noCajero;
+    private int noCajero;
     private float monto;
     private String cuentadestino;
     private String cuentaemoisora;
@@ -15,31 +15,38 @@ public class Transaccion {
     protected Transaccion(){
         
     }
-    protected Transaccion(int noCajero, float monto, String cuentadestino, String cuentaemisora, String motivo, String tipo){
-        
+    protected Transaccion(int noCajero, int notrans, float monto, String cuentadestino, String cuentaemisora, String motivo, String tipo){
+        Date fecha = new Date();
+        this.notrans = notrans;
+        this.fecha = fecha;
+        this.noCajero = noCajero;
+        this.cuentadestino = cuentadestino;
+        this.cuentaemoisora = cuentaemisora;
+        this.motivo = motivo;
+        this.tipo = tipo;
     }
     public int getTrans(){
-        return 0;
+        return this.notrans;
     }
     public Date getFecha(){
-        return null;
+        return this.fecha;
     }
-    public String getCajero(){
-        return null;
+    public int getCajero(){
+        return this.noCajero;
     }
     public float getMonto(){
-        return 0;
+        return this.monto;
     }
     public String getDestino(){
-        return null;
+        return this.cuentadestino;
     }
     public String getEmisora(){
-        return null;
+        return this.cuentaemoisora;
     }
     public String getMotivo(){
-        return null;
+        return this.motivo;
     }
     public String getTipo(){
-        return null;
+        return this.tipo;
     }
 }
