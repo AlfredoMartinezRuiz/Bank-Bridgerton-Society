@@ -45,7 +45,7 @@ public class Rectangulo {
     }
     
     public String toString(){
-        return nombre + ": [" + A.toString()+ "," + B.toString()+"]";
+        return nombre + ":[" + A.toString()+ "," + B.toString()+"]";
     }
     public Rectangulo union(Rectangulo r2){
         Punto aux = new Punto(1,1);
@@ -82,7 +82,7 @@ public class Rectangulo {
             aux2.setY(r2.B.getY());
         aux2.setNom("P2");
         auxR.setB(aux2);
-        auxR.setNombre("Union");
+        auxR.setNombre("U");
         return auxR;
     }
     public Rectangulo interseccion(Rectangulo r2){
