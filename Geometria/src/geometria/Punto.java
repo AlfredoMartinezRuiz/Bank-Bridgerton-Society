@@ -92,7 +92,7 @@ public class Punto {
         if(this.x == b.x){
             return 0;
         }
-        if(this.x > b.x){
+        else if(this.x > b.x){
             return -1;
         }
         else{
@@ -103,7 +103,7 @@ public class Punto {
         if(this.y == b.y){
             return 0;
         }
-        if(this.y > b.y){
+        else if(this.y > b.y){
             return -1;
         }
         else{
