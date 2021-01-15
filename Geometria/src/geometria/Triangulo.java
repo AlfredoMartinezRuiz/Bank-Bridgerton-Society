@@ -23,9 +23,9 @@ public class Triangulo { // Usando triángulos isóseles
         nombre = nom;
     }
     public Triangulo(String nom){
-        A = new Punto(1, 1);
+        A = new Punto(1,1);
         B = new Punto(2,2);
-        C = new Punto(3, 3);
+        C = new Punto(3,3);
         nombre = nom;
     }
     public Triangulo(Triangulo t){
@@ -57,6 +57,7 @@ public class Triangulo { // Usando triángulos isóseles
         this.B = B;
     }
     
+    @Override
     public String toString(){
         return nombre + ": [" + A.toString()+ ", " + B.toString()+ ", " + C.toString() + "]";
     }
@@ -336,7 +337,8 @@ public class Triangulo { // Usando triángulos isóseles
 
         // Comprobando puntos
         
-        // Para A de this *******---------**********
+
+        // Para A de this ******---------*********
         x_punto = A.x;
         y_punto = A.y;
         
@@ -408,7 +410,7 @@ public class Triangulo { // Usando triángulos isóseles
             return 0;
     }
     
-    public void moverRect(Punto a, Punto b, Punto c){
+    public void moverTri(Punto a, Punto b, Punto c){
         A = a;
         B = b;
         C = c;
