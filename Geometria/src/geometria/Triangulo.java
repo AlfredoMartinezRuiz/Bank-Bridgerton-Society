@@ -62,15 +62,12 @@ public class Triangulo { // Usando triángulos isóseles
         return nombre + ": [" + A.toString()+ ", " + B.toString()+ ", " + C.toString() + "]";
     }
     
-  
     public Triangulo interseccion(Triangulo t2){
         // Identificicamos si hay algún punto que esté dentro del triángulo o viceversa
         double m_recta1;
         double m_recta2;
-        double m_recta3;
         double y_recta1; // a izquierda
         double y_recta2; // a derecha
-        double y_recta3; // b
         double x_punto;
         double y_punto;
         

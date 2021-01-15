@@ -144,7 +144,16 @@ public class Geometria {
         Triangulo T8 = new Triangulo("T6",V22,V23,V24);
         
         
-        System.out.println(T6.interseccion(T5));
+        //Interseccion de rectangulos
+        Triangulo I5 = T1.interseccion(T2);
+        System.out.println("La intersecion de los triangulos "+T1+" y "+T2+" es "+I5); //esquina inferior izq del T2 interccionando con T1
+        Triangulo I6 = T3.interseccion(T4);
+        System.out.println("La intersecion de los triangulos "+T3+" y "+T4+" es "+I6);//esquina inferior der del T4 interccionando con T3
+        Triangulo I7 = T6.interseccion(T5);
+        System.out.println("La intersecion de los triangulos "+T5+" y "+T6+" es "+I7);//esquina superior (punta del triangulo) del T6 interccionando con T5
+        Triangulo I8 = T7.interseccion(T8);
+        System.out.println("La intersecion de los triangulos "+T7+" y "+T8+" es "+I8);//triangulo T8 dentro del triangulo T7
+        
         //Verifica si un punto esta dentro de un triangulo
         Punto P3 = new Punto(4,4);
         if(T1.estaAdentro(P3))
