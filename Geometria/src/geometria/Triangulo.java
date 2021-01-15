@@ -112,16 +112,38 @@ public class Triangulo { // Usando triángulos isóseles
         y_recta1 = m_recta1*(x_punto - t2.A.x) - t2.A.y;
         y_recta2 = m_recta2*(x_punto - t2.A.x) - t2.A.y;
         
-        
+        return t2;
         
     }
     
-    public boolean estaAdentro(Punto a){
-        if(A.x <= a.getX() && a.getX() <= B.x)
-            if(A.y <= a.getY() && a.getY() <= B.y)
-                return true;
-
-        return false;
+    public boolean estaAdentro(Punto A){
+        // Identificicamos si hay algún punto que esté dentro del triángulo o viceversa
+        double x_punto;
+        double y_punto;
+        
+        x_punto = A.x;
+        y_punto = A.y;
+        
+        if((this.B.x <= x_punto && x_punto <= this.C.x) && y_punto >= this.C.y)
+            if(x_punto == this.A.x) // Si x_punto está al nivel que A
+                if(y_punto == this.A.y)// Si x punto está a la altura que A
+                    return true;
+                
+            else if(x_punto < this.A.x) // Si x_punto está antes que A
+                if(y_punto < this.A.y) // Si x punto está debajo de la altura de A
+                    return true;
+                else
+                    return false;
+            
+            else
+                if(y_punto < this.A.y) // Si x punto está debajo de la altura de A
+                    return true;               
+                else
+                    return false;           
+        else
+            return false;
+        
+        return true;        
     }
     
     public double areaT(){
