@@ -9,7 +9,7 @@ public class Rectangulo {
     public Rectangulo(){
         A = new Punto(1, 1);
         B = new Punto(2,2);
-        nombre = "Incógnito";
+        nombre = "R";
     }
     public Rectangulo(String nom, Punto a, Punto b){
         A = a;
@@ -132,7 +132,7 @@ public class Rectangulo {
         return false;
     }
     
-    private float areaR(){
+    public float areaR(){
         float altura, base;
         altura = B.y - A.y;
         base = B.x - A.x;
@@ -143,7 +143,18 @@ public class Rectangulo {
         if(this.areaR() < r2.areaR())
             return -1;
         
-        if(this.areaR() > r2.areaR())
+        else if(this.areaR() > r2.areaR())
+            return 1;
+        
+        else
+            return 0;
+    }
+    
+    public int compararTri(Triangulo t){
+        if(this.areaR() < t.areaT())
+            return -1;
+        
+        else if(this.areaR() > t.areaT())
             return 1;
         
         else
