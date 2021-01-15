@@ -77,17 +77,17 @@ public class Geometria {
         else
             System.out.println("El punto " + P2 + " no está adentro de " + R3);
     
-        //Comparación de dos rectángulos
+        //Comparación de áreas de dos rectángulos
         int comp1 = R1.comparar(R2);
         switch (comp1) {
             case -1:
-                System.out.println("El rectangulo"+R1+" es menor que el rectangulo "+R2);
+                System.out.println("El rectangulo "+R1+" es menor que el rectangulo "+R2);
                 break;
             case 1:
-                System.out.println("El rectangulo"+R1+" es mayor que el rectangulo "+R2);
+                System.out.println("El rectangulo "+R1+" es mayor que el rectangulo "+R2);
                 break;
             default:
-                System.out.println("El rectangulo"+R1+" es igual al rectangulo "+R2);
+                System.out.println("El rectangulo "+R1+" es igual al rectangulo "+R2);
                 break;
         }
         
@@ -110,7 +110,93 @@ public class Geometria {
         System.out.println("El rectangulo " + R7 + " se encuentra en el cuadrante " + c5);
         
         
+        Punto V1 = new Punto("V1",5,7);
+        Punto V2 = new Punto("V2",2,2);
+        Punto V3 = new Punto("V3",8,2);
+        Punto V4 = new Punto("V4",9,7);
+        Punto V5 = new Punto("V5",6,3);
+        Punto V6 = new Punto("V6",12,3);
+        Punto V7 = new Punto("V7",-6,8);
+        Punto V8 = new Punto("V8",-10,2);
+        Punto V9 = new Punto("V9",-2,2);
+        Punto V10 = new Punto("V10",-10,8);
+        Punto V11 = new Punto("V11",-14,4);
+        Punto V12 = new Punto("V12",-6,4);
+        Punto V13 = new Punto("V13",-8,-2);
+        Punto V14 = new Punto("V14",-12,-8);
+        Punto V15 = new Punto("V15",-4,-8);
+        Punto V16 = new Punto("V16",-8,-6);
+        Punto V17 = new Punto("V17",-14,-16);
+        Punto V18 = new Punto("V18",-2,-16);
+        Punto V19 = new Punto("V19",10,-2);
+        Punto V20 = new Punto("V20",2,-14);
+        Punto V21 = new Punto("V21",18,-14);
+        Punto V22 = new Punto("V22",10,-2);
+        Punto V23 = new Punto("V23",6,-10);
+        Punto V24 = new Punto("V24",14,-10);
         
+        Triangulo T1 = new Triangulo("T1",V1,V2,V3);
+        Triangulo T2 = new Triangulo("T2",V4,V5,V6);
+        Triangulo T3 = new Triangulo("T3",V7,V8,V9);
+        Triangulo T4 = new Triangulo("T4",V10,V11,V12);
+        Triangulo T5 = new Triangulo("T5",V13,V14,V15);
+        Triangulo T6 = new Triangulo("T6",V16,V17,V18);
+        Triangulo T7 = new Triangulo("T5",V19,V20,V21);
+        Triangulo T8 = new Triangulo("T6",V22,V23,V24);
+        
+        //Verifica si un punto esta dentro de un triangulo
+        Punto P3 = new Punto(4,4);
+        if(T1.estaAdentro(P3))
+            System.out.println("El punto " + P3 + " está adentro de " + T1);
+        else
+            System.out.println("El punto " + P3 + " no está adentro de " + T1);
+        
+        //Comparación de áreas de dos triangulos
+        int comp2 = T1.comparar(T2);
+        switch (comp2) {
+            case -1:
+                System.out.println("El triangulo "+T1+" es menor que el triangulo "+T2);
+                break;
+            case 1:
+                System.out.println("El triangulo "+T1+" es mayor que el triangulo "+T2);
+                break;
+            default:
+                System.out.println("El triangulo "+T1+" es igual al triangulo "+T2);
+                break;
+        }
+        
+        //Comparación de áreas de un triangulo con un rectangulo
+        int comp3 = T1.compararRec(R2);
+        switch (comp2) {
+            case -1:
+                System.out.println("El triangulo "+T1+" es menor que el rectangulo "+R2);
+                break;
+            case 1:
+                System.out.println("El triangulo "+T1+" es mayor que el rectangulo "+R2);
+                break;
+            default:
+                System.out.println("El triangulo "+T1+" es igual al rectangulo "+R2);
+                break;
+        }
+        
+        //Desplazamiento de un rectángulo
+        Triangulo T9 = new Triangulo("T9");
+        Triangulo T9C = new Triangulo(T9);
+        Punto VN1 = new Punto(22, 8);
+        Punto VN2 = new Punto (16, 2);
+        Punto VN3 = new Punto (28, 2);
+        T9C.moverTri(VN1,VN2,VN3);
+        System.out.println("El triangulo "+T9+" se desplazo -> " + T9C);
+        
+        //Cuadrante donde se encuentra un triangulo
+        int c6 = T1.cuadTri();
+        System.out.println("El triangulo " + T1 + " se encuentra en el cuadrante " + c6);
+        int c7 = T3.cuadTri();
+        System.out.println("El triangulo " + T3 + " se encuentra en el cuadrante " + c7);
+        int c8 = T5.cuadTri();
+        System.out.println("El triangulo " + T5 + " se encuentra en el cuadrante " + c8);
+        int c9 = T7.cuadTri();
+        System.out.println("El triangulo " + T7 + " se encuentra en el cuadrante " + c9);
     }
     
 }

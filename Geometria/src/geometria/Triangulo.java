@@ -23,9 +23,9 @@ public class Triangulo { // Usando triángulos isóseles
         nombre = nom;
     }
     public Triangulo(String nom){
-        A = new Punto(1, 1);
+        A = new Punto(1,1);
         B = new Punto(2,2);
-        C = new Punto(3, 3);
+        C = new Punto(3,3);
         nombre = nom;
     }
     public Triangulo(Triangulo t){
@@ -57,6 +57,7 @@ public class Triangulo { // Usando triángulos isóseles
         this.B = B;
     }
     
+    @Override
     public String toString(){
         return nombre + ": [" + A.toString()+ ", " + B.toString()+ ", " + C.toString() + "]";
     }
@@ -117,33 +118,56 @@ public class Triangulo { // Usando triángulos isóseles
     }
     
     public boolean estaAdentro(Punto A){
-        // Identificicamos si hay algún punto que esté dentro del triángulo o viceversa
+          // Identificicamos si hay algún punto que esté dentro del triángulo o viceversa
+        double m_recta1;
+        double m_recta2;
+        
+        double y_recta1; // a izquierda
+        double y_recta2; // a derecha
+        
         double x_punto;
         double y_punto;
         
+        // Primero vemos si el otro triángulo tiene puntos dentro de este
+        m_recta1 = (this.A.y - this.B.y) / (this.A.x - this.B.x); // Para la recta de B a A en externo
+        m_recta2 = (this.A.y - this.C.y) / (this.A.x - this.C.x); // Para la recta de C a A en externo
+
+        // Comprobando puntos
+        
+        // Para A de this ******---------*********
         x_punto = A.x;
         y_punto = A.y;
         
-        if((this.B.x <= x_punto && x_punto <= this.C.x) && y_punto >= this.C.y)
-            if(x_punto == this.A.x) // Si x_punto está al nivel que A
-                if(y_punto == this.A.y)// Si x punto está a la altura que A
+        if((this.B.x <= x_punto && x_punto <= this.C.x) && y_punto >= this.C.y){
+            if(x_punto == this.A.x){ // Si x_punto está al nivel que A
+                if(y_punto == this.A.y){ // Si x punto está a la altura que A
                     return true;
+                }
+            }
+            if(x_punto < this.A.x){ // Si x_punto está antes que A
+                y_recta1 = m_recta1*(x_punto - this.A.x) + this.A.y;
                 
-            else if(x_punto < this.A.x) // Si x_punto está antes que A
-                if(y_punto < this.A.y) // Si x punto está debajo de la altura de A
-                    return true;
-                else
+                if(y_punto <= y_recta1){ // Si x punto está debajo de la recta antes de A
+                    return true;                    
+                }
+                else{
                     return false;
-            
-            else
-                if(y_punto < this.A.y) // Si x punto está debajo de la altura de A
-                    return true;               
-                else
-                    return false;           
+                }
+            }
+            else{
+                y_recta2 = m_recta2*(x_punto - this.A.x) + this.A.y;
+                
+                if(y_punto <= y_recta2){ // Si x punto está debajo de la recta después de A
+                    return true;                    
+                }
+                else{
+                    return false;
+                }
+            }
+        }
         else
             return false;
         
-        return true;        
     }
     
     public double areaT(){
@@ -182,7 +206,7 @@ public class Triangulo { // Usando triángulos isóseles
             return 0;
     }
     
-    public void moverRect(Punto a, Punto b, Punto c){
+    public void moverTri(Punto a, Punto b, Punto c){
         A = a;
         B = b;
         C = c;
