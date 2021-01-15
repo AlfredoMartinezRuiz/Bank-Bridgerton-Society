@@ -66,16 +66,16 @@ public class Triangulo { // Usando triángulos isóseles
         // Identificicamos si hay algún punto que esté dentro del triángulo o viceversa
         double m_recta1;
         double m_recta2;
-        double y_recta1;
-        double y_recta2;
+        double m_recta3;
+        double y_recta1; // a izquierda
+        double y_recta2; // a derecha
+        double y_recta3; // b
         double x_punto;
         double y_punto;
-        double base;
         
         // Primero vemos si el otro triángulo tiene puntos dentro de este
-        m_recta1 = (t2.A.y - t2.B.y) / (t2.A.x - t2.B.x); // Para la recta de B a A en externo
-        m_recta2 = (t2.A.y - t2.C.y) / (t2.A.x - t2.C.x); // Para la recta de C a A en externo
-        base = t2.C.x - t2.B.x;
+        m_recta1 = (double)(t2.A.y - t2.B.y) / (t2.A.x - t2.B.x); // Para la recta de B a A en externo
+        m_recta2 = (double)(t2.A.y - t2.C.y) / (t2.A.x - t2.C.x); // Para la recta de C a A en externo
 
         // Comprobando puntos
         
@@ -84,66 +84,292 @@ public class Triangulo { // Usando triángulos isóseles
         y_punto = this.A.y;
         
         if((t2.B.x <= x_punto && x_punto <= t2.C.x) && y_punto >= t2.C.y){
+          
             if(x_punto == t2.A.x){ // Si x_punto está al nivel que A
                 if(y_punto == t2.A.y){ // Si x punto está a la altura que A
-                    y_recta1 = m_recta1*(x_punto - t2.A.x) - t2.A.y;
-                }
-            }
-            else if(x_punto < t2.A.x){ // Si x_punto está antes que A
-                if(y_punto < t2.A.y){ // Si x punto está debajo de la altura de A
-                    // Sí está antes de A
+                    if(this.C.x > t2.C.x && this.C.y < t2.C.y){ // Implica que el triángulo del punto esa más grande que t2
+                        
+                        return new Triangulo("I", t2.A, t2.B, t2.C);
+                    }
+                    return t2;
                 }
                 else{
-                    // No está antes de A
+                    
+                    Punto A_aux = new Punto("AI", (int) x_punto, (int)y_punto);
+                    // Obteniendo la recta uno de this para poder obtener B
+                    double m_recta1_this = (double)(this.A.y - this.B.y) / (this.A.x - this.B.x); // Para la recta de B a A en this
+                    
+                    //Obtniendo a c.o
+                    double co = this.A.y - t2.B.y;
+                    double ca = (double) (co /m_recta1_this);
+                    
+                    Punto B_aux = new Punto("BI", (int)Math.round(this.A.x-ca), (int)t2.B.y);
+                    
+                    // Obteniendo la recta uno de this para poder obtener C
+                    double m_recta2_this = (double)(this.A.y - this.C.y) / (this.A.x - this.C.x); // Para la recta de B a A en this
+                    
+                    //Obtniendo a c.o
+                    ca = (double) (co /m_recta1_this);
+                    Punto C_aux = new Punto("CI", (int) Math.round(this.A.x+ca), (int)t2.B.y);
+                    
+                    return new Triangulo("I", A_aux, B_aux, C_aux);
+                }
+            }
+            if(x_punto < t2.A.x){ // Si x_punto está antes que A
+                y_recta1 = m_recta1*(x_punto - t2.A.x) + t2.A.y;
+                
+                if(y_punto <= y_recta1){ // Si x punto está debajo de la recta antes de A
+                    
+                    Punto A_aux = new Punto("AI", (int) x_punto, (int)y_punto);
+                    // Obteniendo la recta uno de this para poder obtener B
+                    double m_recta1_this = (double)(this.A.y - this.B.y) / (this.A.x - this.B.x); // Para la recta de B a A en this
+                    
+                    //Obtniendo a c.o
+                    double co = this.A.y - t2.B.y;
+                    double ca = (double) (co /m_recta1_this);
+                    
+                    Punto B_aux = new Punto("BI", (int)Math.round(this.A.x-ca), (int)t2.B.y);
+                    
+                    // Obteniendo la recta uno de this para poder obtener C
+                    double m_recta2_this = (double)(this.A.y - this.C.y) / (this.A.x - this.C.x); // Para la recta de B a A en this
+                    
+                    //Obtniendo a c.o
+                    ca = (double) (co /m_recta1_this);
+                    Punto C_aux = new Punto("CI", (int) Math.round(this.A.x+ca), (int)t2.B.y);
+                    
+                    return new Triangulo("I", A_aux, B_aux, C_aux);                  
                 }
             }
             else{
-                if(y_punto < t2.A.y){ // Si x punto está debajo de la altura de A
-                    // Sí está antes de A
+                
+                y_recta2 = m_recta2*(x_punto - t2.A.x) + t2.A.y;
+                if(y_punto <= y_recta2){ // Si x punto está debajo de la altura de A
+                    Punto A_aux = new Punto("AI", (int) x_punto, (int)y_punto);
+                    // Obteniendo la recta uno de this para poder obtener B
+                    double m_recta1_this = (double)(this.A.y - this.B.y) / (this.A.x - this.B.x); // Para la recta de B a A en this
+                    
+                    //Obtniendo a c.o
+                    double co = this.A.y - t2.B.y;
+                    double ca = (double) (co /m_recta1_this);
+                    
+                    Punto B_aux = new Punto("BI", (int)Math.round(this.A.x-ca), (int)t2.B.y);
+                    
+                    // Obteniendo la recta uno de this para poder obtener C
+                    double m_recta2_this = (double)(this.A.y - this.C.y) / (this.A.x - this.C.x); // Para la recta de B a A en this
+                    
+                    //Obtniendo a c.o
+                    ca = (double) (co /m_recta1_this);
+                    Punto C_aux = new Punto("CI", (int) Math.round(this.A.x+ca), (int)t2.B.y);
+                    
+                    return new Triangulo("I", A_aux, B_aux, C_aux);
+                }
+            }
+        }
+        
+        // Para B de this *******---------**********
+        x_punto = this.B.x;
+        y_punto = this.B.y;
+        if((t2.B.x <= x_punto && x_punto <= t2.C.x) && y_punto >= t2.C.y){
+           
+            if(x_punto == t2.A.x){ // Si x_punto está al nivel que A
+                if(y_punto == t2.A.y){ // Si x punto está a la altura que A
+                    
+                   return null;
                 }
                 else{
-                    // No está antes de A
+                    Punto B_aux = new Punto("BI", (int) x_punto, (int)y_punto);
+                    
+                // Obteniendo la x de la recta dos de t2 para poder obtener A y C
+                    double x_recta2 = (double)( (y_punto - t2.A.y) / m_recta2) + t2.A.x; // En el y punto
+                    
+                    Punto C_aux = new Punto("CI", (int) Math.round(x_recta2), (int)y_punto);
+                    
+                    // La media base
+                    double media_base = x_punto + (double)((x_recta2 - x_punto)*0.5);
+                    System.out.println(media_base);
+                    // Obteniendo la recta uno de this para poder obtener C
+                    y_recta2 = m_recta2*(media_base - t2.A.x) + t2.A.y; // En el y punto
+                    
+                    Punto A_aux = new Punto("AI", (int) Math.round(media_base), (int)Math.round(y_recta2));
+                    
+                    return new Triangulo("I", A_aux, B_aux, C_aux);
+                }
+            }
+            if(x_punto < t2.A.x){ // Si x_punto está antes que A
+                y_recta1 = m_recta1*(x_punto - t2.A.x) + t2.A.y;
+                
+                if(y_punto <= y_recta1){ // Si x punto está debajo de la recta antes de A
+                     Punto B_aux = new Punto("BI", (int) x_punto, (int)y_punto);
+                    
+                // Obteniendo la x de la recta dos de t2 para poder obtener A y C
+                    double x_recta2 = (double)( (y_punto - t2.A.y) / m_recta2) + t2.A.x; // En el y punto
+                    
+                    Punto C_aux = new Punto("CI", (int) Math.round(x_recta2), (int)y_punto);
+                    
+                    // La media base
+                    double media_base = x_punto + (double)((x_recta2 - x_punto)*0.5);
+                    System.out.println(media_base);
+                    // Obteniendo la recta uno de this para poder obtener C
+                    y_recta2 = m_recta2*(media_base - t2.A.x) + t2.A.y; // En el y punto
+                    
+                    Punto A_aux = new Punto("AI", (int) Math.round(media_base), (int)Math.round(y_recta2));
+                    
+                    return new Triangulo("I", A_aux, B_aux, C_aux);
+                }
+            }
+            else{
+                y_recta2 = m_recta2*(x_punto - t2.A.x) + t2.A.y;
+                if(y_punto <= y_recta2){ // Si x punto está debajo de la altura de A
+                    Punto B_aux = new Punto("BI", (int) x_punto, (int)y_punto);
+                    
+                // Obteniendo la x de la recta dos de t2 para poder obtener A y C
+                    double x_recta2 = (double)( (y_punto - t2.A.y) / m_recta2) + t2.A.x; // En el y punto
+                    
+                    Punto C_aux = new Punto("CI", (int) Math.round(x_recta2), (int)y_punto);
+                    
+                    // La media base
+                    double media_base = x_punto + (double)((x_recta2 - x_punto)*0.5);
+                    System.out.println(media_base);
+                    // Obteniendo la recta uno de this para poder obtener C
+                    y_recta2 = m_recta2*(media_base - t2.A.x) + t2.A.y; // En el y punto
+                    
+                    Punto A_aux = new Punto("AI", (int) Math.round(media_base), (int)Math.round(y_recta2));
+                    
+                    return new Triangulo("I", A_aux, B_aux, C_aux);
+                }
+            }
+        }
+        
+        // Para C de this *******---------**********
+        x_punto = this.C.x;
+        y_punto = this.C.y;
+        
+        if((t2.B.x <= x_punto && x_punto <= t2.C.x) && y_punto >= t2.C.y){
+           
+            if(x_punto == t2.A.x){ // Si x_punto está al nivel que A
+                if(y_punto == t2.A.y){ // Si x punto está a la altura que A
+                    
+                   return null;
+                }
+                else{
+                    Punto C_aux = new Punto("CI", (int) x_punto, (int)y_punto);
+                    
+                // Obteniendo la x de la recta dos de t2 para poder obtener A y B
+                    double x_recta1 = ( (y_punto - t2.A.y) / m_recta1) + t2.A.x; //En el y punto
+                    
+                    Punto B_aux = new Punto("BI", (int) Math.round(x_recta1), (int) y_punto);
+                    
+                    // La media base
+                    double media_base = x_punto - (double)((x_punto-x_recta1)*0.5);
+                    // Obteniendo la recta uno de this para poder obtener C
+                    y_recta1 = m_recta1*(media_base - t2.A.x) + t2.A.y; // En el y punto
+                    Punto A_aux = new Punto("AI", (int) Math.round(media_base), (int)Math.round(y_recta1));
+                    
+                    return new Triangulo("I", A_aux, B_aux, C_aux);
+                }
+            }
+            if(x_punto < t2.A.x){ // Si x_punto está antes que A
+                y_recta1 = m_recta1*(x_punto - t2.A.x) + t2.A.y;
+                
+                if(y_punto <= y_recta1){ // Si x punto está debajo de la recta antes de A
+                     Punto C_aux = new Punto("CI", (int) x_punto, (int)y_punto);
+                    
+                // Obteniendo la x de la recta dos de t2 para poder obtener A y B
+                    double x_recta1 = ( (y_punto - t2.A.y) / m_recta1) + t2.A.x; //En el y punto
+                    
+                    Punto B_aux = new Punto("BI", (int) Math.round(x_recta1), (int) y_punto);
+                    
+                    // La media base
+                    double media_base = x_punto - (double)((x_punto-x_recta1)*0.5);
+                    // Obteniendo la recta uno de this para poder obtener C
+                    y_recta1 = m_recta1*(media_base - t2.A.x) + t2.A.y; // En el y punto
+                    Punto A_aux = new Punto("AI", (int) Math.round(media_base), (int)Math.round(y_recta1));
+                    
+                    return new Triangulo("I", A_aux, B_aux, C_aux);
+                }
+            }
+            else{
+                y_recta2 = m_recta2*(x_punto - t2.A.x) + t2.A.y;
+                if(y_punto <= y_recta2){ // Si x punto está debajo de la altura de A
+                    Punto C_aux = new Punto("CI", (int) x_punto, (int)y_punto);
+                    
+                // Obteniendo la x de la recta dos de t2 para poder obtener A y B
+                    double x_recta1 = ( (y_punto - t2.A.y) / m_recta1) + t2.A.x; //En el y punto
+                    
+                    Punto B_aux = new Punto("BI", (int) Math.round(x_recta1), (int) y_punto);
+                    
+                    // La media base
+                    double media_base = x_punto - (double)((x_punto-x_recta1)*0.5);
+                    // Obteniendo la recta uno de this para poder obtener C
+                    y_recta1 = m_recta1*(media_base - t2.A.x) + t2.A.y; // En el y punto
+                    Punto A_aux = new Punto("AI", (int) Math.round(media_base), (int)Math.round(y_recta1));
+                    
+                    return new Triangulo("I", A_aux, B_aux, C_aux);
                 }
             }
         }
         
         
+        //y_recta1 = m_recta1*(x_punto - t2.A.x) + t2.A.y;
+        //y_recta2 = m_recta2*(x_punto - t2.A.x) + t2.A.y;
+        //y_recta3 = m_recta3*(x_punto - this.A.x) + this.A.y;
         
-        y_recta1 = m_recta1*(x_punto - t2.A.x) - t2.A.y;
-        y_recta2 = m_recta2*(x_punto - t2.A.x) - t2.A.y;
-        
-        return t2;
-        
+        // x_recta1 = ( (y_recta1 - t2.A.y) / m_recta1) + t2.A.x;
+        // x_recta2 = ( (y_recta2 - t2.A.y) / m_recta2) + t2.A.x;
+        return null;
     }
     
     public boolean estaAdentro(Punto A){
-        // Identificicamos si hay algún punto que esté dentro del triángulo o viceversa
+          // Identificicamos si hay algún punto que esté dentro del triángulo o viceversa
+        double m_recta1;
+        double m_recta2;
+        
+        double y_recta1; // a izquierda
+        double y_recta2; // a derecha
+        
         double x_punto;
         double y_punto;
         
+        // Primero vemos si el otro triángulo tiene puntos dentro de este
+        m_recta1 = (this.A.y - this.B.y) / (this.A.x - this.B.x); // Para la recta de B a A en externo
+        m_recta2 = (this.A.y - this.C.y) / (this.A.x - this.C.x); // Para la recta de C a A en externo
+
+        // Comprobando puntos
+        
+        // Para A de this *******---------**********
         x_punto = A.x;
         y_punto = A.y;
         
-        if((this.B.x <= x_punto && x_punto <= this.C.x) && y_punto >= this.C.y)
-            if(x_punto == this.A.x) // Si x_punto está al nivel que A
-                if(y_punto == this.A.y)// Si x punto está a la altura que A
+        if((this.B.x <= x_punto && x_punto <= this.C.x) && y_punto >= this.C.y){
+            if(x_punto == this.A.x){ // Si x_punto está al nivel que A
+                if(y_punto == this.A.y){ // Si x punto está a la altura que A
                     return true;
+                }
+            }
+            if(x_punto < this.A.x){ // Si x_punto está antes que A
+                y_recta1 = m_recta1*(x_punto - this.A.x) + this.A.y;
                 
-            else if(x_punto < this.A.x) // Si x_punto está antes que A
-                if(y_punto < this.A.y) // Si x punto está debajo de la altura de A
-                    return true;
-                else
+                if(y_punto <= y_recta1){ // Si x punto está debajo de la recta antes de A
+                    return true;                    
+                }
+                else{
                     return false;
-            
-            else
-                if(y_punto < this.A.y) // Si x punto está debajo de la altura de A
-                    return true;               
-                else
-                    return false;           
+                }
+            }
+            else{
+                y_recta2 = m_recta2*(x_punto - this.A.x) + this.A.y;
+                
+                if(y_punto <= y_recta2){ // Si x punto está debajo de la recta después de A
+                    return true;                    
+                }
+                else{
+                    return false;
+                }
+            }
+        }
         else
             return false;
         
-        return true;        
     }
     
     public double areaT(){

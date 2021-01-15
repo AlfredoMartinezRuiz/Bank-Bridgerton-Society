@@ -108,9 +108,19 @@ public class Geometria {
         System.out.println("El rectangulo " + R5 + " se encuentra en el cuadrante " + c4);
         int c5 = R7.cuadRect();
         System.out.println("El rectangulo " + R7 + " se encuentra en el cuadrante " + c5);
+      
+        Punto V13 = new Punto("V13",-8,-2);
+        Punto V14 = new Punto("V14",-12,-8);
+        Punto V15 = new Punto("V15",-4,-8);
+        Punto V16 = new Punto("V16",-12,-1);
+        Punto V17 = new Punto("V17",-16,-6);
+        Punto V18 = new Punto("V18",-8,-6);
+        Triangulo T5 = new Triangulo("T5",V13,V14,V15);
+        Triangulo T6 = new Triangulo("T6",V16,V17,V18);
+        System.out.println(T5);
+        System.out.println(T6.interseccion(T5));
         
-        
-        
+
     }
     
 }
