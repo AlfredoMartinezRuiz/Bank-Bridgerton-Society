@@ -143,6 +143,8 @@ public class Geometria {
         Triangulo T7 = new Triangulo("T5",V19,V20,V21);
         Triangulo T8 = new Triangulo("T6",V22,V23,V24);
         
+        
+        System.out.println(T6.interseccion(T5));
         //Verifica si un punto esta dentro de un triangulo
         Punto P3 = new Punto(4,4);
         if(T1.estaAdentro(P3))
@@ -196,6 +198,9 @@ public class Geometria {
         System.out.println("El triangulo " + T5 + " se encuentra en el cuadrante " + c8);
         int c9 = T7.cuadTri();
         System.out.println("El triangulo " + T7 + " se encuentra en el cuadrante " + c9);
+        
+        
+        
     }
     
 }
