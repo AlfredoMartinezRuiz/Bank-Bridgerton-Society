@@ -34,7 +34,6 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
         fecha_label = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("BancoListaTransacciones");
         setBackground(new java.awt.Color(206, 147, 216));
         setPreferredSize(new java.awt.Dimension(1000, 700));
 
