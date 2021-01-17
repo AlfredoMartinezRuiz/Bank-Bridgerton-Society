@@ -6,10 +6,14 @@
 package bridgerton.bank.society.GUI;
 
 import bridgerton.bank.society.BridgertonBankSociety;
+import bridgerton.bank.society.Cliente;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,17 +25,94 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author Aurora
  */
 public class AgregarCliente extends javax.swing.JFrame {
-
+    public static ArrayList<Cliente> clientes = new ArrayList<Cliente>();   
     private static File imagen = null;
     private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
     private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
+    private static int dato_idc = 0; 
     
     public AgregarCliente() {
         setLocation(ancho/2-375, 10);
         initComponents();
         fecha_label.setText("Fecha: " + new Date());
+        generarIDC();
     }
-
+    
+    private void generarIDC(){
+        // Para IDC
+        for(int i=0; i<100; i++){
+            if(isInClientes(i)){                
+            }
+            else{
+                dato_idc = i;
+                break;
+            }
+        }
+        txtIdc.setText(""+dato_idc);
+    }
+    
+            
+    private boolean isInClientes(int idc){
+        File file = new File(".\\src\\Files\\Clientes.txt");
+        
+        try {
+            if(file.exists()){ 
+                
+                // Primero leemos si no está vacío
+                if(file.length() > 0){
+                    FileInputStream fin = new FileInputStream(file);
+                    ObjectInputStream oin = new ObjectInputStream(fin);
+                    clientes = (ArrayList<Cliente>) oin.readObject();
+                    for(Cliente c:clientes){
+                        if(c.getIDC() == idc){
+                            return true;
+                        }
+                    }
+                    oin.close();
+                    fin.close();
+                }
+                return false;
+            }
+            else{
+                return false;
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace(); 
+            return false;
+        }
+    }
+    
+    private boolean isInClientes(String curp){
+        File file = new File(".\\src\\Files\\Clientes.txt");
+        
+        try {
+            if(file.exists()){ 
+                
+                // Primero leemos si no está vacío
+                if(file.length() > 0){
+                    FileInputStream fin = new FileInputStream(file);
+                    ObjectInputStream oin = new ObjectInputStream(fin);
+                    clientes = (ArrayList<Cliente>) oin.readObject();
+                    for(Cliente c:clientes){
+                        if(c.getCurp().equals(curp)){
+                            return true;
+                        }
+                    }
+                    oin.close();
+                    fin.close();
+                }
+                return false;
+            }
+            else{
+                return false;
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace(); 
+            return false;
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -59,15 +140,15 @@ public class AgregarCliente extends javax.swing.JFrame {
         agregar_cuenta = new javax.swing.JButton();
         fecha_label = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        curp = new javax.swing.JTextField();
+        txtCurp = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        idc = new javax.swing.JFormattedTextField();
-        direccion = new javax.swing.JFormattedTextField();
-        fechanac = new javax.swing.JFormattedTextField();
-        nombre = new javax.swing.JTextField();
-        telefono = new javax.swing.JFormattedTextField();
-        celular = new javax.swing.JFormattedTextField();
+        txtIdc = new javax.swing.JFormattedTextField();
+        txtDireccion = new javax.swing.JFormattedTextField();
+        txtFechanac = new javax.swing.JFormattedTextField();
+        txtNombre = new javax.swing.JTextField();
+        txtTelefono = new javax.swing.JFormattedTextField();
+        txtCelular = new javax.swing.JFormattedTextField();
 
         Error.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         Error.setAlwaysOnTop(true);
@@ -136,7 +217,7 @@ public class AgregarCliente extends javax.swing.JFrame {
         jLabel4.setText("Nombre:");
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel5.setText("Fecha de nacimiento:");
+        jLabel5.setText("Fecha de nacimiento (dd-mm-aa):");
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel6.setText("Direccion:");
@@ -183,7 +264,7 @@ public class AgregarCliente extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel9.setText("CURP");
 
-        curp.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtCurp.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel10.setText("Teléfono");
@@ -191,24 +272,25 @@ public class AgregarCliente extends javax.swing.JFrame {
         jLabel11.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel11.setText("Celular");
 
-        idc.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#"))));
-        idc.addActionListener(new java.awt.event.ActionListener() {
+        txtIdc.setEditable(false);
+        txtIdc.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#"))));
+        txtIdc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                idcActionPerformed(evt);
+                txtIdcActionPerformed(evt);
             }
         });
 
-        fechanac.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd-MM-yy"))));
-        fechanac.setText("dd-MM-YY");
-        fechanac.addActionListener(new java.awt.event.ActionListener() {
+        txtFechanac.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd-MM-yy"))));
+        txtFechanac.setText("dd-MM-YY");
+        txtFechanac.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fechanacActionPerformed(evt);
+                txtFechanacActionPerformed(evt);
             }
         });
 
-        telefono.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#"))));
+        txtTelefono.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#"))));
 
-        celular.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#"))));
+        txtCelular.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#"))));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -224,15 +306,15 @@ public class AgregarCliente extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(jLabel5)
                     .addComponent(jLabel10)
-                    .addComponent(idc)
+                    .addComponent(txtIdc)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(archivos, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel4)
-                    .addComponent(fechanac)
-                    .addComponent(nombre)
-                    .addComponent(telefono))
+                    .addComponent(txtFechanac)
+                    .addComponent(txtNombre)
+                    .addComponent(txtTelefono))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -240,13 +322,13 @@ public class AgregarCliente extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(celular)
-                            .addComponent(curp, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtCelular)
+                            .addComponent(txtCurp, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(fecha_label, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
-                            .addComponent(direccion, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addComponent(txtDireccion, javax.swing.GroupLayout.Alignment.LEADING))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(36, Short.MAX_VALUE)
@@ -277,15 +359,15 @@ public class AgregarCliente extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(idc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtIdc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(direccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(11, 11, 11)
                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -296,8 +378,8 @@ public class AgregarCliente extends javax.swing.JFrame {
                     .addComponent(jLabel9))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(curp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(fechanac, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCurp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtFechanac, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel10)
@@ -305,7 +387,7 @@ public class AgregarCliente extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(telefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -316,7 +398,7 @@ public class AgregarCliente extends javax.swing.JFrame {
                         .addComponent(agregar_cuenta)
                         .addGap(41, 41, 41))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(celular, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
@@ -347,43 +429,48 @@ public class AgregarCliente extends javax.swing.JFrame {
     private void agregar_cuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregar_cuentaActionPerformed
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         
-        int dato_idc = 0;
         String dato_nombre = "";
         String dato_curp = "";
         Date fecha_nac = null;
         String dato_direc = "";
-        int dato_telefono = 0;
-        int dato_celular = 0;
+        long dato_telefono = 0;
+        long dato_celular = 0;
         File foto = null;
         
         boolean errors = false;
         
-        try{ //IDC
-            dato_idc = Integer.valueOf(idc.getText());
-        }catch(Exception e){
-            message.setText("Falta IDC o está mal");
-            errors = true;
-        }
-        
         try{ // Nombre
-            
-            dato_nombre = nombre.getText();
-            dato_nombre.toUpperCase();
+            dato_nombre = txtNombre.getText();
+            dato_nombre = dato_nombre.toUpperCase();
+            if(txtNombre.getText().equals("")){
+                message.setText("Falta Nombre o está mal");
+                errors = true;
+            }
         }catch(Exception e){
             message.setText("Falta Nombre o está mal");
             errors = true;
         }
         
         try{ // CURP
-            dato_curp = curp.getText();
-            dato_curp.toUpperCase();
+            dato_curp = txtCurp.getText();
+            dato_curp = dato_curp.toUpperCase();
+            if(txtCurp.getText().equals("")){
+                message.setText("Falta CURP o está mal");
+                errors = true;
+            }
+            else{
+                if(isInClientes(dato_curp)){
+                    message.setText("Falta CURP o está mal");
+                    errors = true;
+                }
+            }
         }catch(Exception e){
             message.setText("Falta CURP o está mal");
             errors = true;
         }
       
         try { // FECHA
-            fecha_nac = sdf.parse(fechanac.getText());
+            fecha_nac = sdf.parse(txtFechanac.getText());
         } catch (ParseException ex) {
             message.setText("Falta Fecha o está mal");
             errors = true;
@@ -391,36 +478,41 @@ public class AgregarCliente extends javax.swing.JFrame {
         }
         
         try { // Dirección
-            dato_direc = direccion.getText();
+            dato_direc = txtDireccion.getText();
+            if(txtDireccion.getText().equals("")){
+                message.setText("Falta Dirección o está mal");
+                errors = true;
+            }
+            
         } catch (Exception e) {
             errors = true;
             message.setText("Falta Dirección o está mal");
         }
         
         try { // Telefono
-            dato_direc = direccion.getText();
-        } catch (Exception e) {
-            errors = true;
-            message.setText("Falta Dirección o está mal");
-        }
-        
-        try { // Telefono
-            dato_telefono = Integer.valueOf(telefono.getText());
+            dato_telefono = Long.valueOf(txtTelefono.getText());
+            if(txtTelefono.getText().equals("")){
+                message.setText("Falta Teléfono o está mal");
+                errors = true;
+            }
         } catch (Exception e) {
             errors = true;
             message.setText("Falta Teléfono o está mal");
         }
         
         try { // Celular
-            dato_celular = Integer.valueOf(celular.getText());
+            dato_celular = Long.valueOf(txtCelular.getText());
+            if(txtCelular.getText().equals("")){
+                message.setText("Falta Nombre o está mal");
+                errors = true;
+            }
         } catch (Exception e) {
             errors = true;
             message.setText("Falta celular o está mal");
         }
         
-        if(imagen != null){ // Foto
-            foto = imagen;
-        }        
+        if(imagen != null) // Foto
+            foto = imagen;                
         else{
             errors = true;
             message.setText("Falta imagen o está mal");
@@ -433,7 +525,7 @@ public class AgregarCliente extends javax.swing.JFrame {
         }
         else{
             if(BridgertonBankSociety.crearCliente(dato_idc, dato_nombre, dato_curp, fecha_nac, dato_direc, dato_telefono, dato_celular, foto)){
-                BancoListaClientes bcts= new BancoListaClientes();
+                BancoListaClientes bcts= new BancoListaClientes(0);
                 bcts.setVisible(true);
                 this.setVisible(false);
                 this.dispose();
@@ -449,13 +541,13 @@ public class AgregarCliente extends javax.swing.JFrame {
         
     }//GEN-LAST:event_agregar_cuentaActionPerformed
 
-    private void idcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idcActionPerformed
+    private void txtIdcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdcActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_idcActionPerformed
+    }//GEN-LAST:event_txtIdcActionPerformed
 
-    private void fechanacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fechanacActionPerformed
+    private void txtFechanacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechanacActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_fechanacActionPerformed
+    }//GEN-LAST:event_txtFechanacActionPerformed
 
     /**
      * @param args the command line arguments
@@ -496,12 +588,7 @@ public class AgregarCliente extends javax.swing.JFrame {
     private javax.swing.JDialog Error;
     private javax.swing.JButton agregar_cuenta;
     private javax.swing.JButton archivos;
-    private javax.swing.JFormattedTextField celular;
-    private javax.swing.JTextField curp;
-    private javax.swing.JFormattedTextField direccion;
     private javax.swing.JLabel fecha_label;
-    private javax.swing.JFormattedTextField fechanac;
-    private javax.swing.JFormattedTextField idc;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -518,7 +605,12 @@ public class AgregarCliente extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JLabel message;
-    private javax.swing.JTextField nombre;
-    private javax.swing.JFormattedTextField telefono;
+    private javax.swing.JFormattedTextField txtCelular;
+    private javax.swing.JTextField txtCurp;
+    private javax.swing.JFormattedTextField txtDireccion;
+    private javax.swing.JFormattedTextField txtFechanac;
+    private javax.swing.JFormattedTextField txtIdc;
+    private javax.swing.JTextField txtNombre;
+    private javax.swing.JFormattedTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
 }

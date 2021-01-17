@@ -35,13 +35,13 @@ public class Cliente implements Serializable{
     private Date fecha_nac;
     private String direc;
     private Date fecha_inc;
-    private int telefono;
-    private int celular;
+    private long telefono;
+    private long celular;
     private File foto_cliente; /*temporal*/
     private static ArrayList<Cuenta> cuentas = new ArrayList<Cuenta>();
     private static ArrayList<Transaccion> transacciones = new ArrayList<Transaccion>();
     
-    Cliente(int idc,String nombre, String curp, Date fecha_nac, String direc, int telefono, int celular, File foto_cliente ){
+    Cliente(int idc,String nombre, String curp, Date fecha_nac, String direc, long telefono, long celular, File foto_cliente ){
         Date fecha = new Date();
         this.idc = idc;
         this.nombre = nombre;
@@ -102,11 +102,11 @@ public class Cliente implements Serializable{
         return this.fecha_inc;
     }
     
-    public int getTelefono(){
+    public long getTelefono(){
         return this.telefono;
     }
     
-    public int getCelular(){
+    public long getCelular(){
         return this.celular;
     }
     

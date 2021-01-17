@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
 public class BancoListaClientes extends javax.swing.JFrame {
     public static ArrayList<Cliente> clientes = new ArrayList<Cliente>();
     
-    public BancoListaClientes() {
+    public BancoListaClientes(int opcion) { // Entra con 1 si tiene filtro de búsqueda
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
         fecha_label.setText("Fecha: " + new Date());
@@ -35,8 +35,8 @@ public class BancoListaClientes extends javax.swing.JFrame {
             fila[0] = c.getIDC();
             fila[1] = c.getNombre();
             fila[2] = c.getCurp();
-            fila[3] = c.getCelular();
-            fila[4] = c.getTelefono();
+            fila[3] = Long.toString(c.getCelular());
+            fila[4] = Long.toString(c.getTelefono());
             
             model.addRow(fila);
     
@@ -124,7 +124,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
                 .addGap(548, 548, 548))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(fecha_label, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(fecha_label, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -157,7 +157,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
 
             },
             new String [] {
-                "IDE", "Nombre", "CURP", "Celular", "Correo"
+                "IDE", "Nombre", "CURP", "Celular", "Telefono"
             }
         ) {
             Class[] types = new Class [] {
@@ -179,6 +179,13 @@ public class BancoListaClientes extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(clientesT);
+        if (clientesT.getColumnModel().getColumnCount() > 0) {
+            clientesT.getColumnModel().getColumn(0).setResizable(false);
+            clientesT.getColumnModel().getColumn(1).setResizable(false);
+            clientesT.getColumnModel().getColumn(2).setResizable(false);
+            clientesT.getColumnModel().getColumn(3).setResizable(false);
+            clientesT.getColumnModel().getColumn(4).setResizable(false);
+        }
 
         jLabel3.setText("encabezado");
 
@@ -198,9 +205,9 @@ public class BancoListaClientes extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnLClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(lTransacciones, javax.swing.GroupLayout.DEFAULT_SIZE, 620, Short.MAX_VALUE))))
+                                .addComponent(lTransacciones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 79, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -232,7 +239,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLClientesActionPerformed
-        BancoListaClientes bcts= new BancoListaClientes();
+        BancoListaClientes bcts= new BancoListaClientes(0);
         bcts.setVisible(true);
         this.setVisible(false);
         this.dispose();
@@ -302,7 +309,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new BancoListaClientes().setVisible(true);
+                new BancoListaClientes(0).setVisible(true);
             }
         });
     }

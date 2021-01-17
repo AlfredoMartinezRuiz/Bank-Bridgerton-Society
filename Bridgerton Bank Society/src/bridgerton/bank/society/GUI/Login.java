@@ -196,7 +196,7 @@ public class Login extends javax.swing.JFrame {
         String pass = Password.getText();
         
         if (checarContrasena(user, pass)){ // Contraseña correcta
-            BancoListaClientes bcts= new BancoListaClientes();
+            BancoListaClientes bcts= new BancoListaClientes(0);
             bcts.setVisible(true);
             this.setVisible(false);
             this.dispose();

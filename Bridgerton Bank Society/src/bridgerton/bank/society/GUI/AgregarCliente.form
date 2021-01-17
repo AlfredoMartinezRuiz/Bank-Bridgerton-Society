@@ -84,16 +84,16 @@
                   <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="idc" alignment="0" max="32767" attributes="0"/>
+                  <Component id="txtIdc" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="archivos" min="-2" pref="160" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="fechanac" max="32767" attributes="0"/>
-                  <Component id="nombre" max="32767" attributes="0"/>
-                  <Component id="telefono" max="32767" attributes="0"/>
+                  <Component id="txtFechanac" max="32767" attributes="0"/>
+                  <Component id="txtNombre" max="32767" attributes="0"/>
+                  <Component id="txtTelefono" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -103,13 +103,13 @@
                   </Group>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="celular" max="32767" attributes="0"/>
-                          <Component id="curp" alignment="0" max="32767" attributes="0"/>
+                          <Component id="txtCelular" max="32767" attributes="0"/>
+                          <Component id="txtCurp" alignment="0" max="32767" attributes="0"/>
                           <Component id="jLabel9" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel7" alignment="0" min="-2" pref="141" max="-2" attributes="0"/>
                           <Component id="fecha_label" alignment="0" pref="272" max="32767" attributes="0"/>
-                          <Component id="direccion" alignment="0" max="32767" attributes="0"/>
+                          <Component id="txtDireccion" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
@@ -151,16 +151,16 @@
                   <Group type="102" attributes="0">
                       <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="idc" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtIdc" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="nombre" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtNombre" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="direccion" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtDireccion" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                       <Component id="jLabel7" min="-2" pref="22" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -174,8 +174,8 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="curp" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="fechanac" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtCurp" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtFechanac" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -185,7 +185,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="telefono" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtTelefono" min="-2" max="-2" attributes="0"/>
                       <EmptySpace pref="21" max="32767" attributes="0"/>
                       <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -197,7 +197,7 @@
                       <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
-                      <Component id="celular" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtCelular" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -282,7 +282,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Arial" size="12" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Fecha de nacimiento:"/>
+        <Property name="text" type="java.lang.String" value="Fecha de nacimiento (dd-mm-aa):"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel6">
@@ -410,7 +410,7 @@
         <Property name="text" type="java.lang.String" value="CURP"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="curp">
+    <Component class="javax.swing.JTextField" name="txtCurp">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Arial" size="12" style="0"/>
@@ -433,19 +433,20 @@
         <Property name="text" type="java.lang.String" value="Celular"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JFormattedTextField" name="idc">
+    <Component class="javax.swing.JFormattedTextField" name="txtIdc">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
           <Format format="#" subtype="-1" type="0"/>
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="idcActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtIdcActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JFormattedTextField" name="direccion">
+    <Component class="javax.swing.JFormattedTextField" name="txtDireccion">
     </Component>
-    <Component class="javax.swing.JFormattedTextField" name="fechanac">
+    <Component class="javax.swing.JFormattedTextField" name="txtFechanac">
       <Properties>
         <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
           <Format format="dd-MM-yy" subtype="-1" type="1"/>
@@ -453,19 +454,19 @@
         <Property name="text" type="java.lang.String" value="dd-MM-YY"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="fechanacActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtFechanacActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="nombre">
+    <Component class="javax.swing.JTextField" name="txtNombre">
     </Component>
-    <Component class="javax.swing.JFormattedTextField" name="telefono">
+    <Component class="javax.swing.JFormattedTextField" name="txtTelefono">
       <Properties>
         <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
           <Format format="#" subtype="-1" type="0"/>
         </Property>
       </Properties>
     </Component>
-    <Component class="javax.swing.JFormattedTextField" name="celular">
+    <Component class="javax.swing.JFormattedTextField" name="txtCelular">
       <Properties>
         <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
           <Format format="#" subtype="-1" type="0"/>
