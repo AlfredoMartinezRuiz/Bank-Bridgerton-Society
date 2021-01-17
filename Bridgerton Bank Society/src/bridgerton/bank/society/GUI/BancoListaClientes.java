@@ -9,7 +9,6 @@ public class BancoListaClientes extends javax.swing.JFrame {
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
         fecha_label.setText("Fecha: " + new Date());
-        
     }
 
     BancoListaClientes(Login aThis, boolean b) {
