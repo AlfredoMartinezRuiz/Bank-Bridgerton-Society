@@ -1,6 +1,11 @@
 
 package bridgerton.bank.society;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
@@ -37,12 +42,12 @@ public class BridgertonBankSociety {
     }
     
     public static void main(String[] args) {
-        
+        init();
     }
     
-    public static void crearCliente(int idc, String nombre, String curp, Date fecha_nac, String direc, int telefono, int celular, String foto_cliente){
+    public static boolean crearCliente(int idc, String nombre, String curp, Date fecha_nac, String direc, int telefono, int celular, File foto_cliente){
         Cliente nuevo = new Cliente(idc, nombre, curp, fecha_nac, direc, telefono, celular, foto_cliente);
-        clientes.add(nuevo);   
+        return clienteWriter(nuevo);
     }
     
     public static int hacerDeposito(String nocuenta, float cantidad, int numerodeposito, String motivo, int noCajero){
@@ -422,6 +427,56 @@ public class BridgertonBankSociety {
                 default:
                     return "";
             }
+        }
+    }
+    
+    private static void init(){
+        File file = new File(".\\src\\Files\\Clientes.txt");
+        
+        try {
+            if(file.exists()){ 
+                Cliente c = new Cliente();
+                clientes.add(c);
+                // Después escribimos
+                FileOutputStream fout = new FileOutputStream(file);
+                ObjectOutputStream out = new ObjectOutputStream(fout);
+                out.writeObject(clientes);
+                out.close();
+                fout.close();
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private static boolean clienteWriter(Cliente c){
+        File file = new File(".\\src\\Files\\Clientes.txt");
+        
+        try {
+            if(file.exists()){ // Primero leemos
+                FileInputStream fin = new FileInputStream(file);
+                ObjectInputStream oin = new ObjectInputStream(fin);
+                clientes = (ArrayList<Cliente>) oin.readObject();
+                oin.close();
+                fin.close();
+                clientes.add(c);
+                
+                // Después escribimos
+                FileOutputStream fout = new FileOutputStream(file);
+                ObjectOutputStream out = new ObjectOutputStream(fout);
+                out.writeObject(clientes);
+                out.close();
+                fout.close();
+                return true;
+            }
+            else{
+                return false;
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace(); 
+            return false;
         }
     }
 }

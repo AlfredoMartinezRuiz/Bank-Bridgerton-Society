@@ -5,8 +5,16 @@
  */
 package bridgerton.bank.society.GUI;
 
+import bridgerton.bank.society.BridgertonBankSociety;
+import java.io.File;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -14,10 +22,12 @@ import javax.swing.JFileChooser;
  */
 public class AgregarCliente extends javax.swing.JFrame {
 
-    /**
-     * Creates new form AgregarCliente
-     */
+    private static File imagen = null;
+    private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
+    private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
+    
     public AgregarCliente() {
+        setLocation(ancho/2-375, 10);
         initComponents();
         fecha_label.setText("Fecha: " + new Date());
     }
@@ -31,25 +41,59 @@ public class AgregarCliente extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Error = new javax.swing.JDialog();
+        message = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        archivos = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        IDE = new javax.swing.JTextField();
-        Nombre = new javax.swing.JTextField();
-        Fecha_Nac = new javax.swing.JTextField();
-        Direc = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        agregar_cuenta = new javax.swing.JButton();
         fecha_label = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        curp = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        idc = new javax.swing.JFormattedTextField();
+        direccion = new javax.swing.JFormattedTextField();
+        fechanac = new javax.swing.JFormattedTextField();
+        nombre = new javax.swing.JTextField();
+        telefono = new javax.swing.JFormattedTextField();
+        celular = new javax.swing.JFormattedTextField();
+
+        Error.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        Error.setAlwaysOnTop(true);
+        Error.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        Error.setResizable(false);
+
+        message.setFont(new java.awt.Font("Microsoft New Tai Lue", 0, 14)); // NOI18N
+        message.setForeground(new java.awt.Color(255, 0, 0));
+        message.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        javax.swing.GroupLayout ErrorLayout = new javax.swing.GroupLayout(Error.getContentPane());
+        Error.getContentPane().setLayout(ErrorLayout);
+        ErrorLayout.setHorizontalGroup(
+            ErrorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ErrorLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(message, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        ErrorLayout.setVerticalGroup(
+            ErrorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ErrorLayout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(message, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(29, Short.MAX_VALUE))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("AgregarCliente");
@@ -77,16 +121,16 @@ public class AgregarCliente extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText("Seleccionar foto: ");
 
-        jButton1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jButton1.setText("Seleccionar archivo...");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        archivos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        archivos.setText("Seleccionar foto...");
+        archivos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                archivosActionPerformed(evt);
             }
         });
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel3.setText("IDE:");
+        jLabel3.setText("IDC:");
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel4.setText("Nombre:");
@@ -99,24 +143,6 @@ public class AgregarCliente extends javax.swing.JFrame {
 
         jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel7.setText("Fecha de incorporación:");
-
-        IDE.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-
-        Nombre.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        Nombre.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NombreActionPerformed(evt);
-            }
-        });
-
-        Fecha_Nac.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-
-        Direc.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        Direc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DirecActionPerformed(evt);
-            }
-        });
 
         jLabel8.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel8.setText("CUENTAS");
@@ -143,68 +169,98 @@ public class AgregarCliente extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jButton3.setText("AGREGAR");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        agregar_cuenta.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        agregar_cuenta.setText("AGREGAR");
+        agregar_cuenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                agregar_cuentaActionPerformed(evt);
             }
         });
 
         fecha_label.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         fecha_label.setText("Fecha");
 
+        jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel9.setText("CURP");
+
+        curp.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+
+        jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel10.setText("Teléfono");
+
+        jLabel11.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel11.setText("Celular");
+
+        idc.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#"))));
+        idc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                idcActionPerformed(evt);
+            }
+        });
+
+        fechanac.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd-MM-yy"))));
+        fechanac.setText("dd-MM-YY");
+        fechanac.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fechanacActionPerformed(evt);
+            }
+        });
+
+        telefono.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#"))));
+
+        celular.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#"))));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(77, 77, 77)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel5)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(Fecha_Nac))
-                        .addGap(241, 241, 241))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel3))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(IDE, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(Nombre))
-                                .addGap(61, 61, 61)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel6)
-                            .addComponent(Direc, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(fecha_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(68, 68, 68))))
-            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(34, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton2)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 681, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addGap(77, 77, 77)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel10)
+                    .addComponent(idc)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(archivos, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel4)
+                    .addComponent(fechanac)
+                    .addComponent(nombre)
+                    .addComponent(telefono))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel11)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(celular)
+                            .addComponent(curp, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(fecha_label, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
+                            .addComponent(direccion, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(36, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(305, 305, 305)
+                        .addComponent(jLabel8))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jButton2)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 681, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(33, 33, 33))
             .addGroup(layout.createSequentialGroup()
-                .addGap(325, 325, 325)
-                .addComponent(jButton3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(340, 340, 340)
-                .addComponent(jLabel8)
+                .addGap(328, 328, 328)
+                .addComponent(agregar_cuenta)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -214,66 +270,192 @@ public class AgregarCliente extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(archivos)
                     .addComponent(jLabel2))
                 .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(IDE, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(idc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Direc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(direccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(11, 11, 11)
                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(fecha_label)))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel5)
+                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel9))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Fecha_Nac, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(61, 61, 61)
-                .addComponent(jLabel8)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(curp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(fechanac, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel11))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
-                .addComponent(jButton3)
-                .addGap(54, 54, 54))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(telefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton2)
+                        .addGap(18, 18, 18)
+                        .addComponent(agregar_cuenta)
+                        .addGap(41, 41, 41))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(celular, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
+
+        archivos.getAccessibleContext().setAccessibleName("Seleccionar foto...");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void archivosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_archivosActionPerformed
         JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "jpg", "png", "gif", "jpeg");
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(filter);
+        chooser.setFileSelectionMode(0);
+        chooser.setFileFilter(filter);
+        
         chooser.showOpenDialog(null);
+        imagen = chooser.getSelectedFile();
+        if(imagen != null) archivos.setText(imagen.getName());
         
         //https://www.discoduroderoer.es/como-usar-el-componente-jfilechooser-en-una-aplicacion-grafica-en-java/
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void NombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NombreActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_NombreActionPerformed
-
-    private void DirecActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DirecActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_DirecActionPerformed
+    }//GEN-LAST:event_archivosActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void agregar_cuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregar_cuentaActionPerformed
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        
+        int dato_idc = 0;
+        String dato_nombre = "";
+        String dato_curp = "";
+        Date fecha_nac = null;
+        String dato_direc = "";
+        int dato_telefono = 0;
+        int dato_celular = 0;
+        File foto = null;
+        
+        boolean errors = false;
+        
+        try{ //IDC
+            dato_idc = Integer.valueOf(idc.getText());
+        }catch(Exception e){
+            message.setText("Falta IDC o está mal");
+            errors = true;
+        }
+        
+        try{ // Nombre
+            
+            dato_nombre = nombre.getText();
+            dato_nombre.toUpperCase();
+        }catch(Exception e){
+            message.setText("Falta Nombre o está mal");
+            errors = true;
+        }
+        
+        try{ // CURP
+            dato_curp = curp.getText();
+            dato_curp.toUpperCase();
+        }catch(Exception e){
+            message.setText("Falta CURP o está mal");
+            errors = true;
+        }
+      
+        try { // FECHA
+            fecha_nac = sdf.parse(fechanac.getText());
+        } catch (ParseException ex) {
+            message.setText("Falta Fecha o está mal");
+            errors = true;
+            Logger.getLogger(AgregarCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try { // Dirección
+            dato_direc = direccion.getText();
+        } catch (Exception e) {
+            errors = true;
+            message.setText("Falta Dirección o está mal");
+        }
+        
+        try { // Telefono
+            dato_direc = direccion.getText();
+        } catch (Exception e) {
+            errors = true;
+            message.setText("Falta Dirección o está mal");
+        }
+        
+        try { // Telefono
+            dato_telefono = Integer.valueOf(telefono.getText());
+        } catch (Exception e) {
+            errors = true;
+            message.setText("Falta Teléfono o está mal");
+        }
+        
+        try { // Celular
+            dato_celular = Integer.valueOf(celular.getText());
+        } catch (Exception e) {
+            errors = true;
+            message.setText("Falta celular o está mal");
+        }
+        
+        if(imagen != null){ // Foto
+            foto = imagen;
+        }        
+        else{
+            errors = true;
+            message.setText("Falta imagen o está mal");
+        }
+        
+        if(errors){
+            Error.setVisible(true);
+            Error.setSize(310, 90);
+            Error.setLocation(ancho/2 - 160, alto/2 - 45);
+        }
+        else{
+            if(BridgertonBankSociety.crearCliente(dato_idc, dato_nombre, dato_curp, fecha_nac, dato_direc, dato_telefono, dato_celular, foto)){
+                BancoListaClientes bcts= new BancoListaClientes();
+                bcts.setVisible(true);
+                this.setVisible(false);
+                this.dispose();
+            }
+            else{
+                message.setText("No se creo cliente correctamente");
+                Error.setVisible(true);
+                Error.setSize(310, 90);
+                Error.setLocation(ancho/2 - 160, alto/2 - 45);
+            }
+        }
+
+        
+    }//GEN-LAST:event_agregar_cuentaActionPerformed
+
+    private void idcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idcActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_idcActionPerformed
+
+    private void fechanacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fechanacActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fechanacActionPerformed
 
     /**
      * @param args the command line arguments
@@ -311,15 +493,19 @@ public class AgregarCliente extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField Direc;
-    private javax.swing.JTextField Fecha_Nac;
-    private javax.swing.JTextField IDE;
-    private javax.swing.JTextField Nombre;
+    private javax.swing.JDialog Error;
+    private javax.swing.JButton agregar_cuenta;
+    private javax.swing.JButton archivos;
+    private javax.swing.JFormattedTextField celular;
+    private javax.swing.JTextField curp;
+    private javax.swing.JFormattedTextField direccion;
     private javax.swing.JLabel fecha_label;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JFormattedTextField fechanac;
+    private javax.swing.JFormattedTextField idc;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -327,8 +513,12 @@ public class AgregarCliente extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JLabel message;
+    private javax.swing.JTextField nombre;
+    private javax.swing.JFormattedTextField telefono;
     // End of variables declaration//GEN-END:variables
 }

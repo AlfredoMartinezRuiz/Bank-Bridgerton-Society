@@ -86,7 +86,6 @@ public class Login extends javax.swing.JFrame {
         Error.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         Error.setAlwaysOnTop(true);
         Error.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        Error.setPreferredSize(new java.awt.Dimension(310, 90));
         Error.setResizable(false);
 
         jLabel3.setFont(new java.awt.Font("Microsoft New Tai Lue", 0, 14)); // NOI18N

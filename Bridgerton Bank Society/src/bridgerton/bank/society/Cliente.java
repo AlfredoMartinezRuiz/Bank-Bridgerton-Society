@@ -2,6 +2,8 @@ package bridgerton.bank.society;
 
 import static bridgerton.bank.society.BridgertonBankSociety.clientes;
 import static bridgerton.bank.society.BridgertonBankSociety.diccionario_nombres;
+import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
@@ -26,7 +28,7 @@ enum TipoTarjeta{
             
         }
 
-public class Cliente {
+public class Cliente implements Serializable{
     private String nombre;
     private int idc;
     private String curp;
@@ -35,11 +37,11 @@ public class Cliente {
     private Date fecha_inc;
     private int telefono;
     private int celular;
-    private String foto_cliente; /*temporal*/
+    private File foto_cliente; /*temporal*/
     private static ArrayList<Cuenta> cuentas = new ArrayList<Cuenta>();
     private static ArrayList<Transaccion> transacciones = new ArrayList<Transaccion>();
     
-    Cliente(int idc,String nombre, String curp, Date fecha_nac, String direc, int telefono, int celular, String foto_cliente ){
+    Cliente(int idc,String nombre, String curp, Date fecha_nac, String direc, int telefono, int celular, File foto_cliente ){
         Date fecha = new Date();
         this.idc = idc;
         this.nombre = nombre;
@@ -50,6 +52,10 @@ public class Cliente {
         this.telefono = telefono;
         this.celular = celular;
         this.foto_cliente = foto_cliente;
+    }
+
+    Cliente() {
+        
     }
    
     public Cuenta agregarCuenta(String nocuenta, String notarjeta, int tipo, String clabe, Date fecha, int cvv, int claveseg){
@@ -72,7 +78,7 @@ public class Cliente {
         return this.nombre;
     }
     
-    public String getFotoCliente(){
+    public File getFotoCliente(){
         return this.foto_cliente;
     }
     

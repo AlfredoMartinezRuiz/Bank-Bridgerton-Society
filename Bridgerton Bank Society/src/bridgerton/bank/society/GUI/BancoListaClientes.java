@@ -1,19 +1,73 @@
 
 package bridgerton.bank.society.GUI;
 
+import static bridgerton.bank.society.BridgertonBankSociety.clientes;
+import bridgerton.bank.society.Cliente;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 
 public class BancoListaClientes extends javax.swing.JFrame {
-
+    public static ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+    
     public BancoListaClientes() {
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
         fecha_label.setText("Fecha: " + new Date());
+        clienteReader();
+        tabla();
     }
 
-    BancoListaClientes(Login aThis, boolean b) {
+    public void tabla(){
+        for(Cliente c: clientes){
+            DefaultTableModel model=(DefaultTableModel) clientesT.getModel();
+            
+            Object[] fila = new Object[5];
+            fila[0] = c.getIDC();
+            fila[1] = c.getNombre();
+            fila[2] = c.getCurp();
+            fila[3] = c.getCelular();
+            fila[4] = c.getTelefono();
+            
+            model.addRow(fila);
+    
+            clientesT.setModel(model);
+        }
+        
     }
-
+    
+    public boolean clienteReader(){
+        File file = new File(".\\src\\Files\\Clientes.txt");
+        
+        try {
+            if(file.exists()){ // Primero leemos
+                FileInputStream fin = new FileInputStream(file);                
+                ObjectInputStream oin = new ObjectInputStream(fin);
+                System.out.println(file.getName());
+                clientes = (ArrayList<Cliente>) oin.readObject();
+                oin.close();
+                fin.close();
+                return true;
+            }
+            else{
+                return false;
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace(); 
+            return false;
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -26,7 +80,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
         btnBuscar = new javax.swing.JButton();
         btnAgregar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        clientesT = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -97,25 +151,34 @@ public class BancoListaClientes extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        clientesT.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        clientesT.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "IDE", "Nombre", "CURP", "Celular", "Correo"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        clientesT.addContainerListener(new java.awt.event.ContainerAdapter() {
+            public void componentAdded(java.awt.event.ContainerEvent evt) {
+                clientesTComponentAdded(evt);
+            }
+        });
+        clientesT.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                clientesTMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(clientesT);
 
         jLabel3.setText("encabezado");
 
@@ -197,6 +260,18 @@ public class BancoListaClientes extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
+    private void clientesTComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_clientesTComponentAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_clientesTComponentAdded
+
+    private void clientesTMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clientesTMouseClicked
+        
+        BusquedaCliente bc = new BusquedaCliente();
+        bc.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_clientesTMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -236,12 +311,12 @@ public class BancoListaClientes extends javax.swing.JFrame {
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnLClientes;
+    private javax.swing.JTable clientesT;
     private javax.swing.JLabel fecha_label;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JButton lTransacciones;
     // End of variables declaration//GEN-END:variables
 }
