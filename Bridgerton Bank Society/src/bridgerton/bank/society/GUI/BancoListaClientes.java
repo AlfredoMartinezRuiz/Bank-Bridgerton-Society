@@ -179,6 +179,13 @@ public class BancoListaClientes extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(clientesT);
+        if (clientesT.getColumnModel().getColumnCount() > 0) {
+            clientesT.getColumnModel().getColumn(0).setResizable(false);
+            clientesT.getColumnModel().getColumn(1).setResizable(false);
+            clientesT.getColumnModel().getColumn(2).setResizable(false);
+            clientesT.getColumnModel().getColumn(3).setResizable(false);
+            clientesT.getColumnModel().getColumn(4).setResizable(false);
+        }
 
         jLabel3.setText("encabezado");
 
