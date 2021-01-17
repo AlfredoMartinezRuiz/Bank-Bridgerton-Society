@@ -10,29 +10,64 @@ public class Login extends javax.swing.JFrame {
     
     private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
     private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
- 
+    
+    
 
     public Login() {
         setLocation(ancho/2-350, alto/2-250);
+        String ruta = ".\\src\\Files\\Admins.txt";
+        Admin a1 = new Admin("Alfredo", "12345");
+        Admin a2 = new Admin("Aurora", "78910");
+        
+        Admin[] admins= {a1, a2};
+        objectWriter(ruta, admins);
+        
         initComponents();
-        
-        
-                
     }
-    private boolean checarContrasena(String usuario, String contrasena){
+    private boolean objectWriter(String ruta, Object a[]){
+      File file = new File(ruta);
+        
         try {
+            if(file.exists()){
+                FileOutputStream f = new FileOutputStream(file);
+                ObjectOutputStream o = new ObjectOutputStream(f);
+                o.writeObject(a);
+                o.close();
+                f.close();
+                return true;
+            }           
             
-            BufferedReader bf = new BufferedReader(new FileReader("Admins.txt"));
-            String sCadena;
-            
-            while ((sCadena = bf.readLine())!= null) {
-                System.out.println(sCadena);
-            }
-            
-            return true;
         } catch (Exception e) {
+            e.printStackTrace(); 
             return false;
         }
+        return false;  
+    }
+    
+    private boolean checarContrasena(String usuario, String contrasena){
+        String ruta = ".\\src\\Files\\Admins.txt";
+        Admin[] admin = null;
+        File file = new File(ruta);
+        
+        try {
+            if(file.exists()){
+                FileInputStream f = new FileInputStream(file);
+                ObjectInputStream o = new ObjectInputStream(f);
+                
+                admin = (Admin[]) o.readObject();
+                
+                for(Admin a: admin){
+                    if((a.user).equals(usuario)) if(a.pass.equals(contrasena)) return true;  
+                }
+                o.close();
+                f.close();
+            }           
+            
+        } catch (Exception e) {
+            e.printStackTrace(); 
+            return false;
+        }
+        return false; 
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -162,10 +197,10 @@ public class Login extends javax.swing.JFrame {
         String pass = Password.getText();
         
         if (checarContrasena(user, pass)){ // Contraseña correcta
-           BancoListaClientes banquito = new BancoListaClientes(this, false);
-           banquito.setVisible(true);           
-           this.setVisible(false);
-           this.dispose();
+            BancoListaClientes bcts= new BancoListaClientes();
+            bcts.setVisible(true);
+            this.setVisible(false);
+            this.dispose();
         }
         else{ // En caso de que sea incorrecta
             Error.setVisible(true);

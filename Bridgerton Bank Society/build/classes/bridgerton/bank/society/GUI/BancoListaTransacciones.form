@@ -36,9 +36,15 @@
                   <Component id="jLabel1" max="32767" attributes="0"/>
                   <Component id="jPanel1" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
+<<<<<<< HEAD
                       <Component id="btnLClientes" min="-2" pref="630" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnLTrans" min="-2" pref="630" max="-2" attributes="0"/>
+=======
+                      <Component id="jButton1" min="-2" pref="630" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jButton3" min="-2" pref="630" max="-2" attributes="0"/>
+>>>>>>> 1ea8fd8d287ef39592ee6fccfa5f81848d681011
                   </Group>
               </Group>
               <EmptySpace pref="53" max="32767" attributes="0"/>
