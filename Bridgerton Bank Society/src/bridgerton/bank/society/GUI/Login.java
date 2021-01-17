@@ -10,7 +10,7 @@ public class Login extends javax.swing.JFrame {
     
     private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
     private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
-    
+ 
 
     public Login() {
         setLocation(ancho/2-350, alto/2-250);
