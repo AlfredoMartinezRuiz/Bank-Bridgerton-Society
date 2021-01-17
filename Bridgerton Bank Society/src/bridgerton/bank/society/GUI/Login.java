@@ -167,8 +167,8 @@ public class Login extends javax.swing.JFrame {
            this.dispose();
         }
         else{ // En caso de que sea incorrecta
-            Error.setVisible(true);
-            Error.setSize(310, 90);
+            Error.setVisible(false);
+            Error.setSize(310, 9000);
             Error.setLocation(ancho/2 - 160, alto/2 - 45);
         }        
     }//GEN-LAST:event_AceptarActionPerformed
