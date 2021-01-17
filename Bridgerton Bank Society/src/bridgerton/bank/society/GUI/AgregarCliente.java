@@ -25,7 +25,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author Aurora
  */
 public class AgregarCliente extends javax.swing.JFrame {
-    public static ArrayList<Cliente> clientes = new ArrayList<Cliente>();   
+    private static ArrayList<Cliente> clientes = new ArrayList<Cliente>();   
     private static File imagen = null;
     private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
     private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
@@ -150,7 +150,7 @@ public class AgregarCliente extends javax.swing.JFrame {
         txtTelefono = new javax.swing.JFormattedTextField();
         txtCelular = new javax.swing.JFormattedTextField();
 
-        Error.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        Error.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         Error.setAlwaysOnTop(true);
         Error.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         Error.setResizable(false);
@@ -176,8 +176,13 @@ public class AgregarCliente extends javax.swing.JFrame {
                 .addContainerGap(29, Short.MAX_VALUE))
         );
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("AgregarCliente");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel1.setText("AGREGAR A NUEVO CLIENTE");
@@ -526,7 +531,7 @@ public class AgregarCliente extends javax.swing.JFrame {
         }
         else{
             if(BridgertonBankSociety.crearCliente(dato_idc, dato_nombre, dato_curp, fecha_nac, dato_direc, dato_telefono, dato_celular, foto)){
-                BancoListaClientes bcts= new BancoListaClientes(0);
+                BancoListaClientes bcts= new BancoListaClientes();
                 bcts.setVisible(true);
                 this.setVisible(false);
                 this.dispose();
@@ -549,6 +554,13 @@ public class AgregarCliente extends javax.swing.JFrame {
     private void txtFechanacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechanacActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFechanacActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        BancoListaClientes bcts= new BancoListaClientes();
+        bcts.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -590,12 +602,7 @@ public class AgregarCliente extends javax.swing.JFrame {
     private javax.swing.JButton agregar_cuenta;
     private javax.swing.JButton archivos;
     private javax.swing.JButton btnAgregar;
-    private javax.swing.JFormattedTextField celular;
-    private javax.swing.JTextField curp;
-    private javax.swing.JFormattedTextField direccion;
     private javax.swing.JLabel fecha_label;
-    private javax.swing.JFormattedTextField fechanac;
-    private javax.swing.JFormattedTextField idc;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

@@ -17,14 +17,38 @@ import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 public class BancoListaClientes extends javax.swing.JFrame {
-    public static ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+    private static ArrayList<Cliente> clientes = new ArrayList<Cliente>();    
+    private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
+    private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
     
-    public BancoListaClientes(int opcion) { // Entra con 1 si tiene filtro de búsqueda
+    public BancoListaClientes() { // Sin ningún filtro
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
         fecha_label.setText("Fecha: " + new Date());
         clienteReader();
         tabla();
+    }
+    public BancoListaClientes(int idc) { // Por idc
+        initComponents();
+        this.setExtendedState(MAXIMIZED_BOTH);
+        fecha_label.setText("Fecha: " + new Date());
+        clienteReader();
+        tabla(idc);
+    }
+    public BancoListaClientes(String curp) { // Por idc
+        initComponents();
+        this.setExtendedState(MAXIMIZED_BOTH);
+        fecha_label.setText("Fecha: " + new Date());
+        clienteReader();
+        tabla(curp);
+    }
+    
+    public BancoListaClientes(String nombre, long numero) { // Por idc
+        initComponents();
+        this.setExtendedState(MAXIMIZED_BOTH);
+        fecha_label.setText("Fecha: " + new Date());
+        clienteReader();
+        tabla(nombre, numero);
     }
 
     public void tabla(){
@@ -37,14 +61,63 @@ public class BancoListaClientes extends javax.swing.JFrame {
             fila[2] = c.getCurp();
             fila[3] = Long.toString(c.getCelular());
             fila[4] = Long.toString(c.getTelefono());
-            
             model.addRow(fila);
-    
             clientesT.setModel(model);
-        }
-        
+        }        
     }
     
+    public void tabla(int idc){
+        for(Cliente c: clientes){
+            if(c.getIDC() == idc){
+                DefaultTableModel model=(DefaultTableModel) clientesT.getModel();
+            
+            Object[] fila = new Object[5];
+            fila[0] = c.getIDC();
+            fila[1] = c.getNombre();
+            fila[2] = c.getCurp();
+            fila[3] = Long.toString(c.getCelular());
+            fila[4] = Long.toString(c.getTelefono());
+            model.addRow(fila);
+            clientesT.setModel(model);
+            }
+        }        
+    }
+    
+    public void tabla(String curp){
+        for(Cliente c: clientes){
+            if(c.getCurp() == curp){
+                DefaultTableModel model=(DefaultTableModel) clientesT.getModel();
+            
+            Object[] fila = new Object[5];
+            fila[0] = c.getIDC();
+            fila[1] = c.getNombre();
+            fila[2] = c.getCurp();
+            fila[3] = Long.toString(c.getCelular());
+            fila[4] = Long.toString(c.getTelefono());
+            model.addRow(fila);
+            clientesT.setModel(model);
+            }
+        }        
+    }
+    
+    public void tabla(String nombre, long numero){
+        for(Cliente c: clientes){
+            if(c.getNombre().equals(nombre)){
+                if(c.getCelular() == numero){
+                     DefaultTableModel model=(DefaultTableModel) clientesT.getModel();
+
+                    Object[] fila = new Object[5];
+                    fila[0] = c.getIDC();
+                    fila[1] = c.getNombre();
+                    fila[2] = c.getCurp();
+                    fila[3] = Long.toString(c.getCelular());
+                    fila[4] = Long.toString(c.getTelefono());
+                    model.addRow(fila);
+                    clientesT.setModel(model);
+                }
+            }
+        }        
+    }
     public boolean clienteReader(){
         File file = new File(".\\src\\Files\\Clientes.txt");
         
@@ -52,7 +125,6 @@ public class BancoListaClientes extends javax.swing.JFrame {
             if(file.exists()){ // Primero leemos
                 FileInputStream fin = new FileInputStream(file);                
                 ObjectInputStream oin = new ObjectInputStream(fin);
-                System.out.println(file.getName());
                 clientes = (ArrayList<Cliente>) oin.readObject();
                 oin.close();
                 fin.close();
@@ -72,6 +144,10 @@ public class BancoListaClientes extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Confirmacion = new javax.swing.JDialog();
+        message = new javax.swing.JLabel();
+        btnSi = new javax.swing.JButton();
+        btnNo = new javax.swing.JButton();
         btnLClientes = new javax.swing.JButton();
         lTransacciones = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
@@ -83,10 +159,71 @@ public class BancoListaClientes extends javax.swing.JFrame {
         clientesT = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        Confirmacion.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        Confirmacion.setMaximumSize(new java.awt.Dimension(1000, 150));
+        Confirmacion.setMinimumSize(new java.awt.Dimension(0, 150));
+        Confirmacion.setPreferredSize(new java.awt.Dimension(276, 150));
+        Confirmacion.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                ConfirmacionWindowClosing(evt);
+            }
+        });
+
+        message.setFont(new java.awt.Font("Microsoft New Tai Lue", 0, 14)); // NOI18N
+        message.setForeground(new java.awt.Color(255, 0, 0));
+        message.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        message.setText("¿Está seguro?");
+
+        btnSi.setText("SÍ");
+        btnSi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSiActionPerformed(evt);
+            }
+        });
+
+        btnNo.setText("NO");
+        btnNo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNoActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout ConfirmacionLayout = new javax.swing.GroupLayout(Confirmacion.getContentPane());
+        Confirmacion.getContentPane().setLayout(ConfirmacionLayout);
+        ConfirmacionLayout.setHorizontalGroup(
+            ConfirmacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ConfirmacionLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(message, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ConfirmacionLayout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addComponent(btnSi, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnNo, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37))
+        );
+        ConfirmacionLayout.setVerticalGroup(
+            ConfirmacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ConfirmacionLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(message, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(ConfirmacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnNo)
+                    .addComponent(btnSi))
+                .addContainerGap(31, Short.MAX_VALUE))
+        );
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("BancoListaClientes");
         setBackground(new java.awt.Color(206, 147, 216));
         setPreferredSize(new java.awt.Dimension(1000, 700));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         btnLClientes.setBackground(new java.awt.Color(77, 182, 172));
         btnLClientes.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -178,6 +315,11 @@ public class BancoListaClientes extends javax.swing.JFrame {
                 clientesTMouseClicked(evt);
             }
         });
+        clientesT.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                clientesTPropertyChange(evt);
+            }
+        });
         jScrollPane1.setViewportView(clientesT);
         if (clientesT.getColumnModel().getColumnCount() > 0) {
             clientesT.getColumnModel().getColumn(0).setResizable(false);
@@ -207,7 +349,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(lTransacciones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 79, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -232,14 +374,14 @@ public class BancoListaClientes extends javax.swing.JFrame {
                     .addComponent(btnBuscar))
                 .addGap(26, 26, 26)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 467, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 53, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLClientesActionPerformed
-        BancoListaClientes bcts= new BancoListaClientes(0);
+        BancoListaClientes bcts= new BancoListaClientes();
         bcts.setVisible(true);
         this.setVisible(false);
         this.dispose();
@@ -278,6 +420,35 @@ public class BancoListaClientes extends javax.swing.JFrame {
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_clientesTMouseClicked
+   
+    private void clientesTPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_clientesTPropertyChange
+        // TODO add your handling code here:
+    }//GEN-LAST:event_clientesTPropertyChange
+
+    private void btnSiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiActionPerformed
+        Confirmacion.setVisible(false);
+        Confirmacion.dispose();
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_btnSiActionPerformed
+
+    private void btnNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNoActionPerformed
+        this.setVisible(true);
+        Confirmacion.setVisible(false);
+        Confirmacion.dispose();
+    }//GEN-LAST:event_btnNoActionPerformed
+
+    private void ConfirmacionWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_ConfirmacionWindowClosing
+        this.setVisible(true);
+        Confirmacion.setVisible(false);
+        Confirmacion.dispose();
+    }//GEN-LAST:event_ConfirmacionWindowClosing
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        Confirmacion.setVisible(true);
+        Confirmacion.setSize(310, 90);
+        Confirmacion.setLocation(ancho/2 - 160, alto/2 - 45);
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -309,15 +480,18 @@ public class BancoListaClientes extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new BancoListaClientes(0).setVisible(true);
+                new BancoListaClientes().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JDialog Confirmacion;
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnLClientes;
+    private javax.swing.JButton btnNo;
+    private javax.swing.JButton btnSi;
     private javax.swing.JTable clientesT;
     private javax.swing.JLabel fecha_label;
     private javax.swing.JLabel jLabel2;
@@ -325,5 +499,6 @@ public class BancoListaClientes extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton lTransacciones;
+    private javax.swing.JLabel message;
     // End of variables declaration//GEN-END:variables
 }
