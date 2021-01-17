@@ -136,7 +136,7 @@ public class AgregarCliente extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jButton2 = new javax.swing.JButton();
+        btnAgregar = new javax.swing.JButton();
         agregar_cuenta = new javax.swing.JButton();
         fecha_label = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -242,11 +242,11 @@ public class AgregarCliente extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        jButton2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jButton2.setText("AGREGAR CUENTA");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnAgregar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnAgregar.setText("AGREGAR CUENTA");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnAgregarActionPerformed(evt);
             }
         });
 
@@ -337,7 +337,7 @@ public class AgregarCliente extends javax.swing.JFrame {
                         .addGap(305, 305, 305)
                         .addComponent(jLabel8))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jButton2)
+                        .addComponent(btnAgregar)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 681, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(33, 33, 33))
             .addGroup(layout.createSequentialGroup()
@@ -393,7 +393,7 @@ public class AgregarCliente extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton2)
+                        .addComponent(btnAgregar)
                         .addGap(18, 18, 18)
                         .addComponent(agregar_cuenta)
                         .addGap(41, 41, 41))
@@ -401,8 +401,6 @@ public class AgregarCliente extends javax.swing.JFrame {
                         .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
-
-        archivos.getAccessibleContext().setAccessibleName("Seleccionar foto...");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -422,9 +420,12 @@ public class AgregarCliente extends javax.swing.JFrame {
         //https://www.discoduroderoer.es/como-usar-el-componente-jfilechooser-en-una-aplicacion-grafica-en-java/
     }//GEN-LAST:event_archivosActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        AgregarCliente ac = new AgregarCliente();
+        ac.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void agregar_cuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregar_cuentaActionPerformed
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -588,8 +589,13 @@ public class AgregarCliente extends javax.swing.JFrame {
     private javax.swing.JDialog Error;
     private javax.swing.JButton agregar_cuenta;
     private javax.swing.JButton archivos;
+    private javax.swing.JButton btnAgregar;
+    private javax.swing.JFormattedTextField celular;
+    private javax.swing.JTextField curp;
+    private javax.swing.JFormattedTextField direccion;
     private javax.swing.JLabel fecha_label;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JFormattedTextField fechanac;
+    private javax.swing.JFormattedTextField idc;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
