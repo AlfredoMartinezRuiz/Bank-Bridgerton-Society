@@ -19,7 +19,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lClientes = new javax.swing.JButton();
+        btnLClientes = new javax.swing.JButton();
         lTransacciones = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -31,16 +31,17 @@ public class BancoListaClientes extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("BancoListaClientes");
         setBackground(new java.awt.Color(206, 147, 216));
         setPreferredSize(new java.awt.Dimension(1000, 700));
 
-        lClientes.setBackground(new java.awt.Color(77, 182, 172));
-        lClientes.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lClientes.setText("Listado de clientes");
-        lClientes.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        lClientes.addActionListener(new java.awt.event.ActionListener() {
+        btnLClientes.setBackground(new java.awt.Color(77, 182, 172));
+        btnLClientes.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnLClientes.setText("Listado de clientes");
+        btnLClientes.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnLClientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lClientesActionPerformed(evt);
+                btnLClientesActionPerformed(evt);
             }
         });
 
@@ -133,7 +134,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(lClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnLClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(lTransacciones, javax.swing.GroupLayout.DEFAULT_SIZE, 620, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
@@ -152,7 +153,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lClientes, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                    .addComponent(btnLClientes, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
                     .addComponent(lTransacciones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -168,15 +169,15 @@ public class BancoListaClientes extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void lClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lClientesActionPerformed
+    private void btnLClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLClientesActionPerformed
         BancoListaClientes bcts= new BancoListaClientes();
         bcts.setVisible(true);
         this.setVisible(false);
         this.dispose();
-    }//GEN-LAST:event_lClientesActionPerformed
+    }//GEN-LAST:event_btnLClientesActionPerformed
 
     private void lTransaccionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lTransaccionesActionPerformed
-       BancoListaTransacciones blts= new BancoListaTransacciones();
+        BancoListaTransacciones blts= new BancoListaTransacciones();
         blts.setVisible(true);
         this.setVisible(false);
         this.dispose();
@@ -191,8 +192,8 @@ public class BancoListaClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        AgregarCliente bc = new AgregarCliente();
-        bc.setVisible(true);
+        AgregarCliente ac = new AgregarCliente();
+        ac.setVisible(true);
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnAgregarActionPerformed
@@ -235,13 +236,13 @@ public class BancoListaClientes extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnLClientes;
     private javax.swing.JLabel fecha_label;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JButton lClientes;
     private javax.swing.JButton lTransacciones;
     // End of variables declaration//GEN-END:variables
 }
