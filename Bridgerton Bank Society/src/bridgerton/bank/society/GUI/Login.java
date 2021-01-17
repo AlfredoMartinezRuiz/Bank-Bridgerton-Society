@@ -16,6 +16,7 @@ public class Login extends javax.swing.JFrame {
         setLocation(ancho/2-350, alto/2-250);
         initComponents();
         
+        
                 
     }
     private boolean checarContrasena(String usuario, String contrasena){
