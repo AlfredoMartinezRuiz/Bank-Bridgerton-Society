@@ -25,66 +25,69 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author Aurora
  */
 public class AgregarCliente extends javax.swing.JFrame {
-    private static ArrayList<Cliente> clientes = new ArrayList<Cliente>();   
-    private static File imagen = null;
+    private static ArrayList<Cliente> clientes = new ArrayList<Cliente>(); // Lista de clientes para verificar que no haya curp
+    // o idc repetidos
+    private static File imagen = null;  // Imagen e idc para usarlos más fácilmente con el usuario 
+    private static int dato_idc = 0; 
+    
+    // Herramientas para calcular la posición de la ventana
     private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
     private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
-    private static int dato_idc = 0; 
+    
     
     public AgregarCliente() {
         setLocation(ancho/2-375, 10);
         initComponents();
         fecha_label.setText("Fecha: " + new Date());
-        generarIDC();
+        
+        generarIDC();// Generamos el IDC primero para poder mostrarlo en el formulario como dato no editable
     }
     
     private void generarIDC(){
         // Para IDC
-        for(int i=0; i<100; i++){
-            if(isInClientes(i)){                
-            }
-            else{
+        for(int i=0; i<200; i++){ // Genera idc del 0 al 199 y busca alguno vacío
+            if(isInClientes(i) == false){                
                 dato_idc = i;
                 break;
             }
         }
         txtIdc.setText(""+dato_idc);
     }
-    
             
-    private boolean isInClientes(int idc){
-        File file = new File(".\\src\\Files\\Clientes.txt");
+    private boolean isInClientes(int idc){ // Función para identificar si el idc está registrado entre los clientes 
+        File file = new File(".\\src\\Files\\Clientes.txt"); // Asignamos la ruta
         
         try {
             if(file.exists()){ 
                 
                 // Primero leemos si no está vacío
-                if(file.length() > 0){
-                    FileInputStream fin = new FileInputStream(file);
-                    ObjectInputStream oin = new ObjectInputStream(fin);
-                    clientes = (ArrayList<Cliente>) oin.readObject();
-                    for(Cliente c:clientes){
+                if(file.length() > 0){ 
+                    FileInputStream fin = new FileInputStream(file); // Creamos flujo de lectura del archivo 
+                    ObjectInputStream oin = new ObjectInputStream(fin); // Creamos flujo de lectura tipo objetos
+                    clientes = (ArrayList<Cliente>) oin.readObject(); // Leemos el único objeto de tipo arraylist de clientes del archivo con su cast para poderlo asignar
+                    for(Cliente c:clientes){ // Recorremos el arraylist en busca de clientes que coincidan con el idc generado
                         if(c.getIDC() == idc){
                             return true;
                         }
                     }
-                    oin.close();
+                    oin.close(); // Cerramos flujos de lectura
                     fin.close();
                 }
+                // Si está vacío devolvemos falso
                 return false;
             }
             else{
                 return false;
             }
             
-        } catch (Exception e) {
+        } catch (Exception e) { // Manejo de la exceción
             e.printStackTrace(); 
             return false;
         }
     }
     
-    private boolean isInClientes(String curp){
-        File file = new File(".\\src\\Files\\Clientes.txt");
+    private boolean isInClientes(String curp){ // Función para identificar si el idc está registrado entre los clientes 
+        File file = new File(".\\src\\Files\\Clientes.txt"); // La tura del archivo de clientes
         
         try {
             if(file.exists()){ 
@@ -93,8 +96,8 @@ public class AgregarCliente extends javax.swing.JFrame {
                 if(file.length() > 0){
                     FileInputStream fin = new FileInputStream(file);
                     ObjectInputStream oin = new ObjectInputStream(fin);
-                    clientes = (ArrayList<Cliente>) oin.readObject();
-                    for(Cliente c:clientes){
+                    clientes = (ArrayList<Cliente>) oin.readObject(); // Creamos flujos y después leemos el array de clientes
+                    for(Cliente c:clientes){ // Recorremos el array comprobando que no haya sido registrado antes del curp
                         if(c.getCurp().equals(curp)){
                             return true;
                         }
@@ -136,8 +139,8 @@ public class AgregarCliente extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        btnAgregar = new javax.swing.JButton();
         agregar_cuenta = new javax.swing.JButton();
+        agregar_cliente = new javax.swing.JButton();
         fecha_label = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         txtCurp = new javax.swing.JTextField();
@@ -247,19 +250,19 @@ public class AgregarCliente extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        btnAgregar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btnAgregar.setText("AGREGAR CUENTA");
-        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarActionPerformed(evt);
-            }
-        });
-
-        agregar_cuenta.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        agregar_cuenta.setText("AGREGAR");
+        agregar_cuenta.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        agregar_cuenta.setText("AGREGAR CUENTA");
         agregar_cuenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 agregar_cuentaActionPerformed(evt);
+            }
+        });
+
+        agregar_cliente.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        agregar_cliente.setText("AGREGAR");
+        agregar_cliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                agregar_clienteActionPerformed(evt);
             }
         });
 
@@ -343,21 +346,18 @@ public class AgregarCliente extends javax.swing.JFrame {
                         .addComponent(archivos, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(layout.createSequentialGroup()
-                .addGap(77, 77, 77)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(321, 321, 321)
+                        .addGap(77, 77, 77)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel11)
-                            .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(321, 321, 321)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel11)
+                                    .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel10))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -365,7 +365,7 @@ public class AgregarCliente extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(331, 331, 331)
-                                .addComponent(agregar_cuenta))
+                                .addComponent(agregar_cliente))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(33, 33, 33)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -373,7 +373,7 @@ public class AgregarCliente extends javax.swing.JFrame {
                                         .addGap(305, 305, 305)
                                         .addComponent(jLabel8))
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(btnAgregar)
+                                        .addComponent(agregar_cuenta)
                                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 681, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addGap(0, 26, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -429,9 +429,9 @@ public class AgregarCliente extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnAgregar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(agregar_cuenta)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(agregar_cliente)
                 .addGap(40, 40, 40))
         );
 
@@ -440,28 +440,27 @@ public class AgregarCliente extends javax.swing.JFrame {
 
     private void archivosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_archivosActionPerformed
         JFileChooser chooser = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "jpg", "png", "gif", "jpeg");
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileFilter(filter);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "jpg", "png", "gif", "jpeg"); // Asignamos el nombre y el filtro de cada archivo a escoger (Sólo imágenes)
         chooser.setFileSelectionMode(0);
-        chooser.setFileFilter(filter);
+        chooser.setFileFilter(filter);// Ponemos el filtro de arriba el JFileChooser
         
-        chooser.showOpenDialog(null);
-        imagen = chooser.getSelectedFile();
-        if(imagen != null) archivos.setText(imagen.getName());
-        
+        chooser.showOpenDialog(null); // Abrimos la ventana para escoger
+        imagen = chooser.getSelectedFile(); // Obtenemos el archivo recogido por el chooser y lo almacenamos en la variable imagen
+        if(imagen != null) archivos.setText(imagen.getName()); // Si se escogió bien el archivo, mostramos el nombre del archivo en el botón
+        else System.out.println("Seleccionar imagen...");
         //https://www.discoduroderoer.es/como-usar-el-componente-jfilechooser-en-una-aplicacion-grafica-en-java/
     }//GEN-LAST:event_archivosActionPerformed
 
-    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        AgregarCliente ac = new AgregarCliente();
+    private void agregar_cuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregar_cuentaActionPerformed
+        // Botón para saltar la ventana de agregar cuenta
+        AgregarCuenta ac = new AgregarCuenta();
         ac.setVisible(true);
         this.setVisible(false);
         this.dispose();
-    }//GEN-LAST:event_btnAgregarActionPerformed
+    }//GEN-LAST:event_agregar_cuentaActionPerformed
 
-    private void agregar_cuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregar_cuentaActionPerformed
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    private void agregar_clienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregar_clienteActionPerformed
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // formateamos la fecha para que se ingrese en número
         
         String dato_nombre = "";
         String dato_curp = "";
@@ -471,12 +470,12 @@ public class AgregarCliente extends javax.swing.JFrame {
         long dato_celular = 0;
         File foto = null;
         
-        boolean errors = false;
+        boolean errors = false; // Identifica si hubo algún error en la lectura de datos, si lo hubo, se vuelve true
         
         try{ // Nombre
             dato_nombre = txtNombre.getText();
-            dato_nombre = dato_nombre.toUpperCase();
-            if(txtNombre.getText().equals("")){
+            dato_nombre = dato_nombre.toUpperCase(); // Mayúsculas todas para no tener problemas con mayúsculas/minúsculas
+            if(txtNombre.getText().equals("")){ // Comprueba que la casilla del nombre no esté vacío
                 message.setText("Falta Nombre o está mal");
                 errors = true;
             }
@@ -487,9 +486,9 @@ public class AgregarCliente extends javax.swing.JFrame {
         
         try{ // CURP
             dato_curp = txtCurp.getText();
-            dato_curp = dato_curp.toUpperCase();
-            if(txtCurp.getText().equals("")){
-                message.setText("Falta CURP o está mal");
+            dato_curp = dato_curp.toUpperCase();// Mayúsculas todas para no tener problemas con mayúsculas/minúsculas
+            if(txtCurp.getText().equals("")){ // Comprueba que la casilla del curp no esté vacío
+                message.setText("Falta CURP o está mal"); 
                 errors = true;
             }
             else{
@@ -504,7 +503,7 @@ public class AgregarCliente extends javax.swing.JFrame {
         }
       
         try { // FECHA
-            fecha_nac = sdf.parse(txtFechanac.getText());
+            fecha_nac = sdf.parse(txtFechanac.getText()); // Convierte el String de la casilla a fecha simple 
         } catch (ParseException ex) {
             message.setText("Falta Fecha o está mal");
             errors = true;
@@ -513,7 +512,7 @@ public class AgregarCliente extends javax.swing.JFrame {
         
         try { // Dirección
             dato_direc = txtDireccion.getText();
-            if(txtDireccion.getText().equals("")){
+            if(txtDireccion.getText().equals("")){ // Comprueba que la casilla de la dirección no esté vacía
                 message.setText("Falta Dirección o está mal");
                 errors = true;
             }
@@ -525,7 +524,7 @@ public class AgregarCliente extends javax.swing.JFrame {
         
         try { // Telefono
             dato_telefono = Long.valueOf(txtTelefono.getText());
-            if(txtTelefono.getText().equals("")){
+            if(txtTelefono.getText().equals("")){ // Comprueba que la casilla del teléfono no esté vacío
                 message.setText("Falta Teléfono o está mal");
                 errors = true;
             }
@@ -536,7 +535,7 @@ public class AgregarCliente extends javax.swing.JFrame {
         
         try { // Celular
             dato_celular = Long.valueOf(txtCelular.getText());
-            if(txtCelular.getText().equals("")){
+            if(txtCelular.getText().equals("")){ // Comprueba que la casilla del celular no esté vacío
                 message.setText("Falta Nombre o está mal");
                 errors = true;
             }
@@ -545,19 +544,19 @@ public class AgregarCliente extends javax.swing.JFrame {
             message.setText("Falta celular o está mal");
         }
         
-        if(imagen != null) // Foto
+        if(imagen != null) // si existe la foto entonces la asigna a la variable local
             foto = imagen;                
         else{
             errors = true;
             message.setText("Falta imagen o está mal");
         }
         
-        if(errors){
+        if(errors){ // Si hay algún error, mostrará la ventana con el error antes asignado
             Error.setVisible(true);
             Error.setSize(310, 90);
             Error.setLocation(ancho/2 - 160, alto/2 - 45);
         }
-        else{
+        else{ // Intentará crear el cliente, si algo falla, lo notificará también
             if(BridgertonBankSociety.crearCliente(dato_idc, dato_nombre, dato_curp, fecha_nac, dato_direc, dato_telefono, dato_celular, foto)){
                 BancoListaClientes bcts= new BancoListaClientes();
                 bcts.setVisible(true);
@@ -573,13 +572,14 @@ public class AgregarCliente extends javax.swing.JFrame {
         }
 
         
-    }//GEN-LAST:event_agregar_cuentaActionPerformed
+    }//GEN-LAST:event_agregar_clienteActionPerformed
 
     private void txtFechanacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechanacActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFechanacActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // Si se cierra, abre la ventana de ListaClientes
         BancoListaClientes bcts= new BancoListaClientes();
         bcts.setVisible(true);
         this.setVisible(false);
@@ -635,9 +635,9 @@ public class AgregarCliente extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog Error;
+    private javax.swing.JButton agregar_cliente;
     private javax.swing.JButton agregar_cuenta;
     private javax.swing.JButton archivos;
-    private javax.swing.JButton btnAgregar;
     private javax.swing.JLabel fecha_label;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

@@ -17,25 +17,29 @@ import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 public class BancoListaClientes extends javax.swing.JFrame {
-    private static ArrayList<Cliente> clientes = new ArrayList<Cliente>();    
+    private static ArrayList<Cliente> clientes = new ArrayList<Cliente>(); // Arraylist para manejar a nuestros clientes    
+    
+    // Variables de ayuda para la posición de las ventanas
     private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
     private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
     
     public BancoListaClientes() { // Sin ningún filtro
         initComponents();
-        this.setExtendedState(MAXIMIZED_BOTH);
-        fecha_label.setText("Fecha: " + new Date());
-        clienteReader();
-        tabla();
+        this.setExtendedState(MAXIMIZED_BOTH); 
+        fecha_label.setText("Fecha: " + new Date()); // Pone la fecha y hora actual
+        clienteReader(); // Lee los cientes del archivo y los almacena en el array de clientes
+        tabla(); // Genera la tabla
     }
-    public BancoListaClientes(int idc) { // Por idc
+    
+    public BancoListaClientes(int idc) { // Filtro por búsqueda de idc
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
         fecha_label.setText("Fecha: " + new Date());
         clienteReader();
         tabla(idc);
     }
-    public BancoListaClientes(String curp) { // Por idc
+    
+    public BancoListaClientes(String curp) { // Filtro por búsqueda de curp
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
         fecha_label.setText("Fecha: " + new Date());
@@ -43,89 +47,92 @@ public class BancoListaClientes extends javax.swing.JFrame {
         tabla(curp);
     }
     
-    public BancoListaClientes(String nombre, long numero) { // Por idc
+    public BancoListaClientes(String nombre, long celular) { // Filtro por búsqueda de nombre y número celular
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
         fecha_label.setText("Fecha: " + new Date());
         clienteReader();
-        tabla(nombre, numero);
+        tabla(nombre, celular);
     }
 
-    public void tabla(){
-        for(Cliente c: clientes){
-            DefaultTableModel model=(DefaultTableModel) clientesT.getModel();
+    public void tabla(){ // Muestra la tabla normal con todos los clientes
+        for(Cliente c: clientes){ // Recorre todos los clientes 
+            DefaultTableModel model=(DefaultTableModel) clientesT.getModel(); // Crea el modelo de la tabla a partir del actual
             
-            Object[] fila = new Object[5];
+            Object[] fila = new Object[5]; // Crea el objeto de celdas para agregar
             fila[0] = c.getIDC();
             fila[1] = c.getNombre();
             fila[2] = c.getCurp();
             fila[3] = Long.toString(c.getCelular());
             fila[4] = Long.toString(c.getTelefono());
-            model.addRow(fila);
-            clientesT.setModel(model);
+            model.addRow(fila); // Agrega la fila al modelo de la tabla
+            clientesT.setModel(model); // Reasigna el modelo pero ahora con los nuevos datos
         }        
     }
     
-    public void tabla(int idc){
+    public void tabla(int idc){ // Muestra la tabla sólo donde coincide con el idc del fitro con todos los clientes
         for(Cliente c: clientes){
             if(c.getIDC() == idc){
-                DefaultTableModel model=(DefaultTableModel) clientesT.getModel();
+                DefaultTableModel model=(DefaultTableModel) clientesT.getModel();// Crea el modelo de la tabla a partir del actual
             
-            Object[] fila = new Object[5];
-            fila[0] = c.getIDC();
-            fila[1] = c.getNombre();
-            fila[2] = c.getCurp();
-            fila[3] = Long.toString(c.getCelular());
-            fila[4] = Long.toString(c.getTelefono());
-            model.addRow(fila);
-            clientesT.setModel(model);
+                Object[] fila = new Object[5];// Crea el objeto de celdas para agregar
+                fila[0] = c.getIDC();
+                fila[1] = c.getNombre();
+                fila[2] = c.getCurp();
+                fila[3] = Long.toString(c.getCelular());
+                fila[4] = Long.toString(c.getTelefono());
+                model.addRow(fila); // Agrega la fila al modelo de la tabla
+                clientesT.setModel(model); // Reasigna el modelo pero ahora con los nuevos datos
             }
         }        
     }
     
-    public void tabla(String curp){
+    public void tabla(String curp){ // Muestra la tabla sólo donde coincide con el curp del fitro con todos los clientes
         for(Cliente c: clientes){
             if(c.getCurp() == curp){
-                DefaultTableModel model=(DefaultTableModel) clientesT.getModel();
+                DefaultTableModel model=(DefaultTableModel) clientesT.getModel();// Crea el modelo de la tabla a partir del actual
             
-            Object[] fila = new Object[5];
-            fila[0] = c.getIDC();
-            fila[1] = c.getNombre();
-            fila[2] = c.getCurp();
-            fila[3] = Long.toString(c.getCelular());
-            fila[4] = Long.toString(c.getTelefono());
-            model.addRow(fila);
-            clientesT.setModel(model);
+                Object[] fila = new Object[5];// Crea el objeto de celdas para agregar
+                fila[0] = c.getIDC();
+                fila[1] = c.getNombre();
+                fila[2] = c.getCurp();
+                fila[3] = Long.toString(c.getCelular());
+                fila[4] = Long.toString(c.getTelefono());
+                model.addRow(fila); // Agrega la fila al modelo de la tabla
+                clientesT.setModel(model); // Reasigna el modelo pero ahora con los nuevos datos
             }
         }        
     }
     
-    public void tabla(String nombre, long numero){
+    public void tabla(String nombre, long numero){ // Muestra la tabla sólo donde coincide con el nombre y número del fitro con todos los clientes
         for(Cliente c: clientes){
             if(c.getNombre().equals(nombre)){
                 if(c.getCelular() == numero){
-                     DefaultTableModel model=(DefaultTableModel) clientesT.getModel();
+                     DefaultTableModel model=(DefaultTableModel) clientesT.getModel();// Crea el modelo de la tabla a partir del actual
 
-                    Object[] fila = new Object[5];
+                    Object[] fila = new Object[5]; // Crea el objeto de celdas para agregar
                     fila[0] = c.getIDC();
                     fila[1] = c.getNombre();
                     fila[2] = c.getCurp();
                     fila[3] = Long.toString(c.getCelular());
                     fila[4] = Long.toString(c.getTelefono());
-                    model.addRow(fila);
-                    clientesT.setModel(model);
+                    model.addRow(fila); // Agrega la fila al modelo de la tabla
+                    clientesT.setModel(model); // Reasigna el modelo pero ahora con los nuevos datos
                 }
             }
         }        
     }
-    public boolean clienteReader(){
-        File file = new File(".\\src\\Files\\Clientes.txt");
+    
+    public boolean clienteReader(){ // Se encarga de leer los clientes del arhivo y cargarlos en memoria
+        File file = new File(".\\src\\Files\\Clientes.txt"); // dirección del archivo
         
         try {
             if(file.exists()){ // Primero leemos
+                // Creamos los flujos de lectura del archivo con tipo objeto
                 FileInputStream fin = new FileInputStream(file);                
                 ObjectInputStream oin = new ObjectInputStream(fin);
-                clientes = (ArrayList<Cliente>) oin.readObject();
+                clientes = (ArrayList<Cliente>) oin.readObject(); // Leemos el objeto del archivo y lo cargamos en clientes con su cast a ArrayList tipo clientes
+                // Cerramos flujos de lectura y devolvemos true porque fue exitoso
                 oin.close();
                 fin.close();
                 return true;
@@ -134,7 +141,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
                 return false;
             }
             
-        } catch (Exception e) {
+        } catch (Exception e) { // Manejo de la excepción de la lectura
             e.printStackTrace(); 
             return false;
         }
@@ -379,6 +386,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLClientesActionPerformed
+        // Botón para recargar la lista de clientes
         BancoListaClientes bcts= new BancoListaClientes();
         bcts.setVisible(true);
         this.setVisible(false);
@@ -386,6 +394,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLClientesActionPerformed
 
     private void lTransaccionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lTransaccionesActionPerformed
+        // Botón para abrir la lista de transacciones
         BancoListaTransacciones blts= new BancoListaTransacciones();
         blts.setVisible(true);
         this.setVisible(false);
@@ -394,6 +403,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_lTransaccionesActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        // Botón para buscar algún cliente en específico
         BusquedaCliente bc = new BusquedaCliente();
         bc.setVisible(true);
         this.setVisible(false);
@@ -401,6 +411,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        // Botón para agregar algún cliente
         AgregarCliente ac = new AgregarCliente();
         ac.setVisible(true);
         this.setVisible(false);
@@ -412,7 +423,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_clientesTComponentAdded
 
     private void clientesTMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clientesTMouseClicked
-        
+        // Si se presiona sobre algún cliente entonces aparecerá la descripción del mismo
         BusquedaCliente bc = new BusquedaCliente();
         bc.setVisible(true);
         this.setVisible(false);
@@ -424,6 +435,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_clientesTPropertyChange
 
     private void btnSiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiActionPerformed
+        // Si se confirma, entonces se cerrará todo
         Confirmacion.setVisible(false);
         Confirmacion.dispose();
         this.setVisible(false);
@@ -431,18 +443,21 @@ public class BancoListaClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSiActionPerformed
 
     private void btnNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNoActionPerformed
+        // Si se aprieta que no, ventana de confirmación entonces reaparecerá ListaClientes
         this.setVisible(true);
         Confirmacion.setVisible(false);
         Confirmacion.dispose();
     }//GEN-LAST:event_btnNoActionPerformed
 
     private void ConfirmacionWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_ConfirmacionWindowClosing
+        // Si se cierra la ventana de confirmación entonces reaparecerá ListaClientes
         this.setVisible(true);
         Confirmacion.setVisible(false);
         Confirmacion.dispose();
     }//GEN-LAST:event_ConfirmacionWindowClosing
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // Si se cierra mostrará el mensaje de confirmación
         Confirmacion.setVisible(true);
         Confirmacion.setSize(310, 90);
         Confirmacion.setLocation(ancho/2 - 160, alto/2 - 45);

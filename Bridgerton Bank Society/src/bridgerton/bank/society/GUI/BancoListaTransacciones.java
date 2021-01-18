@@ -16,11 +16,9 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
     public BancoListaTransacciones() {
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
-        fecha_label.setText("Fecha: " + new Date());
+        fecha_label.setText("Fecha: " + new Date()); // Fecha actual
     }
 
-    BancoListaTransacciones(Login aThis, boolean b) {
-    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -188,6 +186,7 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLClientesActionPerformed
+        // Botón para ir a la lista de clientes
         BancoListaClientes bcts = new BancoListaClientes();
         bcts.setVisible(true);
         this.setVisible(false);
@@ -195,6 +194,7 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLClientesActionPerformed
 
     private void btnLTransActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLTransActionPerformed
+        // Botón para actualizar la ventana de transacciones
         BancoListaTransacciones blts= new BancoListaTransacciones();
         blts.setVisible(true);
         this.setVisible(false);

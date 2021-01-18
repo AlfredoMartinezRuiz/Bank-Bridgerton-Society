@@ -21,13 +21,15 @@ public class BusquedaCliente extends javax.swing.JFrame {
     }
    
     public boolean clienteReader(){
-        File file = new File(".\\src\\Files\\Clientes.txt");
+        File file = new File(".\\src\\Files\\Clientes.txt"); // dirección del archivo
         
         try {
             if(file.exists()){ // Primero leemos
+                // Creamos los flujos de lectura del archivo con tipo objeto
                 FileInputStream fin = new FileInputStream(file);                
                 ObjectInputStream oin = new ObjectInputStream(fin);
-                clientes = (ArrayList<Cliente>) oin.readObject();
+                clientes = (ArrayList<Cliente>) oin.readObject(); // Leemos el objeto del archivo y lo cargamos en clientes con su cast a ArrayList tipo clientes
+                // Cerramos flujos de lectura y devolvemos true porque fue exitoso
                 oin.close();
                 fin.close();
                 return true;
@@ -36,7 +38,7 @@ public class BusquedaCliente extends javax.swing.JFrame {
                 return false;
             }
             
-        } catch (Exception e) {
+        } catch (Exception e) { // Manejo de la excepción de la lectura
             e.printStackTrace(); 
             return false;
         }
@@ -201,63 +203,66 @@ public class BusquedaCliente extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
 
-            boolean bandera = true;
-        
-            if(txtIdc.getText().equals("") == false){ // Busqueda por IDC
-                bandera = false;
-                for(Cliente c: clientes){
-                    int idc = Integer.valueOf(txtIdc.getText());
-                    if(c.getIDC() == idc){
-                        bandera = true;
-                        BancoListaClientes bcts= new BancoListaClientes(idc);
-                        bcts.setVisible(true);
-                        this.setVisible(false);
-                        this.dispose();
-                    }
+        boolean coincide = true; // Bandera para comprobar que se encontró el dato entre los clientes
+
+        if(txtIdc.getText().equals("") == false){ // Busqueda por IDC, checamos que no esté vacío
+            coincide = false;
+            for(Cliente c: clientes){ // Recorremos la lista de todos los clientes
+                int idc = Integer.valueOf(txtIdc.getText());
+                if(c.getIDC() == idc){ // Checamos si coincide el cliente con el dato dato por el usuario
+                    coincide = true;
+                    // Dsplegamos la lista de clientes con la nueva consulta
+                    BancoListaClientes bcts= new BancoListaClientes(idc);
+                    bcts.setVisible(true);
+                    this.setVisible(false);
+                    this.dispose();
                 }
             }
-            else if(txtCurp.getText().equals("") == false){ // Búsqueda por curp
-                bandera = false;
-                for(Cliente c: clientes){
-                    String curp = txtCurp.getText();
-                    if(c.getCurp().equals(curp)){
-                        bandera = true;
-                        BancoListaClientes bcts= new BancoListaClientes(curp);
-                        bcts.setVisible(true);
-                        this.setVisible(false);
-                        this.dispose();
-                    }
+        }
+        else if(txtCurp.getText().equals("") == false){ // Busqueda por Curp, checamos que no esté vacío
+            coincide = false;
+            for(Cliente c: clientes){ // Recorremos la lista de todos los clientes
+                String curp = (txtCurp.getText()).toUpperCase(); // Obtenemos el curp en mayus
+                if(c.getCurp().equals(curp)){ // Checamos si coincide el cliente con el dato dato por el usuario
+                    coincide = true;
+                    // Dsplegamos la lista de clientes con la nueva consulta
+                    BancoListaClientes bcts= new BancoListaClientes(curp);
+                    bcts.setVisible(true);
+                    this.setVisible(false);
+                    this.dispose();
                 }
-            } 
-            else if((txtNombre.getText().equals("") == false) && (txtNumero.getText().equals("")== false)){ //Busqueda combinada
-                bandera = false;
-                for(Cliente c: clientes){
-                    String nombre = txtNombre.getText();
-                    nombre = nombre.toUpperCase();
-                    long numero = Long.valueOf(txtNumero.getText());
-                    
-                    if(c.getNombre().equals(nombre)){
-                        if(c.getCelular() == numero){
-                            bandera = true;
-                            BancoListaClientes bcts= new BancoListaClientes(nombre, numero);
-                            bcts.setVisible(true);
-                            this.setVisible(false);
-                            this.dispose();                            
-                        }                        
-                    }
-                }
+            }
+        } 
+        else if((txtNombre.getText().equals("") == false) && (txtNumero.getText().equals("")== false)){ // Busqueda por nombre y número, checamos que no esten vacíos
+            coincide = false;
+            for(Cliente c: clientes){ // Recorremos la lista de todos los clientes
+                String nombre = (txtNombre.getText()).toUpperCase(); //Obtenemos el nombre en mayus
                 
+                long numero = Long.valueOf(txtNumero.getText());
+
+                if(c.getNombre().equals(nombre)){ // Checamos si coincide con el dato dato por el usuario
+                    if(c.getCelular() == numero){
+                        coincide = true;
+                        // Dsplegamos la lista de clientes con la nueva consulta
+                        BancoListaClientes bcts= new BancoListaClientes(nombre, numero);
+                        bcts.setVisible(true);
+                        this.setVisible(false);
+                        this.dispose();                            
+                    }                        
+                }
             }
-            else{
-                Error.setVisible(true);
-                Error.setSize(310, 90);
-                Error.setLocation(ancho/2 - 160, alto/2 - 45);
-            }
-            if(bandera == false){
-                Error.setVisible(true);
-                Error.setSize(310, 90);
-                Error.setLocation(ancho/2 - 160, alto/2 - 45);
-            }
+
+        }
+        else{ // en caso de que todos estén vacíos
+            Error.setVisible(true);
+            Error.setSize(310, 90);
+            Error.setLocation(ancho/2 - 160, alto/2 - 45);
+        }
+        if(coincide == false){ // en caso que no haya ninguna coincidencia
+            Error.setVisible(true);
+            Error.setSize(310, 90);
+            Error.setLocation(ancho/2 - 160, alto/2 - 45);
+        }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
@@ -265,6 +270,7 @@ public class BusquedaCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // Botón de cerrar de búsqueda clientes que lleva a la lista de clientes
         BancoListaClientes bcts= new BancoListaClientes();
         bcts.setVisible(true);
         this.setVisible(false);
