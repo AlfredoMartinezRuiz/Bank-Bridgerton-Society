@@ -42,10 +42,9 @@ public class BridgertonBankSociety {
     }
     
     public static void main(String[] args) {
-        init();
     }
     
-    public static boolean crearCliente(int idc, String nombre, String curp, Date fecha_nac, String direc, int telefono, int celular, File foto_cliente){
+    public static boolean crearCliente(int idc, String nombre, String curp, Date fecha_nac, String direc, long telefono, long celular, File foto_cliente){
         Cliente nuevo = new Cliente(idc, nombre, curp, fecha_nac, direc, telefono, celular, foto_cliente);
         return clienteWriter(nuevo);
     }
@@ -430,36 +429,22 @@ public class BridgertonBankSociety {
         }
     }
     
-    private static void init(){
-        File file = new File(".\\src\\Files\\Clientes.txt");
-        
-        try {
-            if(file.exists()){ 
-                Cliente c = new Cliente();
-                clientes.add(c);
-                // Después escribimos
-                FileOutputStream fout = new FileOutputStream(file);
-                ObjectOutputStream out = new ObjectOutputStream(fout);
-                out.writeObject(clientes);
-                out.close();
-                fout.close();
-            }
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    
+   
     private static boolean clienteWriter(Cliente c){
         File file = new File(".\\src\\Files\\Clientes.txt");
         
         try {
-            if(file.exists()){ // Primero leemos
-                FileInputStream fin = new FileInputStream(file);
-                ObjectInputStream oin = new ObjectInputStream(fin);
-                clientes = (ArrayList<Cliente>) oin.readObject();
-                oin.close();
-                fin.close();
+            if(file.exists()){ 
+                
+                // Primero leemos si no está vacío
+                if(file.length() > 0){
+                    FileInputStream fin = new FileInputStream(file);
+                    ObjectInputStream oin = new ObjectInputStream(fin);
+                    clientes = (ArrayList<Cliente>) oin.readObject();
+                    oin.close();
+                    fin.close();
+                }
+                
                 clientes.add(c);
                 
                 // Después escribimos

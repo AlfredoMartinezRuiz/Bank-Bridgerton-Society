@@ -1,23 +1,59 @@
 
 package bridgerton.bank.society.GUI;
 
-public class BusquedaCliente extends javax.swing.JFrame {
+import bridgerton.bank.society.Cliente;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.util.ArrayList;
 
+public class BusquedaCliente extends javax.swing.JFrame {
+    
+    private static ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+    private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
+    private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
+    
     public BusquedaCliente() {
+        setLocation(ancho/2-250, alto/2-225);        
+        clienteReader();
         initComponents();
         
     }
-
+   
+    public boolean clienteReader(){
+        File file = new File(".\\src\\Files\\Clientes.txt");
+        
+        try {
+            if(file.exists()){ // Primero leemos
+                FileInputStream fin = new FileInputStream(file);                
+                ObjectInputStream oin = new ObjectInputStream(fin);
+                clientes = (ArrayList<Cliente>) oin.readObject();
+                oin.close();
+                fin.close();
+                return true;
+            }
+            else{
+                return false;
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace(); 
+            return false;
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Error = new javax.swing.JDialog();
+        message = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        txtIDE = new javax.swing.JTextField();
-        txtCURP = new javax.swing.JTextField();
+        txtIdc = new javax.swing.JTextField();
+        txtCurp = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
@@ -25,23 +61,54 @@ public class BusquedaCliente extends javax.swing.JFrame {
         txtNumero = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        Error.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        Error.setAlwaysOnTop(true);
+        Error.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        Error.setResizable(false);
+
+        message.setFont(new java.awt.Font("Microsoft New Tai Lue", 0, 14)); // NOI18N
+        message.setForeground(new java.awt.Color(255, 0, 0));
+        message.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        message.setText("Dato(s) incorrecto(s)");
+
+        javax.swing.GroupLayout ErrorLayout = new javax.swing.GroupLayout(Error.getContentPane());
+        Error.getContentPane().setLayout(ErrorLayout);
+        ErrorLayout.setHorizontalGroup(
+            ErrorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ErrorLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(message, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        ErrorLayout.setVerticalGroup(
+            ErrorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ErrorLayout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(message, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(29, Short.MAX_VALUE))
+        );
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("BusquedaCliente");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel1.setText("Busqueda individual.");
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("IDE");
+        jLabel2.setText("IDC");
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText("CURP");
 
         jLabel4.setText("O");
-
-        txtIDE.setText("jTextField1");
-
-        txtCURP.setText("jTextField2");
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel5.setText("Busqueda combinada.");
@@ -49,15 +116,16 @@ public class BusquedaCliente extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel6.setText("Nombre:");
 
-        txtNombre.setText("jTextField3");
-
         jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel7.setText("Número");
-
-        txtNumero.setText("jTextField4");
+        jLabel7.setText("Celular");
 
         btnBuscar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnBuscar.setText("BUSCAR");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -89,8 +157,8 @@ public class BusquedaCliente extends javax.swing.JFrame {
                                     .addComponent(jLabel3))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtIDE, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
-                                    .addComponent(txtCURP)))
+                                    .addComponent(txtIdc, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
+                                    .addComponent(txtCurp)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel1)
@@ -106,13 +174,13 @@ public class BusquedaCliente extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(txtIDE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtIdc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel4)
                 .addGap(13, 13, 13)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(txtCURP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCurp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(66, 66, 66)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -130,6 +198,78 @@ public class BusquedaCliente extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+
+            boolean bandera = true;
+        
+            if(txtIdc.getText().equals("") == false){ // Busqueda por IDC
+                bandera = false;
+                for(Cliente c: clientes){
+                    int idc = Integer.valueOf(txtIdc.getText());
+                    if(c.getIDC() == idc){
+                        bandera = true;
+                        BancoListaClientes bcts= new BancoListaClientes(idc);
+                        bcts.setVisible(true);
+                        this.setVisible(false);
+                        this.dispose();
+                    }
+                }
+            }
+            else if(txtCurp.getText().equals("") == false){ // Búsqueda por curp
+                bandera = false;
+                for(Cliente c: clientes){
+                    String curp = txtCurp.getText();
+                    if(c.getCurp().equals(curp)){
+                        bandera = true;
+                        BancoListaClientes bcts= new BancoListaClientes(curp);
+                        bcts.setVisible(true);
+                        this.setVisible(false);
+                        this.dispose();
+                    }
+                }
+            } 
+            else if((txtNombre.getText().equals("") == false) && (txtNumero.getText().equals("")== false)){ //Busqueda combinada
+                bandera = false;
+                for(Cliente c: clientes){
+                    String nombre = txtNombre.getText();
+                    nombre = nombre.toUpperCase();
+                    long numero = Long.valueOf(txtNumero.getText());
+                    
+                    if(c.getNombre().equals(nombre)){
+                        if(c.getCelular() == numero){
+                            bandera = true;
+                            BancoListaClientes bcts= new BancoListaClientes(nombre, numero);
+                            bcts.setVisible(true);
+                            this.setVisible(false);
+                            this.dispose();                            
+                        }                        
+                    }
+                }
+                
+            }
+            else{
+                Error.setVisible(true);
+                Error.setSize(310, 90);
+                Error.setLocation(ancho/2 - 160, alto/2 - 45);
+            }
+            if(bandera == false){
+                Error.setVisible(true);
+                Error.setSize(310, 90);
+                Error.setLocation(ancho/2 - 160, alto/2 - 45);
+            }
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        
+    }//GEN-LAST:event_formWindowClosed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        BancoListaClientes bcts= new BancoListaClientes();
+        bcts.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -167,6 +307,7 @@ public class BusquedaCliente extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JDialog Error;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -175,8 +316,9 @@ public class BusquedaCliente extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JTextField txtCURP;
-    private javax.swing.JTextField txtIDE;
+    private javax.swing.JLabel message;
+    private javax.swing.JTextField txtCurp;
+    private javax.swing.JTextField txtIdc;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtNumero;
     // End of variables declaration//GEN-END:variables
