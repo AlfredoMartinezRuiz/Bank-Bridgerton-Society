@@ -317,9 +317,16 @@ public class BancoListaClientes extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         clientesT.addContainerListener(new java.awt.event.ContainerAdapter() {
@@ -435,11 +442,15 @@ public class BancoListaClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_clientesTComponentAdded
 
     private void clientesTMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clientesTMouseClicked
-        // Si se presiona sobre algún cliente entonces aparecerá la descripción del mismo
-        BusquedaCliente bc = new BusquedaCliente();
-        bc.setVisible(true);
-        this.setVisible(false);
-        this.dispose();
+//        if (evt.getClickCount() == 2) {
+//           // Si se presiona sobre algún cliente entonces aparecerá la descripción del mismo
+//            BusquedaCliente bc = new BusquedaCliente();
+//            bc.setVisible(true);
+//            this.setVisible(false);
+//            this.dispose(); 
+//        } 
+          
+    
     }//GEN-LAST:event_clientesTMouseClicked
    
     private void clientesTPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_clientesTPropertyChange

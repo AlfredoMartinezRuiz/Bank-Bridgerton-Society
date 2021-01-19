@@ -9,8 +9,6 @@ public class ClienteInt extends javax.swing.JFrame {
     public ClienteInt() {
         initComponents();
         
-//        ButtonColumn buttonColumn = new ButtonColumn(table, delete, 2);
-//        buttonColumn.setMnemonic(KeyEvent.VK_D);
         
     }
     public void agregarCuenta(Cliente.Cuenta cta) {
