@@ -44,9 +44,10 @@ public class BridgertonBankSociety {
     public static void main(String[] args) {
     }
     
-    public static boolean crearCliente(int idc, String nombre, String curp, Date fecha_nac, String direc, long telefono, long celular, File foto_cliente){
+    public static Cliente crearCliente(int idc, String nombre, String curp, Date fecha_nac, String direc, long telefono, long celular, File foto_cliente){
         Cliente nuevo = new Cliente(idc, nombre, curp, fecha_nac, direc, telefono, celular, foto_cliente);
-        return clienteWriter(nuevo); // Mandamos a escribir el cliente y regresamos el resultado
+        clienteWriter(nuevo);
+        return nuevo; // Mandamos a escribir el cliente y regresamos el resultado
     }
     
     public static int hacerDeposito(String nocuenta, float cantidad, int numerodeposito, String motivo, int noCajero){

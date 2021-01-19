@@ -2,12 +2,15 @@
 
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
-    <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="defaultCloseOperation" type="int" value="0"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
     <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
+  <Events>
+    <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowClosing"/>
+  </Events>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -184,7 +187,10 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="lblFoto">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Foto"/>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="2" name="C:\Users\kit_5\OneDrive\Escritorio\ProyectoPOO\C&#xf3;digo Fuente\Bridgerton Bank Society\src\Files\FotosClientes\C1.jpeg"/>
+        </Property>
+        <Property name="debugGraphicsOptions" type="int" value="-1"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblNombre">
@@ -293,25 +299,19 @@
               <Font name="Arial" size="12" style="0"/>
             </Property>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="9" rowCount="5">
-                <Column editable="false" title="" type="java.lang.Object"/>
-                <Column editable="false" title="No.Cuenta" type="java.lang.Object"/>
-                <Column editable="false" title="No. Tarjeta" type="java.lang.Object"/>
-                <Column editable="false" title="Tipo de Cuenta" type="java.lang.Object"/>
-                <Column editable="false" title="CLABE" type="java.lang.Object"/>
-                <Column editable="false" title="Fecha de Apertura" type="java.lang.Object"/>
-                <Column editable="false" title="Saldo" type="java.lang.Object"/>
-                <Column editable="false" title="CVV" type="java.lang.Object"/>
-                <Column editable="false" title="Clave" type="java.lang.Object"/>
+              <Table columnCount="8" rowCount="0">
+                <Column editable="false" title="No.Cuenta" type="java.lang.String"/>
+                <Column editable="false" title="No. Tarjeta" type="java.lang.String"/>
+                <Column editable="false" title="Tipo de Cuenta" type="java.lang.String"/>
+                <Column editable="false" title="CLABE" type="java.lang.String"/>
+                <Column editable="false" title="Fecha de Apertura" type="java.lang.String"/>
+                <Column editable="false" title="Saldo" type="java.lang.String"/>
+                <Column editable="false" title="CVV" type="java.lang.String"/>
+                <Column editable="false" title="Clave" type="java.lang.String"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
               <TableColumnModel selectionModel="0">
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title/>
-                  <Editor/>
-                  <Renderer/>
-                </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title/>
                   <Editor/>

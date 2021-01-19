@@ -10,8 +10,8 @@ import java.util.Random;
 
 enum TipoTarjeta{
             DEBITO(0, 1), CREDITO_BRONCE(5000, 2), CREDITO_PLATA(20000, 3), CREDITO_ORO(70000, 4);
-            private float saldo;
-            private int tipo;
+            private final float saldo;
+            private final int tipo;
             
             private TipoTarjeta(float saldo, int tipo){
                 this.saldo = saldo;
@@ -54,16 +54,18 @@ public class Cliente implements Serializable{
         this.foto_cliente = foto_cliente;
     }
 
-    Cliente() {
+    public Cliente() {
         
     }
    
     public Cuenta agregarCuenta(String nocuenta, String notarjeta, int tipo, String clabe, Date fecha, int cvv, int claveseg){
         Cuenta cuenta = new Cuenta(nocuenta, notarjeta, tipo, clabe, fecha, cvv, claveseg);
         cuentas.add(cuenta);        
-        return null;
+        return cuenta;
     }
-    
+    public void asignarCuentas(ArrayList<Cuenta> n_cuentas){
+        cuentas = n_cuentas;
+    }
     public boolean eliminarCuenta(String nocuenta){
         // Buscando cuenta
         int size = cuentas.size();
@@ -290,7 +292,7 @@ public class Cliente implements Serializable{
             
         }
         
-        Cuenta(String nocuenta, String notarjeta, int tipo, String clabe, Date fecha, int cvv, int claveseg){
+        public Cuenta(String nocuenta, String notarjeta, int tipo, String clabe, Date fecha, int cvv, int claveseg){
             this.nocuenta = nocuenta;
             this.notarjeta = notarjeta;
             this.clabe = clabe;
@@ -301,37 +303,41 @@ public class Cliente implements Serializable{
             switch(tipo){
                 case 1:
                     tipotarjeta = TipoTarjeta.DEBITO;
+                    break;
                 case 2:
                     tipotarjeta = TipoTarjeta.CREDITO_BRONCE;
+                    break;
                 case 3:
                     tipotarjeta = TipoTarjeta.CREDITO_PLATA;
+                    break;
                 case 4:
                     tipotarjeta = TipoTarjeta.CREDITO_ORO;
+                    break;
             }
             this.saldopositivo = tipotarjeta.getSaldo();
         }
-        private String getCuenta(){
+        public String getCuenta(){
             return this.nocuenta;
         }
-        private String getTarjeta(){
+        public String getTarjeta(){
             return this.notarjeta;
         }
-        private int getTipo(){
+        public int getTipo(){
             return this.tipotarjeta.getTipo();
         }
-        private String getClabe(){
+        public String getClabe(){
             return this.clabe;
         }
-        private Date getApertura(){
+        public Date getApertura(){
             return this.fecha_apertura;
         }
-        private float getSaldo(){
+        public float getSaldo(){
             return this.saldopositivo;
         }
-        private int getCVV(){
+        public int getCVV(){
             return this.cvv;
         }
-        private int getClaveseg(){
+        public int getClaveseg(){
             return this.claveseg;
         }
         private boolean compararSaldo(float costo){

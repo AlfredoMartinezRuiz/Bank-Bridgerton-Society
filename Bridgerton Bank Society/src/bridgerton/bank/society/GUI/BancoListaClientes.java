@@ -3,6 +3,8 @@ package bridgerton.bank.society.GUI;
 
 import static bridgerton.bank.society.BridgertonBankSociety.clientes;
 import bridgerton.bank.society.Cliente;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -14,6 +16,7 @@ import java.util.Date;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 
 public class BancoListaClientes extends javax.swing.JFrame {
@@ -29,6 +32,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
         fecha_label.setText("Fecha: " + new Date()); // Pone la fecha y hora actual
         clienteReader(); // Lee los cientes del archivo y los almacena en el array de clientes
         tabla(); // Genera la tabla
+        timer.start();
     }
     
     public BancoListaClientes(int idc) { // Filtro por búsqueda de idc
@@ -37,6 +41,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
         fecha_label.setText("Fecha: " + new Date());
         clienteReader();
         tabla(idc);
+        timer.start();
     }
     
     public BancoListaClientes(String curp) { // Filtro por búsqueda de curp
@@ -45,6 +50,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
         fecha_label.setText("Fecha: " + new Date());
         clienteReader();
         tabla(curp);
+        timer.start();
     }
     
     public BancoListaClientes(String nombre, long celular) { // Filtro por búsqueda de nombre y número celular
@@ -53,8 +59,9 @@ public class BancoListaClientes extends javax.swing.JFrame {
         fecha_label.setText("Fecha: " + new Date());
         clienteReader();
         tabla(nombre, celular);
+        timer.start();
     }
-
+    
     public void tabla(){ // Muestra la tabla normal con todos los clientes
         for(Cliente c: clientes){ // Recorre todos los clientes 
             DefaultTableModel model=(DefaultTableModel) clientesT.getModel(); // Crea el modelo de la tabla a partir del actual
@@ -146,7 +153,12 @@ public class BancoListaClientes extends javax.swing.JFrame {
             return false;
         }
     }
-    
+    // Timer encargado de actualizar la fecha y hora cada segudo
+    Timer timer = new Timer (1000, new ActionListener (){
+            public void actionPerformed(ActionEvent e) {
+               fecha_label.setText("Fecha: " + new Date());
+            }           
+    });
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -438,6 +450,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
         // Si se confirma, entonces se cerrará todo
         Confirmacion.setVisible(false);
         Confirmacion.dispose();
+        timer.stop();
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnSiActionPerformed

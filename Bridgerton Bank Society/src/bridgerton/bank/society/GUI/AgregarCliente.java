@@ -7,6 +7,8 @@ package bridgerton.bank.society.GUI;
 
 import bridgerton.bank.society.BridgertonBankSociety;
 import bridgerton.bank.society.Cliente;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
@@ -18,7 +20,9 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -27,6 +31,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class AgregarCliente extends javax.swing.JFrame {
     private static ArrayList<Cliente> clientes = new ArrayList<Cliente>(); // Lista de clientes para verificar que no haya curp
     // o idc repetidos
+    private static ArrayList<Cliente.Cuenta> cuentas = new ArrayList<Cliente.Cuenta>(); // Lista de cuentas para agregar al cliente
     private static File imagen = null;  // Imagen e idc para usarlos más fácilmente con el usuario 
     private static int dato_idc = 0; 
     
@@ -38,9 +43,10 @@ public class AgregarCliente extends javax.swing.JFrame {
     public AgregarCliente() {
         setLocation(ancho/2-375, 10);
         initComponents();
-        fecha_label.setText("Fecha: " + new Date());
-        
-        generarIDC();// Generamos el IDC primero para poder mostrarlo en el formulario como dato no editable
+        generarIDC();// Generamos el IDC primero para poder mostrarlo en el formulario como dato no editable   
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // formateamos la fecha para que se ingrese en número
+        Date fecha = new Date();
+        fecha_label.setText(sdf.format(fecha));
     }
     
     private void generarIDC(){
@@ -116,6 +122,35 @@ public class AgregarCliente extends javax.swing.JFrame {
             return false;
         }
     }
+    
+    public void tabla_cuentas(Cliente.Cuenta cuenta){ // Regenera las tablas a partir de las nuevas creadas
+        String[] tipos = {"Débito", "Crédito Bronce", "Crédito plata", "Crédito oro"};
+        // Para la fecha
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // formateamos la fecha para que se ingrese en número
+        Date fecha = new Date();
+        
+        DefaultTableModel model=(DefaultTableModel) tcuentas.getModel(); // Crea el modelo de la tabla a partir del actual
+
+        Object[] fila = new Object[6]; // Crea el objeto de celdas para agregar
+        fila[0] = ""+cuenta.getCuenta(); // Número de cuenta
+        fila[1] = ""+cuenta.getTarjeta(); // Número de tarjeta
+        fila[2] = tipos[cuenta.getTipo()-1]; // Tipo de cuenta 
+        fila[3] = ""+cuenta.getClabe(); // Clabe interbancaria
+        fila[4] = ""+sdf.format(cuenta.getApertura()); // Fecha de apertura
+        fila[5] = ""+cuenta.getSaldo(); // Saldo positivo de la cuenta
+
+        model.addRow(fila); // Agrega la fila al modelo de la tabla
+        tcuentas.setModel(model); // Reasigna el modelo pero ahora con los nuevos datos        
+    }
+    
+    public void agregarCuenta(Cliente.Cuenta cta) { // Para agregar a la lista las cuentas creadas 
+        cuentas.add(cta);
+        tabla_cuentas(cta);
+    }
+    
+    public void escribirCuentas(Cliente cliente){ // Para meter las cuentas a cliente una vez creadas todas
+        cliente.asignarCuentas(cuentas);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -138,7 +173,7 @@ public class AgregarCliente extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tcuentas = new javax.swing.JTable();
         agregar_cuenta = new javax.swing.JButton();
         agregar_cliente = new javax.swing.JButton();
         fecha_label = new javax.swing.JLabel();
@@ -157,6 +192,11 @@ public class AgregarCliente extends javax.swing.JFrame {
         Error.setAlwaysOnTop(true);
         Error.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         Error.setResizable(false);
+        Error.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                ErrorWindowClosing(evt);
+            }
+        });
 
         message.setFont(new java.awt.Font("Microsoft New Tai Lue", 0, 14)); // NOI18N
         message.setForeground(new java.awt.Color(255, 0, 0));
@@ -236,19 +276,16 @@ public class AgregarCliente extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel8.setText("CUENTAS");
 
-        jTable1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tcuentas.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        tcuentas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
                 "No. Cuenta", "No. Tarjeta", "Tipo de cuenta", "CLABE", "Fecha de apertura", "Saldo"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tcuentas);
 
         agregar_cuenta.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         agregar_cuenta.setText("AGREGAR CUENTA");
@@ -348,21 +385,20 @@ public class AgregarCliente extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(77, 77, 77)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(321, 321, 321)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel11)
-                                    .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(77, 77, 77)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(321, 321, 321)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel11)
+                                            .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel10)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(331, 331, 331)
                                 .addComponent(agregar_cliente))
@@ -452,11 +488,11 @@ public class AgregarCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_archivosActionPerformed
 
     private void agregar_cuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregar_cuentaActionPerformed
-        // Botón para saltar la ventana de agregar cuenta
-        AgregarCuenta ac = new AgregarCuenta();
+        // Botón para saltar a la ventana de agregar cuenta
+        Cliente cliente = new Cliente();
+        AgregarCuenta ac = new AgregarCuenta(cliente, this, null, false);
         ac.setVisible(true);
         this.setVisible(false);
-        this.dispose();
     }//GEN-LAST:event_agregar_cuentaActionPerformed
 
     private void agregar_clienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregar_clienteActionPerformed
@@ -503,7 +539,13 @@ public class AgregarCliente extends javax.swing.JFrame {
         }
       
         try { // FECHA
+            if(txtFechanac.getText().equals("") == true){
+                message.setText("Falta Fecha o está mal");
+                errors = true;
+            }
+            else
             fecha_nac = sdf.parse(txtFechanac.getText()); // Convierte el String de la casilla a fecha simple 
+            
         } catch (ParseException ex) {
             message.setText("Falta Fecha o está mal");
             errors = true;
@@ -557,7 +599,9 @@ public class AgregarCliente extends javax.swing.JFrame {
             Error.setLocation(ancho/2 - 160, alto/2 - 45);
         }
         else{ // Intentará crear el cliente, si algo falla, lo notificará también
-            if(BridgertonBankSociety.crearCliente(dato_idc, dato_nombre, dato_curp, fecha_nac, dato_direc, dato_telefono, dato_celular, foto)){
+            Cliente nuevo_cliente = BridgertonBankSociety.crearCliente(dato_idc, dato_nombre, dato_curp, fecha_nac, dato_direc, dato_telefono, dato_celular, foto);
+            if( nuevo_cliente != null){ // Si se creo el cliente correctamente
+                escribirCuentas(nuevo_cliente); // Mandamos a asignarle sus cuentas
                 BancoListaClientes bcts= new BancoListaClientes();
                 bcts.setVisible(true);
                 this.setVisible(false);
@@ -597,6 +641,11 @@ public class AgregarCliente extends javax.swing.JFrame {
     private void txtCurpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCurpActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCurpActionPerformed
+
+    private void ErrorWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_ErrorWindowClosing
+        Error.setVisible(false);
+        Error.dispose();
+    }//GEN-LAST:event_ErrorWindowClosing
 
     /**
      * @param args the command line arguments
@@ -652,8 +701,8 @@ public class AgregarCliente extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel message;
+    private javax.swing.JTable tcuentas;
     private javax.swing.JFormattedTextField txtCelular;
     private javax.swing.JTextField txtCurp;
     private javax.swing.JFormattedTextField txtDireccion;
@@ -662,4 +711,6 @@ public class AgregarCliente extends javax.swing.JFrame {
     private javax.swing.JTextField txtNombre;
     private javax.swing.JFormattedTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
+
+    
 }

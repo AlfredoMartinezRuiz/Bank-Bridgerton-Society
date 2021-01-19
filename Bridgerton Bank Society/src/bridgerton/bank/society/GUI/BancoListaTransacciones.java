@@ -6,10 +6,13 @@
 package bridgerton.bank.society.GUI;
 
 import static java.awt.Frame.MAXIMIZED_BOTH;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+import javax.swing.Timer;
 
 public class BancoListaTransacciones extends javax.swing.JFrame {
 
@@ -17,6 +20,7 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
         fecha_label.setText("Fecha: " + new Date()); // Fecha actual
+        timer.start();
     }
 
 
@@ -40,7 +44,6 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(206, 147, 216));
-        setPreferredSize(new java.awt.Dimension(1000, 700));
 
         jLabel1.setText("encabezado");
 
@@ -56,7 +59,7 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
 
         btnLTrans.setBackground(new java.awt.Color(77, 182, 172));
         btnLTrans.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btnLTrans.setText("Listado de transaccion en tiempo real");
+        btnLTrans.setText("Listado de transacciones en tiempo real");
         btnLTrans.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnLTrans.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -74,13 +77,15 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(fecha_label, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(528, 528, 528))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(528, 528, 528))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(fecha_label, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -208,7 +213,11 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnBuscarActionPerformed
-
+    Timer timer = new Timer (1000, new ActionListener (){
+            public void actionPerformed(ActionEvent e) {
+               fecha_label.setText("Fecha: " + new Date());
+            }           
+    });
     /**
      * @param args the command line arguments
      */

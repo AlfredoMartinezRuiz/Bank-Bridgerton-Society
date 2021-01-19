@@ -1,6 +1,7 @@
 
 package bridgerton.bank.society.GUI;
 
+import bridgerton.bank.society.Cliente;
 import static java.nio.file.Files.delete;
 
 public class ClienteInt extends javax.swing.JFrame {
@@ -10,6 +11,9 @@ public class ClienteInt extends javax.swing.JFrame {
         
 //        ButtonColumn buttonColumn = new ButtonColumn(table, delete, 2);
 //        buttonColumn.setMnemonic(KeyEvent.VK_D);
+        
+    }
+    public void agregarCuenta(Cliente.Cuenta cta) {
         
     }
 
@@ -42,9 +46,15 @@ public class ClienteInt extends javax.swing.JFrame {
         JLabell = new javax.swing.JLabel();
         lblCorreo = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
-        lblFoto.setText("Foto");
+        lblFoto.setIcon(new javax.swing.ImageIcon("C:\\Users\\kit_5\\OneDrive\\Escritorio\\ProyectoPOO\\Código Fuente\\Bridgerton Bank Society\\src\\Files\\FotosClientes\\C1.jpeg")); // NOI18N
+        lblFoto.setDebugGraphicsOptions(javax.swing.DebugGraphics.NONE_OPTION);
 
         lblNombre.setText("Nombre");
 
@@ -84,19 +94,22 @@ public class ClienteInt extends javax.swing.JFrame {
         tCuentas.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         tCuentas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null}
+
             },
             new String [] {
-                "", "No.Cuenta", "No. Tarjeta", "Tipo de Cuenta", "CLABE", "Fecha de Apertura", "Saldo", "CVV", "Clave"
+                "No.Cuenta", "No. Tarjeta", "Tipo de Cuenta", "CLABE", "Fecha de Apertura", "Saldo", "CVV", "Clave"
             }
         ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -281,11 +294,19 @@ public class ClienteInt extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVerActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        AgregarCliente ac = new AgregarCliente();
+        AgregarCuenta ac = new AgregarCuenta(new Cliente(), null, this, true);
         ac.setVisible(true);
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // Si se cierra, abre la ventana de ListaClientes
+        BancoListaClientes bcts= new BancoListaClientes();
+        bcts.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -348,4 +369,5 @@ public class ClienteInt extends javax.swing.JFrame {
     private javax.swing.JLabel lblTel;
     private javax.swing.JTable tCuentas;
     // End of variables declaration//GEN-END:variables
+
 }
