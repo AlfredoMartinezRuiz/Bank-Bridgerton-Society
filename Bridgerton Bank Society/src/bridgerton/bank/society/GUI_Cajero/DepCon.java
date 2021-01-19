@@ -1,16 +1,43 @@
 
 package bridgerton.bank.society.GUI_Cajero;
 
+import bridgerton.bank.society.BridgertonBankSociety;
 import java.awt.Color;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 
 public class DepCon extends javax.swing.JFrame {
-
-    public DepCon() {
+    // herramientas para hacer el depósito
+    private static int no_operacion;
+    private static int no_cajero;
+    private static String no_cuenta;
+    private static float cantidad;
+    private static String motivo;
+    
+    private static Deposito depo = null;
+            
+    
+    public DepCon(Deposito depto, String numero, float dato_cantidad, int no_operacion, String dato_motivo, int no_cajero) {
+        // Declaracion de los datos anteriores
+        depo = depto;
+        this.no_operacion = no_operacion;
+        this.no_cajero = no_cajero;
+        this.no_cuenta = numero;
+        this.cantidad = dato_cantidad;
+        this.motivo = dato_motivo;
+        
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
         this.getContentPane().setBackground(Color.WHITE);
+        mostrarDatos();
     }
+    private void mostrarDatos(){
+        lblNo.setText(no_cuenta);
+        lblTitular.setText(" sd");
+        lblMotivo.setText(motivo);
+        lblMonto.setText(""+cantidad);
+        lblNoT.setText(""+no_operacion);
+    }
+    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -30,7 +57,12 @@ public class DepCon extends javax.swing.JFrame {
         lblNoT = new javax.swing.JLabel();
         btnConfi = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jLabel3.setText("encabezado");
 
@@ -141,8 +173,15 @@ public class DepCon extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfiActionPerformed
-        // TODO add your handling code here:
+        /* sokets por defatul pero probamos funcionalidades */
+        BridgertonBankSociety.hacerDeposito(no_cuenta, cantidad, no_operacion, motivo, no_cajero);
     }//GEN-LAST:event_btnConfiActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        depo.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -174,7 +213,7 @@ public class DepCon extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new DepCon().setVisible(true);
+                new DepCon(new Deposito(10), "100000000000", 10, 10, "porque sí", 15).setVisible(true);
             }
         });
     }

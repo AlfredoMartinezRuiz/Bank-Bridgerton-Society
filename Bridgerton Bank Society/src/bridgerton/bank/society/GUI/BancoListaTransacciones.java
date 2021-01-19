@@ -41,31 +41,17 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
         trans_timer.start();
     }
     private void transaccionesReader(){
+        
         File file = new File(".\\src\\Files\\Transacciones.txt"); // Direccion del archivo de los clientes
-        boolean flag = false; // Para identificar si ya tenemos un valor mostrado
         
         try {
             if(file.exists()){ 
                 // Primero leemos si no está vacío
                 if(file.length() > 0){
-                    ArrayList<Transaccion> trans = new ArrayList<Transaccion>(); // Variable de apoyo para ver si hay cambios
+                   // Flujos y lectura de archivos
                     FileInputStream fin = new FileInputStream(file);
                     ObjectInputStream oin = new ObjectInputStream(fin);
-                    trans = (ArrayList<Transaccion>) oin.readObject();
-                    int index = 0;
-                    for(Transaccion t: trans){
-                        for(Transaccion k: transacciones){
-                            
-                               if(t.compareTo(k)){
-                                   flag = true;
-                                   break;
-                               }
-                        }
-                        if(flag == false){
-                            transacciones.add(t);
-                        }
-                        flag = false;    
-                    }
+                    transacciones = (ArrayList<Transaccion>) oin.readObject();
                     
                     oin.close();
                     fin.close();
@@ -79,22 +65,24 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
     private void tabla(){
         DefaultTableModel model=(DefaultTableModel) tablaTransacciones.getModel();
         
-//        for(int i=0; i<model.getColumnCount(); i++){ // Borramos los datos anteriores de la tabla para que no haya repeticiones
-//            model.removeRow(i);
-//        }
+        // Borra la tabla anterior
+        int index = 0;
+        while(index < model.getRowCount()){
+                model.removeRow(index); 
+        }
         
         for(Transaccion t: transacciones){ // Recorre todos los clientes 
+            
             model=(DefaultTableModel) tablaTransacciones.getModel(); // Crea el modelo de la tabla a partir del actual
             
-            Object[] fila = new Object[7]; // Crea el objeto de celdas para agregar
+            Object[] fila = new Object[8]; // Crea el objeto de celdas para agregar
             fila[0] = t.getTrans();
             fila[1] = t.getFecha();
             fila[2] = t.getTipo();
             fila[3] = t.getMotivo();
             fila[4] = t.getEmisora();
             fila[5] = t.getDestino();
-            fila[6] = t.getMonto();
-            
+            fila[6] = "" + t.getMonto();
             model.addRow(fila); // Agrega la fila al modelo de la tabla
             tablaTransacciones.setModel(model); // Reasigna el modelo pero ahora con los nuevos datos
         } 
@@ -268,14 +256,22 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
                 "No. Transacción", "Fecha", "Tipo", "Motivo", "No. Cuenta", "No. Cuenta (destino)", "Monto"
             }
         ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false, false
             };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        tablaTransacciones.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         jScrollPane1.setViewportView(tablaTransacciones);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -308,7 +304,7 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
                                         .addComponent(txtHasta, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(33, 33, 33)
                                         .addComponent(btnBuscar)))))))
-                .addContainerGap(66, Short.MAX_VALUE))
+                .addGap(66, 66, 66))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -330,8 +326,8 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
                     .addComponent(txtHasta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuscar))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 57, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 85, Short.MAX_VALUE))
         );
 
         pack();
@@ -351,6 +347,7 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
         BancoListaTransacciones blts= new BancoListaTransacciones();
         blts.setVisible(true);
         timer.stop();
+        trans_timer.stop();
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnLTransActionPerformed
@@ -368,6 +365,7 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
         Confirmacion.setVisible(false);
         Confirmacion.dispose();
         timer.stop();
+        trans_timer.stop();
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnSiActionPerformed
@@ -399,6 +397,7 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
     });
     Timer trans_timer = new Timer (100, new ActionListener (){
             public void actionPerformed(ActionEvent e) {
+                System.out.println("ciclo");
                transaccionesReader();
                tabla();
             }           

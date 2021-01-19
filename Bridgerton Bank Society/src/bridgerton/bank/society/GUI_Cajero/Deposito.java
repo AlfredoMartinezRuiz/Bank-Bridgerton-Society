@@ -24,11 +24,13 @@ public class Deposito extends javax.swing.JFrame {
     private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
     private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
     private static int no_operacion = 0;
-    private static int no_cajero = 0;
+    private static int no_cajero;
     
     public Deposito(int noCajero) {
-        no_cajero = noCajero;
+        no_cajero = noCajero; // Asignamos el número de cajero
         initComponents();
+        generarOperacion(); // Generamos el número de operación
+        
         this.setExtendedState(MAXIMIZED_BOTH);
         this.getContentPane().setBackground(Color.WHITE);
     }
@@ -36,23 +38,24 @@ public class Deposito extends javax.swing.JFrame {
     private void generarOperacion(){
         // Para Número de depósito
         for(int i=0; i<10000; i++){ // Genera idc del 0 al 199 y busca alguno vacío
-            if(isInTransacciones(i) == false){                
+            if(isInTransacciones(i) == false){
                 no_operacion = i;
                 break;
             }
         }
     }
+   
     private boolean isInTransacciones(int no_deposito){ // Función para identificar si el no. depósito está registrado entre los clientes 
-        File file = new File(".\\src\\Files\\Transaciones.txt"); // Asignamos la ruta
+        File file = new File(".\\src\\Files\\Transacciones.txt"); // Asignamos la ruta
         
-        try {
+        try {            
             if(file.exists()){ 
-                
                 // Primero leemos si no está vacío
                 if(file.length() > 0){ 
                     FileInputStream fin = new FileInputStream(file); // Creamos flujo de lectura del archivo 
                     ObjectInputStream oin = new ObjectInputStream(fin); // Creamos flujo de lectura tipo objetos
                     transacciones = (ArrayList<Transaccion>) oin.readObject(); // Leemos el único objeto de tipo arraylist de transaccion del archivo con su cast para poderlo asignar
+                    
                     for(Transaccion t: transacciones){ // Recorremos el arraylist en busca de transacciones que coincidan con el idc generado
                         if(t.getTrans() == no_deposito){
                             return true;
@@ -265,24 +268,13 @@ public class Deposito extends javax.swing.JFrame {
             Error.setSize(310, 90);
             Error.setLocation(ancho/2 - 160, alto/2 - 45);
         }
-        else{
-            /* sokets por defatul pero probamos funcionalidades */
-            BridgertonBankSociety.hacerDeposito(numero, dato_cantidad, no_operacion, dato_motivo, no_cajero);
-            DepCon depc = new DepCon();
+        else{DepCon depc = new DepCon(this, numero, dato_cantidad, no_operacion, dato_motivo, no_cajero);
             depc.setVisible(true);
             this.setVisible(false);
             this.dispose();
             
         }
-        
-        
-        
-        
-        
-        
-        
-        
-        
+      
     }//GEN-LAST:event_btnSigActionPerformed
 
     private void ErrorWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_ErrorWindowClosing

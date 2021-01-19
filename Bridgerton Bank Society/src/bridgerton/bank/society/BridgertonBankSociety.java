@@ -53,32 +53,34 @@ public class BridgertonBankSociety {
     
     public static int hacerDeposito(String nocuenta, float cantidad, int numerodeposito, String motivo, int noCajero){
         // Buscando cuenta 
-        
+        System.out.println(nocuenta.length());
         if(nocuenta.length() == 16){ // Si es no. de tarjeta bancaria
             for(Cliente c: clientes){
                 if(c.buscadorTarjeta(nocuenta) != null){
-                    c.recibirDeposito(nocuenta, cantidad, numerodeposito, motivo, noCajero);       
+                    return c.recibirDeposito(nocuenta, cantidad, numerodeposito, motivo, noCajero);
                 }
             }
+            Deposito depo = new Deposito(nocuenta, noCajero, cantidad, motivo, numerodeposito);
         }        
         if(nocuenta.length() == 18){ // Si es clabe interbancaria
             for(Cliente c: clientes){
                 if(c.buscadorClabe(nocuenta) != null){
-                    c.recibirDeposito(nocuenta, cantidad, numerodeposito, motivo, noCajero);
+                    return c.recibirDeposito(nocuenta, cantidad, numerodeposito, motivo, noCajero);
                 }
             }
+            Deposito depo = new Deposito(nocuenta, noCajero, cantidad, motivo, numerodeposito);
         }        
         if(nocuenta.length() == 12){ // Si es no. de cuenta bancaria
             for(Cliente c: clientes){
                 if(c.buscadorCuenta(nocuenta) != null){
-                    c.recibirDeposito(nocuenta, cantidad, numerodeposito, motivo, noCajero);
+                    return c.recibirDeposito(nocuenta, cantidad, numerodeposito, motivo, noCajero);
                 }
             }
+            Deposito depo = new Deposito(nocuenta, noCajero, cantidad, motivo, numerodeposito);
         }
         else{
             return -5;
         }
-        Deposito depo = new Deposito(nocuenta, noCajero, cantidad, motivo, numerodeposito);
         
         return 0;       
     }

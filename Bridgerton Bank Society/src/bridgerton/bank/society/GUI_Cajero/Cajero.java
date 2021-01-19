@@ -26,6 +26,7 @@ public class Cajero extends javax.swing.JFrame {
         iconos(".\\src\\Imagenes\\becalos.jpg", 2); 
         iconos(".\\src\\Imagenes\\teleton.png", 3); 
         iconos(".\\src\\Imagenes\\asif.png", 4); 
+        
         // Crear un nuevo número entero aleatorio
         Random r = new Random();
         noCajero = r.nextInt(100); // Creamos un número de cajero
@@ -224,7 +225,7 @@ public class Cajero extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDepositoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDepositoActionPerformed
-        Deposito dep = new Deposito(10);
+        Deposito dep = new Deposito(noCajero);
         dep.setVisible(true);
         this.setVisible(false);
         this.dispose();

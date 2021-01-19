@@ -35,6 +35,7 @@ public class Transaccion implements Serializable{
         this.cuentaemoisora = cuentaemisora;
         this.motivo = motivo;
         this.tipo = tipo;
+        this.monto = monto;
         transWriter(this);
     }
     public int getTrans(){
@@ -62,12 +63,13 @@ public class Transaccion implements Serializable{
         return this.tipo;
     }
     public boolean transWriter(Transaccion t){
+        System.out.println("Hola");
         File file = new File(".\\src\\Files\\Transacciones.txt"); // dirección del archivo
         try {
             if(file.exists()){ // Primero leemos
                 
                 // Creamos los flujos de lectura del archivo con tipo objeto
-                if(file.length() > 0){
+                if(file.length() > 0){                    
                     
                     FileInputStream fin = new FileInputStream(file);                
                     ObjectInputStream oin = new ObjectInputStream(fin);
@@ -75,9 +77,7 @@ public class Transaccion implements Serializable{
                     // Cerramos flujos de lectura y devolvemos true porque fue exitoso
                     oin.close();
                     fin.close();
-                    return true;
-                }  
-             
+                }
                 transacciones.add(t);
 
                 // Después escribimos
