@@ -490,7 +490,7 @@ public class AgregarCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_agregar_cuentaActionPerformed
 
     private void agregar_clienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregar_clienteActionPerformed
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // formateamos la fecha para que se ingrese en número
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy"); // formateamos la fecha para que se ingrese en número
         
         String dato_nombre = "";
         String dato_curp = "";

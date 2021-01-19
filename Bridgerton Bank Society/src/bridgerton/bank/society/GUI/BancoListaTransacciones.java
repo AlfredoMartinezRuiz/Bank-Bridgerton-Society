@@ -18,16 +18,28 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.DateFormatter;
 
 public class BancoListaTransacciones extends javax.swing.JFrame {
     // Array para la lista de transacciones
     private static ArrayList<Transaccion> transacciones = new ArrayList<Transaccion>();
+    
+    // Herramientas para las fechas de filtro
+    private static Date desde = new Date();
+    private static Date hasta = new Date();
+    private static boolean con_fecha = false;
+    
     
     // Variables de ayuda para la posición de las ventanas
     private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
@@ -40,6 +52,7 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
         timer.start();
         trans_timer.start();
     }
+    
     private void transaccionesReader(){
         
         File file = new File(".\\src\\Files\\Transacciones.txt"); // Direccion del archivo de los clientes
@@ -62,7 +75,53 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
         }    
     }
     
-    private void tabla(){
+    private void tabla(){ // Muestra la tabla normal
+        DefaultTableModel model=(DefaultTableModel) tablaTransacciones.getModel();
+        Date fecha_dato = new Date();
+        
+        // Borra la tabla anterior
+        int index = 0;
+        while(index < model.getRowCount()){
+                model.removeRow(index); 
+        }
+        
+        for(Transaccion t: transacciones){ // Recorre todas las transacciones
+            if(con_fecha){ // Hay filtro de fecha
+                fecha_dato = t.getFecha();
+                
+                if(fecha_dato.compareTo(desde) >= 0 && fecha_dato.compareTo(hasta) <= 0){ // Si es el mismo día o despúes de la fecha
+                    model=(DefaultTableModel) tablaTransacciones.getModel(); // Crea el modelo de la tabla a partir del actual
+
+                    Object[] fila = new Object[8]; // Crea el objeto de celdas para agregar
+                    fila[0] = t.getTrans();
+                    fila[1] = t.getFecha();
+                    fila[2] = t.getTipo();
+                    fila[3] = t.getMotivo();
+                    fila[4] = t.getEmisora();
+                    fila[5] = t.getDestino();
+                    fila[6] = "" + t.getMonto();
+                    model.addRow(fila); // Agrega la fila al modelo de la tabla
+                    tablaTransacciones.setModel(model); // Reasigna el modelo pero ahora con los nuevos datos 
+                }                
+            }
+            else{
+                    model=(DefaultTableModel) tablaTransacciones.getModel(); // Crea el modelo de la tabla a partir del actual
+
+                    Object[] fila = new Object[8]; // Crea el objeto de celdas para agregar
+                    fila[0] = t.getTrans();
+                    fila[1] = t.getFecha();
+                    fila[2] = t.getTipo();
+                    fila[3] = t.getMotivo();
+                    fila[4] = t.getEmisora();
+                    fila[5] = t.getDestino();
+                    fila[6] = "" + t.getMonto();
+                    model.addRow(fila); // Agrega la fila al modelo de la tabla
+                    tablaTransacciones.setModel(model); // Reasigna el modelo pero ahora con los nuevos datos
+            }
+        } 
+    }
+    
+    private void tabla(Date desde, Date hasta){
         DefaultTableModel model=(DefaultTableModel) tablaTransacciones.getModel();
         
         // Borra la tabla anterior
@@ -71,23 +130,10 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
                 model.removeRow(index); 
         }
         
-        for(Transaccion t: transacciones){ // Recorre todos los clientes 
-            
-            model=(DefaultTableModel) tablaTransacciones.getModel(); // Crea el modelo de la tabla a partir del actual
-            
-            Object[] fila = new Object[8]; // Crea el objeto de celdas para agregar
-            fila[0] = t.getTrans();
-            fila[1] = t.getFecha();
-            fila[2] = t.getTipo();
-            fila[3] = t.getMotivo();
-            fila[4] = t.getEmisora();
-            fila[5] = t.getDestino();
-            fila[6] = "" + t.getMonto();
-            model.addRow(fila); // Agrega la fila al modelo de la tabla
-            tablaTransacciones.setModel(model); // Reasigna el modelo pero ahora con los nuevos datos
+        for(Transaccion t: transacciones){ // Recorre todos las transacciones
+                      
         } 
     }
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -96,6 +142,8 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
         message = new javax.swing.JLabel();
         btnSi = new javax.swing.JButton();
         btnNo = new javax.swing.JButton();
+        Error = new javax.swing.JDialog();
+        messageError = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         btnLClientes = new javax.swing.JButton();
         btnLTrans = new javax.swing.JButton();
@@ -109,6 +157,7 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
         btnBuscar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaTransacciones = new javax.swing.JTable();
+        btn_elfilltro = new javax.swing.JButton();
 
         Confirmacion.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         Confirmacion.setMinimumSize(new java.awt.Dimension(0, 150));
@@ -162,6 +211,37 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
                     .addComponent(btnNo)
                     .addComponent(btnSi))
                 .addContainerGap(31, Short.MAX_VALUE))
+        );
+
+        Error.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        Error.setAlwaysOnTop(true);
+        Error.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        Error.setResizable(false);
+        Error.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                ErrorWindowClosing(evt);
+            }
+        });
+
+        messageError.setFont(new java.awt.Font("Microsoft New Tai Lue", 0, 14)); // NOI18N
+        messageError.setForeground(new java.awt.Color(255, 0, 0));
+        messageError.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        javax.swing.GroupLayout ErrorLayout = new javax.swing.GroupLayout(Error.getContentPane());
+        Error.getContentPane().setLayout(ErrorLayout);
+        ErrorLayout.setHorizontalGroup(
+            ErrorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ErrorLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(messageError, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        ErrorLayout.setVerticalGroup(
+            ErrorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ErrorLayout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(messageError, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -225,14 +305,14 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
         );
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel3.setText("Desde (dd/mm/yy):");
+        jLabel3.setText("Desde (dd-mm-yy):");
 
-        txtDesde.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
+        txtDesde.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd-MM-yy"))));
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel4.setText("Hasta (dd/mm/yy):");
+        jLabel4.setText("Hasta (dd-mm-yy):");
 
-        txtHasta.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
+        txtHasta.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd-MM-yy"))));
         txtHasta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtHastaActionPerformed(evt);
@@ -274,6 +354,13 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
         tablaTransacciones.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         jScrollPane1.setViewportView(tablaTransacciones);
 
+        btn_elfilltro.setText("Eliminar filtro");
+        btn_elfilltro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_elfilltroActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -303,7 +390,9 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(txtHasta, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(33, 33, 33)
-                                        .addComponent(btnBuscar)))))))
+                                        .addComponent(btnBuscar)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btn_elfilltro)))))))
                 .addGap(66, 66, 66))
         );
         layout.setVerticalGroup(
@@ -324,7 +413,8 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtDesde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtHasta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBuscar))
+                    .addComponent(btnBuscar)
+                    .addComponent(btn_elfilltro, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 85, Short.MAX_VALUE))
@@ -357,7 +447,46 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
     }//GEN-LAST:event_txtHastaActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy"); // formateamos la fecha para que se ingrese en número
+        boolean errors = false; // auxiliar para detectar errores en la captura
+        
+        try { // FECHA DESDE
+            if(txtDesde.getText().equals("") == true){
+                messageError.setText("Falta Fecha desde o está mal");
+                errors = true;
+            }
+            else
+            desde = sdf.parse(txtDesde.getText()); // Convierte el String de la casilla a fecha simple 
+            
+        } catch (ParseException ex) {
+            messageError.setText("Falta Fecha desde o está mal");
+            errors = true;
+            Logger.getLogger(AgregarCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try { // FECHA HASTA
+            if(txtHasta.getText().equals("") == true){
+                messageError.setText("Falta Fecha hasta o está mal");
+                errors = true;
+            }
+            else
+            hasta = sdf.parse(txtHasta.getText()); // Convierte el String de la casilla a fecha simple 
+            
+        } catch (ParseException ex) {
+            messageError.setText("Falta Fecha hasta o está mal");
+            errors = true;
+            Logger.getLogger(AgregarCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if(errors){ // Si hay algún error, mostrará la ventana con el error antes asignado
+            Error.setVisible(true);
+            Error.setSize(310, 90);
+            Error.setLocation(ancho/2 - 160, alto/2 - 45);
+        }
+        else{
+            // Botón para abrir la lista de transacciones con filtro
+            con_fecha = true;
+        }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnSiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiActionPerformed
@@ -390,18 +519,28 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
         Confirmacion.setSize(310, 90);
         Confirmacion.setLocation(ancho/2 - 160, alto/2 - 45);
     }//GEN-LAST:event_formWindowClosing
-    Timer timer = new Timer (1000, new ActionListener (){
+
+    private void ErrorWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_ErrorWindowClosing
+        Error.setVisible(false);
+        Error.dispose();
+    }//GEN-LAST:event_ErrorWindowClosing
+
+    private void btn_elfilltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_elfilltroActionPerformed
+        con_fecha = false;
+    }//GEN-LAST:event_btn_elfilltroActionPerformed
+    Timer timer = new Timer (1000, new ActionListener (){ // Encargado de actualizar la hora
             public void actionPerformed(ActionEvent e) {
                fecha_label.setText("Fecha: " + new Date());
             }           
     });
-    Timer trans_timer = new Timer (100, new ActionListener (){
+    
+    Timer trans_timer = new Timer (100, new ActionListener (){ // Encargado de mostrar la tabla normal
             public void actionPerformed(ActionEvent e) {
-                System.out.println("ciclo");
                transaccionesReader();
                tabla();
             }           
     });
+    
     /**
      * @param args the command line arguments
      */
@@ -439,11 +578,13 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog Confirmacion;
+    private javax.swing.JDialog Error;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnLClientes;
     private javax.swing.JButton btnLTrans;
     private javax.swing.JButton btnNo;
     private javax.swing.JButton btnSi;
+    private javax.swing.JButton btn_elfilltro;
     private javax.swing.JLabel fecha_label;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -452,6 +593,7 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel message;
+    private javax.swing.JLabel messageError;
     private javax.swing.JTable tablaTransacciones;
     private javax.swing.JFormattedTextField txtDesde;
     private javax.swing.JFormattedTextField txtHasta;
