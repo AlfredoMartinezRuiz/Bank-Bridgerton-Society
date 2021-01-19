@@ -5,19 +5,120 @@
  */
 package bridgerton.bank.society.GUI;
 
+import bridgerton.bank.society.Cliente;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.util.ArrayList;
+import java.util.Random;
+
 /**
  *
  * @author Aurora
  */
 public class AgregarCuenta extends javax.swing.JFrame {
-
+    private static ArrayList<bridgerton.bank.society.Cliente> clientes = new ArrayList<bridgerton.bank.society.Cliente>(); // Arraylist para manejar a nuestros clientes    
+    private static String dato_cuenta = "";
+    private static String dato_tarjeta = "";
+    private static String dato_clabe = "";
     /**
      * Creates new form AgregarCuenta
      */
     public AgregarCuenta() {
         initComponents();
+        clienteReader();
+        generadorCuentas();
     }
-
+    public void generadorCuentas(){
+        // Variables para omprobar que sean correctas antes de terminar con el método
+        boolean clabe_correcta = false;
+        boolean tarjeta_corecta = false;
+        boolean cuenta_corecta = false;
+        
+        
+        // Nos aseguramos que la clabe sea correcta
+        while(clabe_correcta == false){ 
+            String clabe = generadorCifras(18); // Generamos un número entero aleatorio de 18 cifras 
+            
+            if(isInCuentas(clabe) == false ){ // Comrpobamos que no esté en alguna cuenta de algún cliente
+                dato_clabe = clabe;
+                txtCLABE.setText(dato_clabe);
+                clabe_correcta = true;
+            }
+            else clabe_correcta = false;
+        }
+        clabe_correcta = false;
+        // Nos aseguramos que la tarjeta sea correcta
+        while(clabe_correcta == false){ 
+            String tarjeta = generadorCifras(16); // Generamos un número entero aleatorio de 16 cifras 
+            
+            if(isInCuentas(tarjeta) == false ){ // Comprobamos que no esté en alguna cuenta de algún cliente
+                dato_tarjeta = tarjeta;
+                txtNtarjeta.setText(dato_tarjeta);
+                clabe_correcta = true;
+            }
+            else clabe_correcta = false;
+        }
+        clabe_correcta = false;
+        // Nos aseguramos que la cuenta sea correcta
+        while(clabe_correcta == false){ 
+            String cuenta = generadorCifras(12); // Generamos un número entero aleatorio de 12 cifras 
+            
+            if(isInCuentas(cuenta) == false ){ // Comprobamos que no esté en alguna cuenta de algún cliente
+                dato_cuenta = cuenta;
+                txtNcuenta.setText(dato_cuenta);
+                clabe_correcta = true;
+            }
+            else clabe_correcta = false;
+        }
+    }
+    public String generadorCifras(int n){
+        // Genera número aleatorios con ayuda de la concatenación de n dígitos del 0 al 9
+        String numero = "";
+        Random r = new Random();
+        int num = 0;
+        for(int i=0; i < n; i++){
+            num = r.nextInt(9);
+            if(i == 0 && num == 0) num++;
+            numero = numero + num;
+        }
+        
+        return numero;
+    }
+    
+    public boolean isInCuentas(String numero){
+        Cliente c = new Cliente();
+        for(Cliente c: clientes){
+            
+        }
+        return false;
+    }
+    
+    public boolean clienteReader(){ // Se encarga de leer los clientes del arhivo y cargarlos en memoria
+        File file = new File(".\\src\\Files\\Clientes.txt"); // dirección del archivo
+        
+        try {
+            if(file.exists()){ // Primero leemos
+                // Creamos los flujos de lectura del archivo con tipo objeto
+                FileInputStream fin = new FileInputStream(file);                
+                ObjectInputStream oin = new ObjectInputStream(fin);
+                clientes = (ArrayList<bridgerton.bank.society.Cliente>) oin.readObject(); // Leemos el objeto del archivo y lo cargamos en clientes con su cast a ArrayList tipo clientes
+                // Cerramos flujos de lectura y devolvemos true porque fue exitoso
+                oin.close();
+                fin.close();
+                return true;
+            }
+            else{
+                return false;
+            }
+            
+        } catch (Exception e) { // Manejo de la excepción de la lectura
+            e.printStackTrace(); 
+            return false;
+        }
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -78,13 +179,16 @@ public class AgregarCuenta extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel8.setText("Clave:");
 
+        txtNcuenta.setEditable(false);
         txtNcuenta.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
+        txtNtarjeta.setEditable(false);
         txtNtarjeta.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         fecha_label.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         fecha_label.setText("Fecha");
 
+        txtCLABE.setEditable(false);
         txtCLABE.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtCLABE.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
