@@ -36,8 +36,10 @@ public class Cajero extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Cajero");
         setBackground(new java.awt.Color(255, 255, 255));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel3.setText("encabezado");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1370, 125));
 
         btnDeposito.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         btnDeposito.setText("REALIZAR DEPÓSITO");
@@ -46,6 +48,7 @@ public class Cajero extends javax.swing.JFrame {
                 btnDepositoActionPerformed(evt);
             }
         });
+        getContentPane().add(btnDeposito, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 201, 273, 60));
 
         btnTransferencia.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         btnTransferencia.setText("REALIZAR TRANSFERENCIA");
@@ -54,6 +57,7 @@ public class Cajero extends javax.swing.JFrame {
                 btnTransferenciaActionPerformed(evt);
             }
         });
+        getContentPane().add(btnTransferencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 432, -1, 60));
 
         btnRetiro.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         btnRetiro.setText("REALIZAR RETIRO");
@@ -62,6 +66,7 @@ public class Cajero extends javax.swing.JFrame {
                 btnRetiroActionPerformed(evt);
             }
         });
+        getContentPane().add(btnRetiro, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 602, 273, 60));
 
         lblUNAM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/unam.jpg"))); // NOI18N
         lblUNAM.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -69,19 +74,25 @@ public class Cajero extends javax.swing.JFrame {
                 lblUNAMMouseClicked(evt);
             }
         });
+        getContentPane().add(lblUNAM, new org.netbeans.lib.awtextra.AbsoluteConstraints(355, 226, -1, 213));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/teleton.png"))); // NOI18N
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(415, 452, -1, 220));
 
         lblBecalos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/becalos.jpg"))); // NOI18N
         lblBecalos.setText("becalos");
+        getContentPane().add(lblBecalos, new org.netbeans.lib.awtextra.AbsoluteConstraints(736, 219, 282, 210));
 
         lblAsif.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/asif.png"))); // NOI18N
+        getContentPane().add(lblAsif, new org.netbeans.lib.awtextra.AbsoluteConstraints(712, 463, -1, 209));
 
         jLabel6.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel6.setText("¡APOYA UNA CAUSA!");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(568, 139, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel7.setText("Puedes apoyar a diferentes causas y poder sumarte al tren de la solidaridad:");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(395, 179, -1, -1));
 
         btnSaldo.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         btnSaldo.setText("CHECAR SALDO");
@@ -90,6 +101,7 @@ public class Cajero extends javax.swing.JFrame {
                 btnSaldoActionPerformed(evt);
             }
         });
+        getContentPane().add(btnSaldo, new org.netbeans.lib.awtextra.AbsoluteConstraints(1104, 201, 266, 60));
 
         btnMov.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         btnMov.setText("CHECAR MOVIMIENTOS");
@@ -98,6 +110,7 @@ public class Cajero extends javax.swing.JFrame {
                 btnMovActionPerformed(evt);
             }
         });
+        getContentPane().add(btnMov, new org.netbeans.lib.awtextra.AbsoluteConstraints(1104, 432, 266, 60));
 
         btnClave.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         btnClave.setText("CAMBIAR CLAVE");
@@ -106,84 +119,10 @@ public class Cajero extends javax.swing.JFrame {
                 btnClaveActionPerformed(evt);
             }
         });
+        getContentPane().add(btnClave, new org.netbeans.lib.awtextra.AbsoluteConstraints(1104, 602, 266, 60));
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/ipn.png"))); // NOI18N
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(btnDeposito, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnRetiro, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnTransferencia, javax.swing.GroupLayout.Alignment.LEADING))
-                .addGap(82, 82, 82)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel7)
-                        .addGap(11, 11, 11))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblUNAM)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel8)
-                        .addGap(18, 18, 18)
-                        .addComponent(lblBecalos, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(60, 60, 60)
-                        .addComponent(jLabel2)
-                        .addGap(18, 18, 18)
-                        .addComponent(lblAsif))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(213, 213, 213)
-                        .addComponent(jLabel6)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 86, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnSaldo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnMov, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)
-                    .addComponent(btnClave, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(76, 76, 76)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnDeposito, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 171, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnTransferencia, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnMov, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(110, 110, 110)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnRetiro, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnClave, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(110, 110, 110))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(jLabel6)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel7)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblBecalos, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(7, 7, 7)
-                                .addComponent(lblUNAM, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(16, 16, 16)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblAsif, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-        );
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(571, 219, -1, 217));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

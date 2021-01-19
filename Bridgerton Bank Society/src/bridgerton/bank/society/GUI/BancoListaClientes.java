@@ -2,6 +2,7 @@
 package bridgerton.bank.society.GUI;
 
 import static bridgerton.bank.society.BridgertonBankSociety.clientes;
+import bridgerton.bank.society.BridgertonBankSociety;
 import bridgerton.bank.society.Cliente;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,12 +17,14 @@ import java.util.Date;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 
 public class BancoListaClientes extends javax.swing.JFrame {
     private static ArrayList<Cliente> clientes = new ArrayList<Cliente>(); // Arraylist para manejar a nuestros clientes    
-    
     // Variables de ayuda para la posición de las ventanas
     private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
     private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
@@ -33,6 +36,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
         clienteReader(); // Lee los cientes del archivo y los almacena en el array de clientes
         tabla(); // Genera la tabla
         timer.start();
+        popupTabla();
     }
     
     public BancoListaClientes(int idc) { // Filtro por búsqueda de idc
@@ -159,6 +163,36 @@ public class BancoListaClientes extends javax.swing.JFrame {
                fecha_label.setText("Fecha: " + new Date());
             }           
     });
+    public void popupTabla(){
+        JPopupMenu pM = new JPopupMenu(); //se crea el contenedor
+        JMenuItem jmi1 = new JMenuItem("Ver"); //las opciones
+        JMenuItem jmi2 = new JMenuItem("Eliminar");
+        
+        jmi1.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //int ift = clientesT.getSelectedRow();
+                int ideC = (int) clientesT.getValueAt(clientesT.getSelectedRow(), 0);
+                
+            }
+        });
+        jmi2.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int ideC = (int) clientesT.getValueAt(clientesT.getSelectedRow(), 0);
+                if(ideC != -1){                 
+                    for(Cliente c: clientes){
+                        
+                    }                  
+                }
+                    
+            }
+        });
+        pM.add(jmi1);// se agregan las opciones al contenedor
+        pM.add(jmi2);
+        
+        clientesT.setComponentPopupMenu(pM);//se agrega el menú a la tabla con su respectivo evento
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -403,7 +437,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+   
     private void btnLClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLClientesActionPerformed
         // Botón para recargar la lista de clientes
         BancoListaClientes bcts= new BancoListaClientes();

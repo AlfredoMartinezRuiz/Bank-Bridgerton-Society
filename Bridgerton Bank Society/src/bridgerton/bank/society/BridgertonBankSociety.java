@@ -16,6 +16,7 @@ public class BridgertonBankSociety {
     public static ArrayList<Transaccion> transacciones = new ArrayList<Transaccion>();
     public static ArrayList<String>diccionario_errores = new ArrayList<String>();
     public static ArrayList<String> diccionario_nombres = new ArrayList<String>();
+    private static File file = new File(".\\src\\Files\\Clientes.txt"); // Direccion del archivo de los clientes
     
     static{
         diccionario_nombres.add("Javier Santaolalla");
@@ -430,9 +431,8 @@ public class BridgertonBankSociety {
         }
     }
     
-   
     private static boolean clienteWriter(Cliente c){
-        File file = new File(".\\src\\Files\\Clientes.txt"); // Direccion del archivo de los clientes
+       
         
         try {
             if(file.exists()){ 
@@ -464,5 +464,19 @@ public class BridgertonBankSociety {
             e.printStackTrace(); 
             return false;
         }
+    }
+    
+    public static void eliminarCliente(Cliente c){
+        
+        clientes.remove(c);
+        ArrayList<Cliente> copia = clientes;
+        clientes = new ArrayList<>();
+        
+        file.delete();
+        
+        for(Cliente clientes:copia){
+            clienteWriter(clientes);
+        }
+       
     }
 }
