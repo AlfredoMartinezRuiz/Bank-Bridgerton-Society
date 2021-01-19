@@ -46,7 +46,7 @@ public class BridgertonBankSociety {
     
     public static boolean crearCliente(int idc, String nombre, String curp, Date fecha_nac, String direc, long telefono, long celular, File foto_cliente){
         Cliente nuevo = new Cliente(idc, nombre, curp, fecha_nac, direc, telefono, celular, foto_cliente);
-        return clienteWriter(nuevo);
+        return clienteWriter(nuevo); // Mandamos a escribir el cliente y regresamos el resultado
     }
     
     public static int hacerDeposito(String nocuenta, float cantidad, int numerodeposito, String motivo, int noCajero){
@@ -431,7 +431,7 @@ public class BridgertonBankSociety {
     
    
     private static boolean clienteWriter(Cliente c){
-        File file = new File(".\\src\\Files\\Clientes.txt");
+        File file = new File(".\\src\\Files\\Clientes.txt"); // Direccion del archivo de los clientes
         
         try {
             if(file.exists()){ 

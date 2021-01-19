@@ -6,6 +6,7 @@
 package bridgerton.bank.society.GUI;
 
 import bridgerton.bank.society.Cliente;
+import bridgerton.bank.society.Cliente.Cuenta;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
@@ -17,7 +18,9 @@ import java.util.Random;
  * @author Aurora
  */
 public class AgregarCuenta extends javax.swing.JFrame {
-    private static ArrayList<bridgerton.bank.society.Cliente> clientes = new ArrayList<bridgerton.bank.society.Cliente>(); // Arraylist para manejar a nuestros clientes    
+    private static ArrayList<Cliente> clientes = new ArrayList<Cliente>(); // Lista de clientes para verificar que no haya curp
+    // o idc repetidosprivate static ArrayList<Cliente> clientes = new ArrayList<Cliente>(); // Arraylist para manejar a nuestros clientes    
+    private static ArrayList<Cliente.Cuenta> cuentas = new ArrayList<Cuenta>(); // Arraylist para manejar a sus cuentas
     private static String dato_cuenta = "";
     private static String dato_tarjeta = "";
     private static String dato_clabe = "";
@@ -87,32 +90,45 @@ public class AgregarCuenta extends javax.swing.JFrame {
     }
     
     public boolean isInCuentas(String numero){
-        Cliente c = new Cliente();
+        
         for(Cliente c: clientes){
-            
+            switch(numero.length()){
+                case 18:
+                    if(c.buscadorClabe(numero)!= null) return true; // Si enontró la cuenta entonces retorna verdadero
+                    else return false;
+                case 16:
+                    if(c.buscadorTarjeta(numero)!= null) return true; // Si enontró la cuenta entonces retorna verdadero
+                    else return false;
+                case 12:
+                    if(c.buscadorCuenta(numero)!= null) return true; // Si enontró la cuenta entonces retorna verdadero
+                    else return false;
+            }
         }
         return false;
     }
     
     public boolean clienteReader(){ // Se encarga de leer los clientes del arhivo y cargarlos en memoria
-        File file = new File(".\\src\\Files\\Clientes.txt"); // dirección del archivo
+        File file = new File(".\\src\\Files\\Clientes.txt"); // La tura del archivo de clientes
         
         try {
-            if(file.exists()){ // Primero leemos
-                // Creamos los flujos de lectura del archivo con tipo objeto
-                FileInputStream fin = new FileInputStream(file);                
-                ObjectInputStream oin = new ObjectInputStream(fin);
-                clientes = (ArrayList<bridgerton.bank.society.Cliente>) oin.readObject(); // Leemos el objeto del archivo y lo cargamos en clientes con su cast a ArrayList tipo clientes
-                // Cerramos flujos de lectura y devolvemos true porque fue exitoso
-                oin.close();
-                fin.close();
-                return true;
+            if(file.exists()){ 
+                
+                // Primero leemos si no está vacío
+                if(file.length() > 0){
+                    FileInputStream fin = new FileInputStream(file);
+                    ObjectInputStream oin = new ObjectInputStream(fin);
+                    clientes = (ArrayList<Cliente>) oin.readObject(); // Creamos flujos y después leemos el array de clientes
+                    
+                    oin.close();
+                    fin.close();
+                }
+                return false;
             }
             else{
                 return false;
             }
             
-        } catch (Exception e) { // Manejo de la excepción de la lectura
+        } catch (Exception e) {
             e.printStackTrace(); 
             return false;
         }
@@ -146,6 +162,7 @@ public class AgregarCuenta extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel1.setText("Agregar cuenta");

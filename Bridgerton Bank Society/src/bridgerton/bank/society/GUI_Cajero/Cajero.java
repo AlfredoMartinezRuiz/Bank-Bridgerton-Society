@@ -22,6 +22,7 @@ public class Cajero extends javax.swing.JFrame {
         btnDeposito = new javax.swing.JButton();
         btnTransferencia = new javax.swing.JButton();
         btnRetiro = new javax.swing.JButton();
+        lblUNAM = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         lblBecalos = new javax.swing.JLabel();
         lblAsif = new javax.swing.JLabel();
@@ -30,8 +31,7 @@ public class Cajero extends javax.swing.JFrame {
         btnSaldo = new javax.swing.JButton();
         btnMov = new javax.swing.JButton();
         btnClave = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Cajero");
@@ -60,6 +60,13 @@ public class Cajero extends javax.swing.JFrame {
         btnRetiro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRetiroActionPerformed(evt);
+            }
+        });
+
+        lblUNAM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/unam.jpg"))); // NOI18N
+        lblUNAM.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblUNAMMouseClicked(evt);
             }
         });
 
@@ -100,9 +107,7 @@ public class Cajero extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bridgerton/bank/society/GUI_Cajero/Images/unam.jpg"))); // NOI18N
-
-        jLabel4.setText("jLabel4");
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/ipn.png"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -114,24 +119,25 @@ public class Cajero extends javax.swing.JFrame {
                     .addComponent(btnDeposito, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnRetiro, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnTransferencia, javax.swing.GroupLayout.Alignment.LEADING))
+                .addGap(82, 82, 82)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel7))
+                        .addComponent(jLabel7)
+                        .addGap(11, 11, 11))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(63, 63, 63)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblUNAM)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel8)
                         .addGap(18, 18, 18)
                         .addComponent(lblBecalos, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(142, 142, 142)
+                        .addGap(60, 60, 60)
                         .addComponent(jLabel2)
                         .addGap(18, 18, 18)
                         .addComponent(lblAsif))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(295, 295, 295)
+                        .addGap(213, 213, 213)
                         .addComponent(jLabel6)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 86, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -164,11 +170,15 @@ public class Cajero extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel7)
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblBecalos, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(7, 7, 7)
+                                .addComponent(lblUNAM, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(16, 16, 16)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblAsif, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -220,6 +230,10 @@ public class Cajero extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnClaveActionPerformed
 
+    private void lblUNAMMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblUNAMMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lblUNAMMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -262,13 +276,13 @@ public class Cajero extends javax.swing.JFrame {
     private javax.swing.JButton btnRetiro;
     private javax.swing.JButton btnSaldo;
     private javax.swing.JButton btnTransferencia;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel lblAsif;
     private javax.swing.JLabel lblBecalos;
+    private javax.swing.JLabel lblUNAM;
     // End of variables declaration//GEN-END:variables
 }

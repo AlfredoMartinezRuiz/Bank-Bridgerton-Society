@@ -1,8 +1,12 @@
 package bridgerton.bank.society;
 
-import static bridgerton.bank.society.BridgertonBankSociety.clientes;
+
 import static bridgerton.bank.society.BridgertonBankSociety.diccionario_nombres;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -58,10 +62,9 @@ public class Cliente implements Serializable{
         
     }
    
-    public Cuenta agregarCuenta(String nocuenta, String notarjeta, int tipo, String clabe, Date fecha, int cvv, int claveseg){
+    public boolean agregarCuenta(String nocuenta, String notarjeta, int tipo, String clabe, Date fecha, int cvv, int claveseg){
         Cuenta cuenta = new Cuenta(nocuenta, notarjeta, tipo, clabe, fecha, cvv, claveseg);
-        cuentas.add(cuenta);        
-        return null;
+        return cuenta.cuentaWriter(cuenta);  // Agrega la cuenta al arraylist y devuelve el resultado
     }
     
     public boolean eliminarCuenta(String nocuenta){
@@ -276,7 +279,7 @@ public class Cliente implements Serializable{
         else return -1;
     }
     
-    private class Cuenta{
+    public class Cuenta implements Serializable{
         private String nocuenta;
         private String notarjeta;
         private TipoTarjeta tipotarjeta;
@@ -336,6 +339,40 @@ public class Cliente implements Serializable{
         }
         private boolean compararSaldo(float costo){
             return this.saldopositivo > costo;
+        }
+        private boolean cuentaWriter(Cuenta cta){
+            File file = new File(".\\src\\Files\\Cuentas.txt"); // Direccion del archivo de los clientes
+
+            try {
+                if(file.exists()){ 
+
+                    // Primero leemos si no está vacío
+                    if(file.length() > 0){
+                        FileInputStream fin = new FileInputStream(file);
+                        ObjectInputStream oin = new ObjectInputStream(fin);
+                        cuentas = (ArrayList<Cuenta>) oin.readObject();
+                        oin.close();
+                        fin.close();
+                    }
+
+                    cuentas.add(cta);
+
+                    // Después escribimos
+                    FileOutputStream fout = new FileOutputStream(file);
+                    ObjectOutputStream out = new ObjectOutputStream(fout);
+                    out.writeObject(cuentas);
+                    out.close();
+                    fout.close();
+                    return true;
+                }
+                else{
+                    return false;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace(); 
+                return false;
+            }
         }
     }
 }
