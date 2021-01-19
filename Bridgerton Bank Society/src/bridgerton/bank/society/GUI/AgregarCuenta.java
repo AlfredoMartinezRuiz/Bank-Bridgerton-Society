@@ -6,7 +6,7 @@
 package bridgerton.bank.society.GUI;
 
 import bridgerton.bank.society.Cliente;
-import bridgerton.bank.society.Cliente.Cuenta;
+//import bridgerton.bank.society.Cliente.Cuenta;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
@@ -20,7 +20,7 @@ import java.util.Random;
 public class AgregarCuenta extends javax.swing.JFrame {
     private static ArrayList<Cliente> clientes = new ArrayList<Cliente>(); // Lista de clientes para verificar que no haya curp
     // o idc repetidosprivate static ArrayList<Cliente> clientes = new ArrayList<Cliente>(); // Arraylist para manejar a nuestros clientes    
-    private static ArrayList<Cliente.Cuenta> cuentas = new ArrayList<Cuenta>(); // Arraylist para manejar a sus cuentas
+    //private static ArrayList<Cliente.Cuenta> cuentas = new ArrayList<Cuenta>(); // Arraylist para manejar a sus cuentas
     private static String dato_cuenta = "";
     private static String dato_tarjeta = "";
     private static String dato_clabe = "";
