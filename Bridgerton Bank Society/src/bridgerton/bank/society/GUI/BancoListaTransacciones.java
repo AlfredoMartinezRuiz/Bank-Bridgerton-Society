@@ -5,29 +5,109 @@
  */
 package bridgerton.bank.society.GUI;
 
+import static bridgerton.bank.society.BridgertonBankSociety.clientes;
+import bridgerton.bank.society.Cliente;
+import bridgerton.bank.society.GUI_Cajero.Transferencia;
+import bridgerton.bank.society.Transaccion;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.Timer;
+import javax.swing.table.DefaultTableModel;
 
 public class BancoListaTransacciones extends javax.swing.JFrame {
-
+    // Array para la lista de transacciones
+    private static ArrayList<Transaccion> transacciones = new ArrayList<Transaccion>();
+    
+    // Variables de ayuda para la posición de las ventanas
+    private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
+    private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
+    
     public BancoListaTransacciones() {
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
         fecha_label.setText("Fecha: " + new Date()); // Fecha actual
         timer.start();
+        trans_timer.start();
     }
-
-
+    private void transaccionesReader(){
+        File file = new File(".\\src\\Files\\Transacciones.txt"); // Direccion del archivo de los clientes
+        boolean flag = false; // Para identificar si ya tenemos un valor mostrado
+        
+        try {
+            if(file.exists()){ 
+                // Primero leemos si no está vacío
+                if(file.length() > 0){
+                    ArrayList<Transaccion> trans = new ArrayList<Transaccion>(); // Variable de apoyo para ver si hay cambios
+                    FileInputStream fin = new FileInputStream(file);
+                    ObjectInputStream oin = new ObjectInputStream(fin);
+                    trans = (ArrayList<Transaccion>) oin.readObject();
+                    int index = 0;
+                    for(Transaccion t: trans){
+                        for(Transaccion k: transacciones){
+                            
+                               if(t.compareTo(k)){
+                                   flag = true;
+                                   break;
+                               }
+                        }
+                        if(flag == false){
+                            transacciones.add(t);
+                        }
+                        flag = false;    
+                    }
+                    
+                    oin.close();
+                    fin.close();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); 
+        }    
+    }
+    
+    private void tabla(){
+        DefaultTableModel model=(DefaultTableModel) tablaTransacciones.getModel();
+        
+//        for(int i=0; i<model.getColumnCount(); i++){ // Borramos los datos anteriores de la tabla para que no haya repeticiones
+//            model.removeRow(i);
+//        }
+        
+        for(Transaccion t: transacciones){ // Recorre todos los clientes 
+            model=(DefaultTableModel) tablaTransacciones.getModel(); // Crea el modelo de la tabla a partir del actual
+            
+            Object[] fila = new Object[7]; // Crea el objeto de celdas para agregar
+            fila[0] = t.getTrans();
+            fila[1] = t.getFecha();
+            fila[2] = t.getTipo();
+            fila[3] = t.getMotivo();
+            fila[4] = t.getEmisora();
+            fila[5] = t.getDestino();
+            fila[6] = t.getMonto();
+            
+            model.addRow(fila); // Agrega la fila al modelo de la tabla
+            tablaTransacciones.setModel(model); // Reasigna el modelo pero ahora con los nuevos datos
+        } 
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Confirmacion = new javax.swing.JDialog();
+        message = new javax.swing.JLabel();
+        btnSi = new javax.swing.JButton();
+        btnNo = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         btnLClientes = new javax.swing.JButton();
         btnLTrans = new javax.swing.JButton();
@@ -40,10 +120,69 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
         txtHasta = new javax.swing.JFormattedTextField();
         btnBuscar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaTransacciones = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        Confirmacion.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        Confirmacion.setMinimumSize(new java.awt.Dimension(0, 150));
+        Confirmacion.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                ConfirmacionWindowClosing(evt);
+            }
+        });
+
+        message.setFont(new java.awt.Font("Microsoft New Tai Lue", 0, 14)); // NOI18N
+        message.setForeground(new java.awt.Color(255, 0, 0));
+        message.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        message.setText("¿Está seguro?");
+
+        btnSi.setText("SÍ");
+        btnSi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSiActionPerformed(evt);
+            }
+        });
+
+        btnNo.setText("NO");
+        btnNo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNoActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout ConfirmacionLayout = new javax.swing.GroupLayout(Confirmacion.getContentPane());
+        Confirmacion.getContentPane().setLayout(ConfirmacionLayout);
+        ConfirmacionLayout.setHorizontalGroup(
+            ConfirmacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ConfirmacionLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(message, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ConfirmacionLayout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addComponent(btnSi, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnNo, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37))
+        );
+        ConfirmacionLayout.setVerticalGroup(
+            ConfirmacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ConfirmacionLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(message, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(ConfirmacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnNo)
+                    .addComponent(btnSi))
+                .addContainerGap(31, Short.MAX_VALUE))
+        );
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setBackground(new java.awt.Color(206, 147, 216));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jLabel1.setText("encabezado");
 
@@ -120,16 +259,24 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaTransacciones.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        tablaTransacciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
                 "No. Transacción", "Fecha", "Tipo", "Motivo", "No. Cuenta", "No. Cuenta (destino)", "Monto"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tablaTransacciones);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -194,6 +341,7 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
         // Botón para ir a la lista de clientes
         BancoListaClientes bcts = new BancoListaClientes();
         bcts.setVisible(true);
+        timer.stop();
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnLClientesActionPerformed
@@ -202,6 +350,7 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
         // Botón para actualizar la ventana de transacciones
         BancoListaTransacciones blts= new BancoListaTransacciones();
         blts.setVisible(true);
+        timer.stop();
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnLTransActionPerformed
@@ -213,9 +362,45 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnSiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiActionPerformed
+        // Si se confirma, entonces se cerrará todo
+        Confirmacion.setVisible(false);
+        Confirmacion.dispose();
+        timer.stop();
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_btnSiActionPerformed
+
+    private void btnNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNoActionPerformed
+        // Si se aprieta que no, ventana de confirmación entonces reaparecerá ListaClientes
+        this.setVisible(true);
+        Confirmacion.setVisible(false);
+        Confirmacion.dispose();
+    }//GEN-LAST:event_btnNoActionPerformed
+
+    private void ConfirmacionWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_ConfirmacionWindowClosing
+        // Si se cierra la ventana de confirmación entonces reaparecerá ListaClientes
+        this.setVisible(true);
+        Confirmacion.setVisible(false);
+        Confirmacion.dispose();
+    }//GEN-LAST:event_ConfirmacionWindowClosing
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // Si se cierra mostrará el mensaje de confirmación
+        Confirmacion.setVisible(true);
+        Confirmacion.setSize(310, 90);
+        Confirmacion.setLocation(ancho/2 - 160, alto/2 - 45);
+    }//GEN-LAST:event_formWindowClosing
     Timer timer = new Timer (1000, new ActionListener (){
             public void actionPerformed(ActionEvent e) {
                fecha_label.setText("Fecha: " + new Date());
+            }           
+    });
+    Timer trans_timer = new Timer (100, new ActionListener (){
+            public void actionPerformed(ActionEvent e) {
+               transaccionesReader();
+               tabla();
             }           
     });
     /**
@@ -248,15 +433,18 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new BancoListaClientes().setVisible(true);
+                new BancoListaTransacciones().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JDialog Confirmacion;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnLClientes;
     private javax.swing.JButton btnLTrans;
+    private javax.swing.JButton btnNo;
+    private javax.swing.JButton btnSi;
     private javax.swing.JLabel fecha_label;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -264,7 +452,8 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel message;
+    private javax.swing.JTable tablaTransacciones;
     private javax.swing.JFormattedTextField txtDesde;
     private javax.swing.JFormattedTextField txtHasta;
     // End of variables declaration//GEN-END:variables

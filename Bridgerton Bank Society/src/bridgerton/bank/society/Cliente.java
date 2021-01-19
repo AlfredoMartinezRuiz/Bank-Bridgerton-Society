@@ -278,7 +278,7 @@ public class Cliente implements Serializable{
         else return -1;
     }
     
-    public class Cuenta{
+    public class Cuenta implements Serializable{
         private String nocuenta;
         private String notarjeta;
         private TipoTarjeta tipotarjeta;

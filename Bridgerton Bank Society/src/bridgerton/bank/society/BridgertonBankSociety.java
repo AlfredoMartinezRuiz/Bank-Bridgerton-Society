@@ -51,7 +51,8 @@ public class BridgertonBankSociety {
     }
     
     public static int hacerDeposito(String nocuenta, float cantidad, int numerodeposito, String motivo, int noCajero){
-        // Buscando cuenta        
+        // Buscando cuenta 
+        
         if(nocuenta.length() == 16){ // Si es no. de tarjeta bancaria
             for(Cliente c: clientes){
                 if(c.buscadorTarjeta(nocuenta) != null){
@@ -76,6 +77,7 @@ public class BridgertonBankSociety {
         else{
             return -5;
         }
+        Deposito depo = new Deposito(nocuenta, noCajero, cantidad, motivo, numerodeposito);
         
         return 0;       
     }
@@ -430,7 +432,6 @@ public class BridgertonBankSociety {
         }
     }
     
-   
     private static boolean clienteWriter(Cliente c){
         File file = new File(".\\src\\Files\\Clientes.txt"); // Direccion del archivo de los clientes
         

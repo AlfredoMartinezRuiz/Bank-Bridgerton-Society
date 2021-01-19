@@ -2,13 +2,18 @@
 package bridgerton.bank.society.GUI_Cajero;
 
 import java.awt.Color;
+import java.util.Random;
 
 public class Cajero extends javax.swing.JFrame {
-
+    private static int noCajero; 
     /**
      * Creates new form Cajero
      */
     public Cajero() {
+        // Crear un nuevo número entero aleatorio
+        Random r = new Random();
+        noCajero = r.nextInt(100); // Creamos un número de cajero
+        
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
         this.getContentPane().setBackground(Color.WHITE);
@@ -170,15 +175,13 @@ public class Cajero extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel7)
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblBecalos, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(7, 7, 7)
                                 .addComponent(lblUNAM, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(16, 16, 16)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(13, 13, 13)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblAsif, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -189,7 +192,7 @@ public class Cajero extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDepositoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDepositoActionPerformed
-        Deposito dep = new Deposito();
+        Deposito dep = new Deposito(noCajero);
         dep.setVisible(true);
         this.setVisible(false);
         this.dispose();

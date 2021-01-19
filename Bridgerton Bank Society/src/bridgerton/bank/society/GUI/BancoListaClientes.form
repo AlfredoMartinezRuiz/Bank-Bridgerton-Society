@@ -122,7 +122,7 @@
                           <Group type="102" attributes="0">
                               <Component id="btnLClientes" min="-2" pref="620" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="lTransacciones" pref="624" max="32767" attributes="0"/>
+                              <Component id="lTransacciones" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>

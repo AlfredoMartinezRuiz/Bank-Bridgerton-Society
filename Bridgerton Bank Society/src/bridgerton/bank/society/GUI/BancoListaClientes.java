@@ -136,13 +136,19 @@ public class BancoListaClientes extends javax.swing.JFrame {
         try {
             if(file.exists()){ // Primero leemos
                 // Creamos los flujos de lectura del archivo con tipo objeto
-                FileInputStream fin = new FileInputStream(file);                
-                ObjectInputStream oin = new ObjectInputStream(fin);
-                clientes = (ArrayList<Cliente>) oin.readObject(); // Leemos el objeto del archivo y lo cargamos en clientes con su cast a ArrayList tipo clientes
-                // Cerramos flujos de lectura y devolvemos true porque fue exitoso
-                oin.close();
-                fin.close();
-                return true;
+                if(file.length() > 0){
+                    FileInputStream fin = new FileInputStream(file);                
+                    ObjectInputStream oin = new ObjectInputStream(fin);
+                    clientes = (ArrayList<Cliente>) oin.readObject(); // Leemos el objeto del archivo y lo cargamos en clientes con su cast a ArrayList tipo clientes
+                    // Cerramos flujos de lectura y devolvemos true porque fue exitoso
+                    oin.close();
+                    fin.close();
+                    return true;
+                }
+                else{
+                    return false;
+                }
+                
             }
             else{
                 return false;
