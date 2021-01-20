@@ -4,6 +4,9 @@ package bridgerton.bank.society.GUI_Cajero;
 import bridgerton.bank.society.Transaccion;
 import java.awt.Color;
 import static java.awt.Frame.MAXIMIZED_BOTH;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
 public class Retiro extends javax.swing.JFrame {
@@ -14,10 +17,57 @@ public class Retiro extends javax.swing.JFrame {
     private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
     private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
     
-    public Retiro() {
+    private static int no_retiro = 0;
+    private static int no_cajero;
+    
+    public Retiro(int noCajero) {
+        no_cajero = noCajero; // Asignamos el número de cajero
         initComponents();
+        generarRetiro(); // Generamos el número de operación
         this.setExtendedState(MAXIMIZED_BOTH);
         this.getContentPane().setBackground(Color.WHITE);
+    }
+    
+    private void generarRetiro(){
+        // Para Número de depósito
+        for(int i=0; i<10000; i++){ // Genera idc del 0 al 199 y busca alguno vacío
+            if(isInTransacciones(i) == false){
+                no_retiro = i;
+                break;
+            }
+        }
+    }
+   
+    private boolean isInTransacciones(int no_deposito){ // Función para identificar si el no. depósito está registrado entre los clientes 
+        File file = new File(".\\src\\Files\\Transacciones.txt"); // Asignamos la ruta
+        
+        try {            
+            if(file.exists()){ 
+                // Primero leemos si no está vacío
+                if(file.length() > 0){ 
+                    FileInputStream fin = new FileInputStream(file); // Creamos flujo de lectura del archivo 
+                    ObjectInputStream oin = new ObjectInputStream(fin); // Creamos flujo de lectura tipo objetos
+                    transacciones = (ArrayList<Transaccion>) oin.readObject(); // Leemos el único objeto de tipo arraylist de transaccion del archivo con su cast para poderlo asignar
+                    
+                    for(Transaccion t: transacciones){ // Recorremos el arraylist en busca de transacciones que coincidan con el idc generado
+                        if(t.getTrans() == no_deposito){
+                            return true;
+                        }
+                    }
+                    oin.close(); // Cerramos flujos de lectura
+                    fin.close();
+                }
+                // Si está vacío devolvemos falso
+                return false;
+            }
+            else{
+                return false;
+            }
+            
+        } catch (Exception e) { // Manejo de la exceción
+            e.printStackTrace(); 
+            return false;
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -33,8 +83,8 @@ public class Retiro extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         txtCantidad = new javax.swing.JFormattedTextField();
         jLabel6 = new javax.swing.JLabel();
-        txtClave = new javax.swing.JFormattedTextField();
         btnSig = new javax.swing.JButton();
+        txtClave = new javax.swing.JTextField();
 
         Error.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         Error.setAlwaysOnTop(true);
@@ -90,10 +140,6 @@ public class Retiro extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel6.setText("Ingrese la clave de seguridad:");
 
-        txtClave.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(190, 109, 246), 2));
-        txtClave.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#.00"))));
-        txtClave.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-
         btnSig.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         btnSig.setText("SIGUIENTE");
         btnSig.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(190, 109, 246), 1, true));
@@ -103,6 +149,9 @@ public class Retiro extends javax.swing.JFrame {
                 btnSigActionPerformed(evt);
             }
         });
+
+        txtClave.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        txtClave.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(190, 109, 246), 2));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -123,8 +172,9 @@ public class Retiro extends javax.swing.JFrame {
                                 .addComponent(txtCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel5)
                                 .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel6)
-                                .addComponent(txtClave, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(txtClave, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -143,9 +193,9 @@ public class Retiro extends javax.swing.JFrame {
                 .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(73, 73, 73)
                 .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                 .addComponent(btnSig, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(129, 129, 129))
         );
@@ -156,7 +206,7 @@ public class Retiro extends javax.swing.JFrame {
     private void btnSigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSigActionPerformed
         boolean errors = false; // Variable para identificar los errores del algun dato
         float dato_cantidad = 0;
-        String dato_motivo = "";
+        int dato_clave = 0;
 
         // Para el no de cuenta
         if(txtCuenta.getText().isBlank() == false){
@@ -189,14 +239,14 @@ public class Retiro extends javax.swing.JFrame {
         // Para la clave de seguridad
         if(txtClave.getText().isBlank() == false){
             try{
-                dato_motivo = txtClave.getText();
+                dato_clave = Integer.valueOf(txtClave.getText());
             }catch(Exception e){
                 message.setText("Falta clave o está mal");
                 errors = true;
             }
         }
         else{
-            message.setText("Falta motivo o está mal");
+            message.setText("Falta clave o está mal");
             errors = true;
         }
         // Checamos si hubo algún error
@@ -205,12 +255,13 @@ public class Retiro extends javax.swing.JFrame {
             Error.setSize(310, 90);
             Error.setLocation(ancho/2 - 160, alto/2 - 45);
         }
-//        else{RetCon depc = new DepCon(this, numero, dato_cantidad, no_operacion, dato_motivo, no_cajero);
-//            depc.setVisible(true);
-//            this.setVisible(false);
-//            this.dispose();
-//
-//        }
+        else{
+            RetCon retc = new RetCon(this, numero, dato_cantidad, dato_clave, no_retiro, no_cajero);
+            retc.setVisible(true);
+            this.setVisible(false);
+            this.dispose();
+
+        }
 
     }//GEN-LAST:event_btnSigActionPerformed
 
@@ -246,7 +297,7 @@ public class Retiro extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Retiro().setVisible(true);
+                new Retiro(10).setVisible(true);
             }
         });
     }
@@ -261,7 +312,7 @@ public class Retiro extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel message;
     private javax.swing.JFormattedTextField txtCantidad;
-    private javax.swing.JFormattedTextField txtClave;
+    private javax.swing.JTextField txtClave;
     private javax.swing.JTextField txtCuenta;
     // End of variables declaration//GEN-END:variables
 }

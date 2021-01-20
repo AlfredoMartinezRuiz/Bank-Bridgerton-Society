@@ -512,6 +512,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
         // Botón para abrir la lista de transacciones
         BancoListaTransacciones blts= new BancoListaTransacciones();
         blts.setVisible(true);
+        timer.stop();
         this.setVisible(false);
         this.dispose();
 
@@ -591,6 +592,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
                 BridgertonBankSociety.eliminarCliente(idc);  
                 BancoListaClientes bcts= new BancoListaClientes();
                 bcts.setVisible(true);
+                timer.stop();
                 this.setVisible(false);
                 this.dispose();
                 Eliminar.setVisible(false);

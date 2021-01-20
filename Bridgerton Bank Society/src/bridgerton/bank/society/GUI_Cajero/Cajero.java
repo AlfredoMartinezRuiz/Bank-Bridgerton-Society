@@ -240,7 +240,7 @@ public class Cajero extends javax.swing.JFrame {
     }//GEN-LAST:event_btnTransferenciaActionPerformed
 
     private void btnRetiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroActionPerformed
-        Retiro ret = new Retiro();
+        Retiro ret = new Retiro(noCajero);
         ret.setVisible(true);
         this.setVisible(false);
         this.dispose();

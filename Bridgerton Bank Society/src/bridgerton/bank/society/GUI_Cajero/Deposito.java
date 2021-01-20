@@ -268,7 +268,8 @@ public class Deposito extends javax.swing.JFrame {
             Error.setSize(310, 90);
             Error.setLocation(ancho/2 - 160, alto/2 - 45);
         }
-        else{DepCon depc = new DepCon(this, numero, dato_cantidad, no_operacion, dato_motivo, no_cajero);
+        else{
+            DepCon depc = new DepCon(this, numero, dato_cantidad, no_operacion, dato_motivo, no_cajero);
             depc.setVisible(true);
             this.setVisible(false);
             this.dispose();
