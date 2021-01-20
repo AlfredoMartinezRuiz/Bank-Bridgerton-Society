@@ -274,6 +274,11 @@ public class AgregarCuenta extends javax.swing.JFrame {
 
         txtNcuenta.setEditable(false);
         txtNcuenta.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtNcuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNcuentaActionPerformed(evt);
+            }
+        });
 
         txtNtarjeta.setEditable(false);
         txtNtarjeta.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -427,8 +432,9 @@ public class AgregarCuenta extends javax.swing.JFrame {
             }
             else{ // Si se creó correctamente la cuenta
                 if(invocador_cliente){ // Si fue invocada desde ClienteInt
-                    clte.setVisible(true);
-                    clte.agregarCuenta(cta);
+                    ClienteInt clt = new ClienteInt(clte.idc);
+                    clt.setVisible(true);
+                    clt.agregarCuenta(cta);
                     this.setVisible(false);
                     this.dispose();
                 }                
@@ -467,6 +473,10 @@ public class AgregarCuenta extends javax.swing.JFrame {
         Error.dispose();
     }//GEN-LAST:event_ErrorWindowClosing
 
+    private void txtNcuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNcuentaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNcuentaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -497,7 +507,7 @@ public class AgregarCuenta extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AgregarCuenta(new Cliente(), new AgregarCliente(), new ClienteInt(), true).setVisible(true);
+                new AgregarCuenta(new Cliente(), new AgregarCliente(), new ClienteInt(-1), true).setVisible(true);
             }
         });
     }

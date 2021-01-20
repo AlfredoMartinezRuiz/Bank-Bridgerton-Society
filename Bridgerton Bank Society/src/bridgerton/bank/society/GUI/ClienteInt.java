@@ -2,19 +2,182 @@
 package bridgerton.bank.society.GUI;
 
 import bridgerton.bank.society.Cliente;
+import bridgerton.bank.society.Cliente.Cuenta;
+import bridgerton.bank.society.GUI_Cajero.Cajero;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import static java.nio.file.Files.delete;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.table.DefaultTableModel;
 
 public class ClienteInt extends javax.swing.JFrame {
-
-    public ClienteInt() {
+    private static ArrayList<Cliente> clientes = new ArrayList<Cliente>(); // Arraylist para manejar a nuestros clientes 
+    private static ArrayList<Cliente.Cuenta> cuentas = new ArrayList<Cliente.Cuenta>(); // Arraylist para manejar a nuestros clientes 
+    
+// Herramientas para calcular la posición de la ventana
+    private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
+    private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
+    
+    // Variable para tener el idc
+    public static int idc = 0;
+    
+    private ImageIcon icon = new ImageIcon();
+    public ClienteInt(int idc) {
+        this.idc = idc;
+        setLocation(ancho/2-375, 10);
         initComponents();
+        clienteReader(idc);
+        tabla_cuentas(cuentas);
         
-        
+        //lblNombre.setText(c.getNombre());
     }
+    
     public void agregarCuenta(Cliente.Cuenta cta) {
+        clienteWriter(idc, cta);
+        //cuentas.add(cta);
+        tabla_cuentas(cuentas);        
+    }
+    public boolean clienteWriter(int idc, Cuenta cta){ // Para meter las cuentas a cliente una vez creadas todas
+        File file = new File(".\\src\\Files\\Clientes.txt"); // dirección del archivo
+        
+        try {
+            if(file.exists()){ // Primero leemos
+                // Creamos los flujos de lectura del archivo con tipo objeto
+                FileInputStream fin = new FileInputStream(file);                
+                ObjectInputStream oin = new ObjectInputStream(fin);
+                clientes = (ArrayList<Cliente>) oin.readObject(); // Leemos el objeto del archivo y lo cargamos en clientes con su cast a ArrayList tipo clientes
+                // Cerramos flujos de lectura y devolvemos true porque fue exitoso
+                
+                for(Cliente c: clientes){
+                    if(c.getIDC() == idc){
+                        String location = c.getFotoCliente().getPath();
+                        iconos(location);
+                        cuentas = c.getCuentas();
+                        System.out.println(cuentas.size());
+                        cuentas.add(cta); // Para actualizar la tabla
+                        c.agregarCuenta(cta); // Agregar a cliente y archivo
+                        
+                        break;
+                    }
+                }
+                 // Creamos los flujos de lectura del archivo con tipo objeto
+                FileOutputStream fout = new FileOutputStream(file);                
+                ObjectOutputStream out = new ObjectOutputStream(fout);
+                out.writeObject(clientes); // Leemos el objeto del archivo y lo cargamos en clientes con su cast a ArrayList tipo clientes
+                // Cerramos flujos de lectura y devolvemos true porque fue exitoso
+                
+                oin.close();
+                fin.close();
+                return true;
+            }
+            else{
+                return false;
+            }
+            
+        } catch (Exception e) { // Manejo de la excepción de la lectura
+            e.printStackTrace(); 
+            return false;
+        }
+    }
+    private void iconos(String location){ // Arregla el problema de can't invoke
+        // path(String) -> abrimos file -> URI -> URL -> Usamos para construir una ImageIcon
+        URI p1 = null; // Variable de apoyo
+        
+        // Obtenemos el archivo de la dirección
+        File file = new File(location);
+        p1 = file.toURI(); // Cambia a URI primero
+        URL p2 = null;
+        try {
+            p2 = p1.toURL(); // Después cambia a URL
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(Cajero.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+        icon = new ImageIcon(p2);         
+    }
+    
+    public boolean clienteReader(int idc){
+        File file = new File(".\\src\\Files\\Clientes.txt"); // dirección del archivo
+        
+        try {
+            if(file.exists()){ // Primero leemos
+                // Creamos los flujos de lectura del archivo con tipo objeto
+                FileInputStream fin = new FileInputStream(file);                
+                ObjectInputStream oin = new ObjectInputStream(fin);
+                clientes = (ArrayList<Cliente>) oin.readObject(); // Leemos el objeto del archivo y lo cargamos en clientes con su cast a ArrayList tipo clientes
+                // Cerramos flujos de lectura y devolvemos true porque fue exitoso
+                
+                for(Cliente c: clientes){
+                    if(c.getIDC() == idc){
+                       
+                        lblNombre.setText(c.getNombre());
+                        lblIDE.setText(String.valueOf(c.getIDC()));
+                        lblCURP.setText(c.getCurp());
+                        lblFecha.setText(String.valueOf(c.getFechaN()));
+                        lblDir.setText(c.getDirec());
+                        lblFechI.setText(String.valueOf(c.getFechaI()));
+                        lblCel.setText(String.valueOf(c.getCelular()));
+                        lblTel.setText(String.valueOf(c.getTelefono()));
+                        cuentas = c.getCuentas();
+                    }
+                }
+                
+                
+                
+                oin.close();
+                fin.close();
+                return true;
+            }
+            else{
+                return false;
+            }
+            
+        } catch (Exception e) { // Manejo de la excepción de la lectura
+            e.printStackTrace(); 
+            return false;
+        }
+    }
+        
+        public void tabla_cuentas(ArrayList<Cliente.Cuenta> cuentas){ // Regenera las tablas a partir de las nuevas creadas
+        String[] tipos = {"Débito", "Crédito Bronce", "Crédito plata", "Crédito oro"};
+        // Para la fecha
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // formateamos la fecha para que se ingrese en número
+        Date fecha = new Date();
+        
+        DefaultTableModel model=(DefaultTableModel) tCuentas.getModel(); // Crea el modelo de la tabla a partir del actual
+        // Borra la tabla anterior
+        int index = 0;
+        while(index < model.getRowCount()){
+                model.removeRow(index); 
+        } 
+        
+        for(Cliente.Cuenta cuenta: cuentas)
+        {
+            Object[] fila = new Object[8]; // Crea el objeto de celdas para agregar
+            fila[0] = ""+cuenta.getCuenta(); // Número de cuenta
+            fila[1] = ""+cuenta.getTarjeta(); // Número de tarjeta
+            fila[2] = tipos[cuenta.getTipo()-1]; // Tipo de cuenta 
+            fila[3] = ""+cuenta.getClabe(); // Clabe interbancaria
+            fila[4] = ""+sdf.format(cuenta.getApertura()); // Fecha de apertura
+            fila[5] = ""+cuenta.getSaldo(); // Saldo positivo de la cuenta
+            fila[6] = ""+cuenta.getCVV(); // cvv de la tarjeta
+            fila[7] = ""+cuenta.getClaveseg(); //clave de seguridad
+            model.addRow(fila); // Agrega la fila al modelo de la tabla
+            tCuentas.setModel(model); // Reasigna el modelo pero ahora con los nuevos datos        
+        }
         
     }
-
+        
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -38,52 +201,51 @@ public class ClienteInt extends javax.swing.JFrame {
         lblCel = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         lblTel = new javax.swing.JLabel();
-        btnEliminar = new javax.swing.JButton();
         btnVer = new javax.swing.JButton();
         btnAgregar = new javax.swing.JButton();
-        JLabell = new javax.swing.JLabel();
-        lblCorreo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("Cliente");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
         });
 
-        lblFoto.setIcon(new javax.swing.ImageIcon("C:\\Users\\kit_5\\OneDrive\\Escritorio\\ProyectoPOO\\Código Fuente\\Bridgerton Bank Society\\src\\Files\\FotosClientes\\C1.jpeg")); // NOI18N
+        lblFoto.setIcon(icon);
         lblFoto.setDebugGraphicsOptions(javax.swing.DebugGraphics.NONE_OPTION);
 
+        lblNombre.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblNombre.setText("Nombre");
 
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel1.setText("IDE:");
 
-        lblIDE.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblIDE.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblIDE.setText("ide");
 
-        jLabel2.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel2.setText("CURP:");
 
-        lblCURP.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblCURP.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblCURP.setText("curp");
 
-        jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel4.setText("Fecha:");
+        jLabel4.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel4.setText("Fecha de nacimiento:");
 
-        lblFecha.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblFecha.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblFecha.setText("fecha");
 
-        jLabel5.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel5.setText("Dirección:");
 
-        lblDir.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblDir.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblDir.setText("direccion");
 
-        jLabel7.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel7.setText("Fecha de incorporación:");
 
-        lblFechI.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblFechI.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblFechI.setText("fecha_inco");
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -115,25 +277,17 @@ public class ClienteInt extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tCuentas);
 
-        jLabel8.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel8.setText("Celular:");
 
-        lblCel.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblCel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblCel.setText("cel");
 
-        jLabel10.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel10.setText("Teléfono:");
 
-        lblTel.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblTel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblTel.setText("tel");
-
-        btnEliminar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btnEliminar.setText("Eliminar Cliente");
-        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarActionPerformed(evt);
-            }
-        });
 
         btnVer.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnVer.setText("Ver transacciones");
@@ -151,12 +305,6 @@ public class ClienteInt extends javax.swing.JFrame {
             }
         });
 
-        JLabell.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        JLabell.setText("Correo:");
-
-        lblCorreo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblCorreo.setText("correo");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -165,45 +313,41 @@ public class ClienteInt extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(75, 75, 75)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel7))
-                                .addGap(27, 27, 27)
+                                .addComponent(lblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblFechI)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jLabel7))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addGroup(layout.createSequentialGroup()
-                                                .addComponent(lblDir)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addGap(16, 16, 16)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(lblDir, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                                                    .addComponent(lblIDE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(lblCURP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(lblFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                             .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addGroup(layout.createSequentialGroup()
-                                                        .addGap(3, 3, 3)
-                                                        .addComponent(lblIDE))
-                                                    .addComponent(lblCURP)
-                                                    .addComponent(lblFecha))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(jLabel8)
-                                                    .addComponent(jLabel10)
-                                                    .addComponent(JLabell))
-                                                .addGap(30, 30, 30)))
+                                                .addGap(18, 18, 18)
+                                                .addComponent(lblFechI, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(lblTel)
-                                            .addComponent(lblCel)
-                                            .addComponent(lblCorreo))
-                                        .addGap(136, 136, 136))))
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(56, 56, 56)
-                                .addComponent(lblNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE))
+                                            .addComponent(jLabel8)
+                                            .addComponent(jLabel10)))
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4))
+                                .addGap(21, 21, 21)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(lblCel, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                                    .addComponent(lblTel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(81, 81, 81))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -211,58 +355,54 @@ public class ClienteInt extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGap(430, 430, 430)
-                                        .addComponent(btnEliminar)
-                                        .addGap(18, 18, 18)
+                                        .addGap(569, 569, 569)
                                         .addComponent(btnVer))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(365, 365, 365)
                                 .addComponent(jLabel6)))
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(12, 12, 12))
             .addGroup(layout.createSequentialGroup()
                 .addGap(29, 29, 29)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 719, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 759, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(27, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(44, 44, 44)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel1)
-                                    .addComponent(lblIDE))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel2)
-                                    .addComponent(lblCURP)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel10)))
+                        .addGap(34, 34, 34)
+                        .addComponent(lblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(44, 44, 44)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(lblIDE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(lblFecha))
-                        .addGap(26, 26, 26)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(lblDir)
-                            .addComponent(JLabell)))
+                            .addComponent(jLabel2)
+                            .addComponent(lblCURP)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblCel)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(lblCel))
                         .addGap(18, 18, 18)
-                        .addComponent(lblTel)
-                        .addGap(58, 58, 58)
-                        .addComponent(lblCorreo)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel10)
+                            .addComponent(lblTel))))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(lblFecha))
+                .addGap(26, 26, 26)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(lblDir))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
@@ -274,28 +414,22 @@ public class ClienteInt extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAgregar)
                 .addGap(22, 22, 22)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEliminar)
-                    .addComponent(btnVer))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addComponent(btnVer)
+                .addGap(19, 19, 19))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnEliminarActionPerformed
-
+        
     private void btnVerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnVerActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        AgregarCuenta ac = new AgregarCuenta(new Cliente(), null, this, true);
+        Cliente cliente = new Cliente();
+        AgregarCuenta ac = new AgregarCuenta(cliente, null, this, true);
         ac.setVisible(true);
         this.setVisible(false);
-        this.dispose();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -336,15 +470,13 @@ public class ClienteInt extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ClienteInt().setVisible(true);
+                new ClienteInt(-1).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel JLabell;
     private javax.swing.JButton btnAgregar;
-    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnVer;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -357,7 +489,6 @@ public class ClienteInt extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblCURP;
     private javax.swing.JLabel lblCel;
-    private javax.swing.JLabel lblCorreo;
     private javax.swing.JLabel lblDir;
     private javax.swing.JLabel lblFechI;
     private javax.swing.JLabel lblFecha;

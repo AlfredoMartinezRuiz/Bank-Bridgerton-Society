@@ -1,6 +1,7 @@
 
 package bridgerton.bank.society;
 
+import bridgerton.bank.society.GUI.BancoListaClientes;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -436,8 +437,7 @@ public class BridgertonBankSociety {
     }
     
     private static boolean clienteWriter(Cliente c){
-       
-        
+           
         try {
             if(file.exists()){ 
                 
@@ -470,17 +470,45 @@ public class BridgertonBankSociety {
         }
     }
     
-    public static void eliminarCliente(Cliente c){
+    public static boolean eliminarCliente(int idc){
         
-        clientes.remove(c);
-        ArrayList<Cliente> copia = clientes;
-        clientes = new ArrayList<>();
-        
-        file.delete();
-        
-        for(Cliente clientes:copia){
-            clienteWriter(clientes);
+        try {
+            if(file.exists()){ 
+                
+                // Primero leemos si no está vacío
+                if(file.length() > 0){
+                    FileInputStream fin = new FileInputStream(file);
+                    ObjectInputStream oin = new ObjectInputStream(fin);
+                    clientes = (ArrayList<Cliente>) oin.readObject();
+                    
+                    for(Cliente c: clientes){
+                        if(c.getIDC() == idc){
+                            clientes.remove(c);
+                            break;
+                        }
+                    }
+                    oin.close();
+                    fin.close();
+                }
+                    
+                
+                // Después escribimos
+                FileOutputStream fout = new FileOutputStream(file);
+                ObjectOutputStream out = new ObjectOutputStream(fout);
+                out.writeObject(clientes);
+                out.close();
+                fout.close();
+                
+                return true;
+            }
+            else{
+                return false;
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace(); 
+            return false;
         }
-       
+        
     }
 }

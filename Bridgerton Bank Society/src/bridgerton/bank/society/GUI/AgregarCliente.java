@@ -234,10 +234,10 @@ public class AgregarCliente extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(292, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(269, 269, 269)
                 .addComponent(jLabel1)
-                .addGap(266, 266, 266))
+                .addContainerGap(289, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -462,11 +462,16 @@ public class AgregarCliente extends javax.swing.JFrame {
                 .addGap(11, 11, 11)
                 .addComponent(agregar_cuenta)
                 .addGap(6, 6, 6)
-                .addComponent(agregar_cliente))
+                .addComponent(agregar_cliente)
+                .addContainerGap(38, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    public static ArrayList<Cliente.Cuenta> getCuentas() {
+        return cuentas;
+    }
 
     private void archivosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_archivosActionPerformed
         JFileChooser chooser = new JFileChooser();

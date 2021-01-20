@@ -29,6 +29,9 @@ public class BancoListaClientes extends javax.swing.JFrame {
     private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
     private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
     
+    // Herramienta de instancia
+    private static BancoListaClientes blt = null;
+    
     public BancoListaClientes() { // Sin ningún filtro
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH); 
@@ -36,6 +39,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
         clienteReader(); // Lee los cientes del archivo y los almacena en el array de clientes
         tabla(); // Genera la tabla
         timer.start();
+        blt = this;
         popupTabla();
     }
     
@@ -169,6 +173,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
                fecha_label.setText("Fecha: " + new Date());
             }           
     });
+    
     public void popupTabla(){
         JPopupMenu pM = new JPopupMenu(); //se crea el contenedor
         JMenuItem jmi1 = new JMenuItem("Ver"); //las opciones
@@ -178,20 +183,23 @@ public class BancoListaClientes extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //int ift = clientesT.getSelectedRow();
-                int ideC = (int) clientesT.getValueAt(clientesT.getSelectedRow(), 0);
-                
+                String ideC = String.valueOf(clientesT.getValueAt(clientesT.getSelectedRow(), 0));   
+                int idc = Integer.valueOf(ideC);   
+                if(idc != -1){ // Busqueda por IDC, checamos que no esté vacío              
+                    ClienteInt clr = new ClienteInt(idc);
+                    clr.setVisible(true);
+                    blt.setVisible(false);
+                    blt.dispose();
+                }    
             }
         });
         jmi2.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                int ideC = (int) clientesT.getValueAt(clientesT.getSelectedRow(), 0);
-                if(ideC != -1){                 
-                    for(Cliente c: clientes){
-                        
-                    }                  
-                }
-                    
+                Eliminar.setVisible(true);
+                Eliminar.setSize(310, 170);
+                Eliminar.setLocation(ancho/2 - 160, alto/2 - 45);
+                
             }
         });
         pM.add(jmi1);// se agregan las opciones al contenedor
@@ -207,6 +215,10 @@ public class BancoListaClientes extends javax.swing.JFrame {
         message = new javax.swing.JLabel();
         btnSi = new javax.swing.JButton();
         btnNo = new javax.swing.JButton();
+        Eliminar = new javax.swing.JDialog();
+        message1 = new javax.swing.JLabel();
+        btnSi1 = new javax.swing.JButton();
+        btnNo1 = new javax.swing.JButton();
         btnLClientes = new javax.swing.JButton();
         lTransacciones = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
@@ -270,6 +282,49 @@ public class BancoListaClientes extends javax.swing.JFrame {
                     .addComponent(btnNo)
                     .addComponent(btnSi))
                 .addContainerGap(31, Short.MAX_VALUE))
+        );
+
+        message1.setFont(new java.awt.Font("Microsoft New Tai Lue", 0, 14)); // NOI18N
+        message1.setForeground(new java.awt.Color(255, 0, 0));
+        message1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        message1.setText("¿Está seguro?");
+
+        btnSi1.setText("SÍ");
+        btnSi1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSi1ActionPerformed(evt);
+            }
+        });
+
+        btnNo1.setText("NO");
+        btnNo1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNo1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout EliminarLayout = new javax.swing.GroupLayout(Eliminar.getContentPane());
+        Eliminar.getContentPane().setLayout(EliminarLayout);
+        EliminarLayout.setHorizontalGroup(
+            EliminarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(EliminarLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(message1, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(EliminarLayout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addComponent(btnSi1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(81, 81, 81)
+                .addComponent(btnNo1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        EliminarLayout.setVerticalGroup(
+            EliminarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(EliminarLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(message1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(EliminarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnSi1)
+                    .addComponent(btnNo1)))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -411,7 +466,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnLClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(lTransacciones, javax.swing.GroupLayout.DEFAULT_SIZE, 624, Short.MAX_VALUE))))
+                                .addComponent(lTransacciones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -527,6 +582,30 @@ public class BancoListaClientes extends javax.swing.JFrame {
         Confirmacion.setLocation(ancho/2 - 160, alto/2 - 45);
     }//GEN-LAST:event_formWindowClosing
 
+    private void btnSi1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSi1ActionPerformed
+        String ideC = String.valueOf(clientesT.getValueAt(clientesT.getSelectedRow(), 0));       
+        System.out.println(ideC);
+        if(ideC.equals("") == false){ // Busqueda por IDC, checamos que no esté vacío              
+            int idc = Integer.valueOf(ideC);  
+            if(idc != -1){
+                BridgertonBankSociety.eliminarCliente(idc);  
+                BancoListaClientes bcts= new BancoListaClientes();
+                bcts.setVisible(true);
+                this.setVisible(false);
+                this.dispose();
+                Eliminar.setVisible(false);
+                Eliminar.dispose();
+            }
+        }
+        
+    }//GEN-LAST:event_btnSi1ActionPerformed
+
+    private void btnNo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNo1ActionPerformed
+        this.setVisible(true);
+        Confirmacion.setVisible(false);
+        Confirmacion.dispose();
+    }//GEN-LAST:event_btnNo1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -564,11 +643,14 @@ public class BancoListaClientes extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog Confirmacion;
+    private javax.swing.JDialog Eliminar;
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnLClientes;
     private javax.swing.JButton btnNo;
+    private javax.swing.JButton btnNo1;
     private javax.swing.JButton btnSi;
+    private javax.swing.JButton btnSi1;
     private javax.swing.JTable clientesT;
     private javax.swing.JLabel fecha_label;
     private javax.swing.JLabel jLabel2;
@@ -577,5 +659,6 @@ public class BancoListaClientes extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton lTransacciones;
     private javax.swing.JLabel message;
+    private javax.swing.JLabel message1;
     // End of variables declaration//GEN-END:variables
 }
