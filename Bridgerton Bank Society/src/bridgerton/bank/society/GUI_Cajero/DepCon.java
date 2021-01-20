@@ -12,7 +12,7 @@ public class DepCon extends javax.swing.JFrame {
     private static String no_cuenta;
     private static float cantidad;
     private static String motivo;
-    
+    private static String titular;
     private static Deposito depo = null;
             
     
@@ -24,6 +24,7 @@ public class DepCon extends javax.swing.JFrame {
         this.no_cuenta = numero;
         this.cantidad = dato_cantidad;
         this.motivo = dato_motivo;
+        titular = BridgertonBankSociety.buscadorNombres(numero, 0);
         
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
@@ -32,7 +33,7 @@ public class DepCon extends javax.swing.JFrame {
     }
     private void mostrarDatos(){
         lblNo.setText(no_cuenta);
-        lblTitular.setText(" sd");
+        lblTitular.setText(titular);
         lblMotivo.setText(motivo);
         lblMonto.setText(""+cantidad);
         lblNoT.setText(""+no_operacion);

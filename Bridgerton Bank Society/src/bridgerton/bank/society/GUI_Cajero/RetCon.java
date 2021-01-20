@@ -5,6 +5,7 @@
  */
 package bridgerton.bank.society.GUI_Cajero;
 
+import bridgerton.bank.society.BridgertonBankSociety;
 import java.awt.Color;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 
@@ -15,23 +16,25 @@ import static java.awt.Frame.MAXIMIZED_BOTH;
 public class RetCon extends javax.swing.JFrame {
 
     // herramientas para hacer el retiro
-    private static int no_operacion;
+    private static int no_retiro;
     private static int no_cajero;
     private static String no_cuenta;
     private static float cantidad;
-    private static String clave;
-    
+    private static int clave;
+    private static String titular;
     private static Retiro ret = null;
    
-    RetCon(Retiro reti, String numero, float dato_cantidad, String dato_clave, int no_operacion, int no_cajero) {
+    RetCon(Retiro reti, String numero, float dato_cantidad, int dato_clave, int no_retiro, int no_cajero) {
         // Declaracion de los datos anteriores
         ret = reti;
-        this.no_operacion = no_operacion;
+        this.no_retiro = no_retiro;
         this.no_cajero = no_cajero;
         this.no_cuenta = numero;
         this.cantidad = dato_cantidad;
         this.clave = dato_clave;
         
+       
+        titular = BridgertonBankSociety.buscadorNombres(numero, 0);
         
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
@@ -39,14 +42,12 @@ public class RetCon extends javax.swing.JFrame {
         mostrarDatos();
     }
 
-    private RetCon() {
-    }
-    
+
     private void mostrarDatos() {
         lblNo.setText(no_cuenta);
-        //lblTitular.setText();
+        lblTitular.setText(titular);
         lblMonto.setText(""+cantidad);
-        lblNoT.setText(""+no_operacion);
+        lblNoT.setText(""+no_retiro);
     }
 
    
@@ -165,8 +166,8 @@ public class RetCon extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfiActionPerformed
-        /* sokets por defatul pero probamos funcionalidades */
-        BridgertonBankSociety.hacerDeposito(no_cuenta, cantidad, no_operacion, motivo, no_cajero);
+        
+        BridgertonBankSociety.hacerRetiro(no_cuenta, cantidad, no_retiro, clave, no_cajero);
     }//GEN-LAST:event_btnConfiActionPerformed
 
     /**
@@ -199,7 +200,7 @@ public class RetCon extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new RetCon().setVisible(true);
+                new RetCon(new Retiro(10), "100000000000", 10, 10, 10, 15).setVisible(true);
             }
         });
     }
