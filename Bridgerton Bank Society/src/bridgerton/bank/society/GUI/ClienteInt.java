@@ -131,9 +131,7 @@ public class ClienteInt extends javax.swing.JFrame {
                         cuentas = c.getCuentas();
                     }
                 }
-                
-                
-                
+
                 oin.close();
                 fin.close();
                 return true;
@@ -142,10 +140,10 @@ public class ClienteInt extends javax.swing.JFrame {
                 return false;
             }
             
-        } catch (Exception e) { // Manejo de la excepción de la lectura
-            e.printStackTrace(); 
-            return false;
-        }
+            } catch (Exception e) { // Manejo de la excepción de la lectura
+                e.printStackTrace(); 
+                return false;
+            }
     }
         
         public void tabla_cuentas(ArrayList<Cliente.Cuenta> cuentas){ // Regenera las tablas a partir de las nuevas creadas

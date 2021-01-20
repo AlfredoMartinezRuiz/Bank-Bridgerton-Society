@@ -4,6 +4,9 @@ package bridgerton.bank.society.GUI_Cajero;
 import bridgerton.bank.society.Transaccion;
 import java.awt.Color;
 import static java.awt.Frame.MAXIMIZED_BOTH;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
 public class Retiro extends javax.swing.JFrame {
@@ -14,10 +17,59 @@ public class Retiro extends javax.swing.JFrame {
     private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
     private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
     
-    public Retiro() {
+    private static int no_operacion = 0;
+    private static int no_cajero;
+    
+    public Retiro(int noCajero) {
+        no_cajero = noCajero; // Asignamos el número de cajero
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
         this.getContentPane().setBackground(Color.WHITE);
+    }
+
+    private Retiro() {
+    }
+    
+    private void generarOperacion(){
+        // Para Número de depósito
+        for(int i=0; i<10000; i++){ // Genera idc del 0 al 199 y busca alguno vacío
+            if(isInTransacciones(i) == false){
+                no_operacion = i;
+                break;
+            }
+        }
+    }
+   
+    private boolean isInTransacciones(int no_deposito){ // Función para identificar si el no. depósito está registrado entre los clientes 
+        File file = new File(".\\src\\Files\\Transacciones.txt"); // Asignamos la ruta
+        
+        try {            
+            if(file.exists()){ 
+                // Primero leemos si no está vacío
+                if(file.length() > 0){ 
+                    FileInputStream fin = new FileInputStream(file); // Creamos flujo de lectura del archivo 
+                    ObjectInputStream oin = new ObjectInputStream(fin); // Creamos flujo de lectura tipo objetos
+                    transacciones = (ArrayList<Transaccion>) oin.readObject(); // Leemos el único objeto de tipo arraylist de transaccion del archivo con su cast para poderlo asignar
+                    
+                    for(Transaccion t: transacciones){ // Recorremos el arraylist en busca de transacciones que coincidan con el idc generado
+                        if(t.getTrans() == no_deposito){
+                            return true;
+                        }
+                    }
+                    oin.close(); // Cerramos flujos de lectura
+                    fin.close();
+                }
+                // Si está vacío devolvemos falso
+                return false;
+            }
+            else{
+                return false;
+            }
+            
+        } catch (Exception e) { // Manejo de la exceción
+            e.printStackTrace(); 
+            return false;
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -156,7 +208,7 @@ public class Retiro extends javax.swing.JFrame {
     private void btnSigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSigActionPerformed
         boolean errors = false; // Variable para identificar los errores del algun dato
         float dato_cantidad = 0;
-        String dato_motivo = "";
+        String dato_clave = "";
 
         // Para el no de cuenta
         if(txtCuenta.getText().isBlank() == false){
@@ -189,14 +241,14 @@ public class Retiro extends javax.swing.JFrame {
         // Para la clave de seguridad
         if(txtClave.getText().isBlank() == false){
             try{
-                dato_motivo = txtClave.getText();
+                dato_clave = txtClave.getText();
             }catch(Exception e){
                 message.setText("Falta clave o está mal");
                 errors = true;
             }
         }
         else{
-            message.setText("Falta motivo o está mal");
+            message.setText("Falta clave o está mal");
             errors = true;
         }
         // Checamos si hubo algún error
@@ -205,12 +257,13 @@ public class Retiro extends javax.swing.JFrame {
             Error.setSize(310, 90);
             Error.setLocation(ancho/2 - 160, alto/2 - 45);
         }
-//        else{RetCon depc = new DepCon(this, numero, dato_cantidad, no_operacion, dato_motivo, no_cajero);
-//            depc.setVisible(true);
-//            this.setVisible(false);
-//            this.dispose();
-//
-//        }
+        else{
+            RetCon retc = new RetCon(this, numero, dato_cantidad, dato_clave, no_operacion, no_cajero);
+            retc.setVisible(true);
+            this.setVisible(false);
+            this.dispose();
+
+        }
 
     }//GEN-LAST:event_btnSigActionPerformed
 
