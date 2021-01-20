@@ -386,6 +386,7 @@ public class BridgertonBankSociety {
     }
     
     public static String buscadorNombres(String numero, int causa){
+        clienteWriter(null);
         if(causa == 0){
             // Buscando cuenta destino
             if(numero.length() == 16){ // Si es no. de tarjeta bancaria
@@ -449,15 +450,16 @@ public class BridgertonBankSociety {
                     oin.close();
                     fin.close();
                 }
-                
-                clientes.add(c);
-                
-                // Después escribimos
-                FileOutputStream fout = new FileOutputStream(file);
-                ObjectOutputStream out = new ObjectOutputStream(fout);
-                out.writeObject(clientes);
-                out.close();
-                fout.close();
+                else if(c != null){
+                    clientes.add(c);                
+                    // Después escribimos
+                    FileOutputStream fout = new FileOutputStream(file);
+                    ObjectOutputStream out = new ObjectOutputStream(fout);
+                    out.writeObject(clientes);
+                    out.close();
+                    fout.close();
+                    return true;
+                }
                 return true;
             }
             else{

@@ -31,8 +31,9 @@ public class ClienteInt extends javax.swing.JFrame {
     
     // Variable para tener el idc
     public static int idc = 0;
-    
+    // Herramienta para el icono
     private ImageIcon icon = new ImageIcon();
+    
     public ClienteInt(int idc) {
         this.idc = idc;
         setLocation(ancho/2-375, 10);
@@ -48,6 +49,7 @@ public class ClienteInt extends javax.swing.JFrame {
         //cuentas.add(cta);
         tabla_cuentas(cuentas);        
     }
+    
     public boolean clienteWriter(int idc, Cuenta cta){ // Para meter las cuentas a cliente una vez creadas todas
         File file = new File(".\\src\\Files\\Clientes.txt"); // dirección del archivo
         
@@ -61,8 +63,6 @@ public class ClienteInt extends javax.swing.JFrame {
                 
                 for(Cliente c: clientes){
                     if(c.getIDC() == idc){
-                        String location = c.getFotoCliente().getPath();
-                        iconos(location);
                         cuentas = c.getCuentas();
                         System.out.println(cuentas.size());
                         cuentas.add(cta); // Para actualizar la tabla
@@ -90,6 +90,7 @@ public class ClienteInt extends javax.swing.JFrame {
             return false;
         }
     }
+    
     private void iconos(String location){ // Arregla el problema de can't invoke
         // path(String) -> abrimos file -> URI -> URL -> Usamos para construir una ImageIcon
         URI p1 = null; // Variable de apoyo
@@ -106,6 +107,13 @@ public class ClienteInt extends javax.swing.JFrame {
         icon = new ImageIcon(p2);         
     }
     
+    // Función correctora de location
+    private String toRelative(String location){
+        fot
+        
+    }
+    
+    
     public boolean clienteReader(int idc){
         File file = new File(".\\src\\Files\\Clientes.txt"); // dirección del archivo
         
@@ -119,7 +127,9 @@ public class ClienteInt extends javax.swing.JFrame {
                 
                 for(Cliente c: clientes){
                     if(c.getIDC() == idc){
-                       
+                        String location = c.getFotoCliente().getPath();
+                        System.out.println(location);
+                        iconos(location);
                         lblNombre.setText(c.getNombre());
                         lblIDE.setText(String.valueOf(c.getIDC()));
                         lblCURP.setText(c.getCurp());
