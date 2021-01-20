@@ -148,9 +148,6 @@ public class AgregarCliente extends javax.swing.JFrame {
         tabla_cuentas(cta);
     }
     
-    public void escribirCuentas(Cliente cliente){ // Para meter las cuentas a cliente una vez creadas todas
-        cliente.asignarCuentas(cuentas);
-    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -482,7 +479,7 @@ public class AgregarCliente extends javax.swing.JFrame {
         chooser.showOpenDialog(null); // Abrimos la ventana para escoger
         imagen = chooser.getSelectedFile(); // Obtenemos el archivo recogido por el chooser y lo almacenamos en la variable imagen
         if(imagen != null) archivos.setText(imagen.getName()); // Si se escogió bien el archivo, mostramos el nombre del archivo en el botón
-        else System.out.println("Seleccionar imagen...");
+        
         //https://www.discoduroderoer.es/como-usar-el-componente-jfilechooser-en-una-aplicacion-grafica-en-java/
     }//GEN-LAST:event_archivosActionPerformed
 
@@ -598,9 +595,8 @@ public class AgregarCliente extends javax.swing.JFrame {
             Error.setLocation(ancho/2 - 160, alto/2 - 45);
         }
         else{ // Intentará crear el cliente, si algo falla, lo notificará también
-            Cliente nuevo_cliente = BridgertonBankSociety.crearCliente(dato_idc, dato_nombre, dato_curp, fecha_nac, dato_direc, dato_telefono, dato_celular, foto);
+            Cliente nuevo_cliente = BridgertonBankSociety.crearCliente(dato_idc, dato_nombre, dato_curp, fecha_nac, dato_direc, dato_telefono, dato_celular, foto, cuentas);
             if( nuevo_cliente != null){ // Si se creo el cliente correctamente
-                escribirCuentas(nuevo_cliente); // Mandamos a asignarle sus cuentas
                 BancoListaClientes bcts= new BancoListaClientes();
                 bcts.setVisible(true);
                 this.setVisible(false);

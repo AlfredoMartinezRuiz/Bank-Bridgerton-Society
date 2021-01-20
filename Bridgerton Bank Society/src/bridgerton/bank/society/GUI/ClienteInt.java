@@ -12,16 +12,20 @@ import java.io.ObjectOutputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.nio.file.Files;
 import static java.nio.file.Files.delete;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.ImageIcon;
 import javax.swing.table.DefaultTableModel;
 
 public class ClienteInt extends javax.swing.JFrame {
+    private static ImageIcon icon = new ImageIcon();
     private static ArrayList<Cliente> clientes = new ArrayList<Cliente>(); // Arraylist para manejar a nuestros clientes 
     private static ArrayList<Cliente.Cuenta> cuentas = new ArrayList<Cliente.Cuenta>(); // Arraylist para manejar a nuestros clientes 
     
@@ -32,14 +36,16 @@ public class ClienteInt extends javax.swing.JFrame {
     // Variable para tener el idc
     public static int idc = 0;
     // Herramienta para el icono
-    private ImageIcon icon = new ImageIcon();
+    
     
     public ClienteInt(int idc) {
+        imageDataReader(idc);
+        
         this.idc = idc;
         setLocation(ancho/2-375, 10);
-        initComponents();
+        initComponents();    
         clienteReader(idc);
-        tabla_cuentas(cuentas);
+        tabla_cuentas();
         
         //lblNombre.setText(c.getNombre());
     }
@@ -47,7 +53,7 @@ public class ClienteInt extends javax.swing.JFrame {
     public void agregarCuenta(Cliente.Cuenta cta) {
         clienteWriter(idc, cta);
         //cuentas.add(cta);
-        tabla_cuentas(cuentas);        
+        tabla_cuentas();        
     }
     
     public boolean clienteWriter(int idc, Cuenta cta){ // Para meter las cuentas a cliente una vez creadas todas
@@ -64,7 +70,6 @@ public class ClienteInt extends javax.swing.JFrame {
                 for(Cliente c: clientes){
                     if(c.getIDC() == idc){
                         cuentas = c.getCuentas();
-                        System.out.println(cuentas.size());
                         cuentas.add(cta); // Para actualizar la tabla
                         c.agregarCuenta(cta); // Agregar a cliente y archivo
                         
@@ -91,28 +96,61 @@ public class ClienteInt extends javax.swing.JFrame {
         }
     }
     
-    private void iconos(String location){ // Arregla el problema de can't invoke
-        // path(String) -> abrimos file -> URI -> URL -> Usamos para construir una ImageIcon
+    // Función correctora de location 1
+    private String toRelative(String name){
         URI p1 = null; // Variable de apoyo
+        String directory =".\\src\\Files\\FotosClientes\\"; 
+        File file = new File(directory);
+        File[] archivos = file.listFiles();
         
-        // Obtenemos el archivo de la dirección
-        File file = new File(location);
-        p1 = file.toURI(); // Cambia a URI primero
-        URL p2 = null;
+        for(int i = 0; i<archivos.length; i++){
+            if(archivos[i].getName().equals(name)){
+                p1 = archivos[i].toURI(); // Cambia a URI primero
+                URL p2 = null;
+                
+                try {
+                    p2 = p1.toURL(); // Después cambia a URL
+                } catch (MalformedURLException ex) {
+                    Logger.getLogger(Cajero.class.getName()).log(Level.SEVERE, null, ex);
+                }        
+                icon = new ImageIcon(p2);
+                return archivos[i].getPath();
+            }
+        }
+        return "";
+    }
+    
+    // Lectura de la imagen
+    private boolean imageDataReader(int idc){
+        File file = new File(".\\src\\Files\\Clientes.txt"); // dirección del archivo
+        
         try {
-            p2 = p1.toURL(); // Después cambia a URL
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(Cajero.class.getName()).log(Level.SEVERE, null, ex);
-        }        
-        icon = new ImageIcon(p2);         
+            if(file.exists()){ // Primero leemos
+                // Creamos los flujos de lectura del archivo con tipo objeto
+                FileInputStream fin = new FileInputStream(file);                
+                ObjectInputStream oin = new ObjectInputStream(fin);
+                clientes = (ArrayList<Cliente>) oin.readObject(); // Leemos el objeto del archivo y lo cargamos en clientes con su cast a ArrayList tipo clientes
+                
+                for(Cliente c: clientes){
+                    if(c.getIDC() == idc){
+                        String name = c.getFotoCliente().getName();
+                        toRelative(name);
+                        cuentas = c.getCuentas();
+                    }
+                }
+                oin.close();
+                fin.close();
+                return true;
+            }
+            else{
+                return false;
+            }
+            
+        } catch (Exception e) { // Manejo de la excepción de la lectura
+            e.printStackTrace(); 
+            return false;
+        }    
     }
-    
-    // Función correctora de location
-    private String toRelative(String location){
-        fot
-        
-    }
-    
     
     public boolean clienteReader(int idc){
         File file = new File(".\\src\\Files\\Clientes.txt"); // dirección del archivo
@@ -123,13 +161,9 @@ public class ClienteInt extends javax.swing.JFrame {
                 FileInputStream fin = new FileInputStream(file);                
                 ObjectInputStream oin = new ObjectInputStream(fin);
                 clientes = (ArrayList<Cliente>) oin.readObject(); // Leemos el objeto del archivo y lo cargamos en clientes con su cast a ArrayList tipo clientes
-                // Cerramos flujos de lectura y devolvemos true porque fue exitoso
                 
                 for(Cliente c: clientes){
                     if(c.getIDC() == idc){
-                        String location = c.getFotoCliente().getPath();
-                        System.out.println(location);
-                        iconos(location);
                         lblNombre.setText(c.getNombre());
                         lblIDE.setText(String.valueOf(c.getIDC()));
                         lblCURP.setText(c.getCurp());
@@ -140,11 +174,7 @@ public class ClienteInt extends javax.swing.JFrame {
                         lblTel.setText(String.valueOf(c.getTelefono()));
                         cuentas = c.getCuentas();
                     }
-                }
-                
-                
-                
-                oin.close();
+                }oin.close();
                 fin.close();
                 return true;
             }
@@ -158,17 +188,18 @@ public class ClienteInt extends javax.swing.JFrame {
         }
     }
         
-        public void tabla_cuentas(ArrayList<Cliente.Cuenta> cuentas){ // Regenera las tablas a partir de las nuevas creadas
+    public void tabla_cuentas(){ // Regenera las tablas a partir de las nuevas creadas
         String[] tipos = {"Débito", "Crédito Bronce", "Crédito plata", "Crédito oro"};
         // Para la fecha
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // formateamos la fecha para que se ingrese en número
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy"); // formateamos la fecha para que se ingrese en número
         Date fecha = new Date();
         
         DefaultTableModel model=(DefaultTableModel) tCuentas.getModel(); // Crea el modelo de la tabla a partir del actual
+        
         // Borra la tabla anterior
         int index = 0;
         while(index < model.getRowCount()){
-                model.removeRow(index); 
+            model.removeRow(index); 
         } 
         
         for(Cliente.Cuenta cuenta: cuentas)
@@ -440,6 +471,7 @@ public class ClienteInt extends javax.swing.JFrame {
         AgregarCuenta ac = new AgregarCuenta(cliente, null, this, true);
         ac.setVisible(true);
         this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing

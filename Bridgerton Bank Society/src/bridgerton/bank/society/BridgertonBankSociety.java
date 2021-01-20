@@ -2,15 +2,21 @@
 package bridgerton.bank.society;
 
 import bridgerton.bank.society.GUI.BancoListaClientes;
+import bridgerton.bank.society.Cliente.Cuenta;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BridgertonBankSociety {
     public static ArrayList<Cliente> clientes = new ArrayList<Cliente>();
@@ -46,15 +52,15 @@ public class BridgertonBankSociety {
     public static void main(String[] args) {
     }
     
-    public static Cliente crearCliente(int idc, String nombre, String curp, Date fecha_nac, String direc, long telefono, long celular, File foto_cliente){
+    public static Cliente crearCliente(int idc, String nombre, String curp, Date fecha_nac, String direc, long telefono, long celular, File foto_cliente, ArrayList<Cuenta> cuentas){
         Cliente nuevo = new Cliente(idc, nombre, curp, fecha_nac, direc, telefono, celular, foto_cliente);
+        nuevo.asignarCuentas(cuentas); // Mandamos a asignarle sus cuentas
         clienteWriter(nuevo);
         return nuevo; // Mandamos a escribir el cliente y regresamos el resultado
     }
     
     public static int hacerDeposito(String nocuenta, float cantidad, int numerodeposito, String motivo, int noCajero){
         // Buscando cuenta 
-        System.out.println(nocuenta.length());
         if(nocuenta.length() == 16){ // Si es no. de tarjeta bancaria
             for(Cliente c: clientes){
                 if(c.buscadorTarjeta(nocuenta) != null){
@@ -471,6 +477,15 @@ public class BridgertonBankSociety {
             return false;
         }
     }
+    public static void limpiarClientes(){
+        file.delete();
+        try {
+            file.createNewFile();
+        } catch (IOException ex) {
+            Logger.getLogger(BridgertonBankSociety.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("Limpieza hecha");
+    }
     
     public static boolean eliminarCliente(int idc){
         
@@ -488,11 +503,13 @@ public class BridgertonBankSociety {
                             clientes.remove(c);
                             break;
                         }
-                    }
+                    }                    
                     oin.close();
                     fin.close();
-                }
+                    // Limpieza de archivo
                     
+                }
+                BridgertonBankSociety.limpiarClientes();                   
                 
                 // Después escribimos
                 FileOutputStream fout = new FileOutputStream(file);
