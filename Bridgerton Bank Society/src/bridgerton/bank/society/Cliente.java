@@ -246,7 +246,7 @@ public class Cliente implements Serializable{
     }
     
     public int recibirDeposito(String nocuenta, float cantidad, int numerodeposito, String motivo, int noCajero){
-         // Trabajando con la cuenta
+        // Trabajando con la cuenta
         // Buscando cuenta estando totalmente seguros que aquí está la cuenta
         Cuenta cuenta = new Cuenta();
         if(nocuenta.length() == 16){ // Si es no. de tarjeta bancaria
@@ -259,6 +259,7 @@ public class Cliente implements Serializable{
             cuenta = this.buscadorClabe(nocuenta);
         }
         cuenta.saldopositivo = cuenta.saldopositivo + cantidad;
+        System.out.println(cuenta.saldopositivo);
         cuentaRewriter(cuenta); // Modifica la cuenta en el archivo
 
         // Trabajando con la transaccion

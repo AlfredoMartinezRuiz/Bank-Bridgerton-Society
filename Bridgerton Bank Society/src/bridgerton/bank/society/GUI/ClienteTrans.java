@@ -1,6 +1,8 @@
 
 package bridgerton.bank.society.GUI;
 
+import bridgerton.bank.society.Cliente;
+import bridgerton.bank.society.Cliente.Cuenta;
 import bridgerton.bank.society.Transaccion;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,6 +21,7 @@ import javax.swing.table.DefaultTableModel;
 public class ClienteTrans extends javax.swing.JFrame {
     // Array para la lista de transacciones
     private static ArrayList<Transaccion> transacciones = new ArrayList<Transaccion>();
+    private static ArrayList<Cliente.Cuenta> cuentas = new ArrayList<Cliente.Cuenta>();
     
     // Herramientas para las fechas de filtro
     private static Date desde = new Date();
@@ -29,14 +32,18 @@ public class ClienteTrans extends javax.swing.JFrame {
     // Variables de ayuda para la posición de las ventanas
     private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
     private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
+    private static int idc;
+    private static ClienteInt cint = null;
     
-    public ClienteTrans() {
+    public ClienteTrans(int idc, ClienteInt cint) {
+        this.idc = idc;
+        this.cint = cint;
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
         trans_timer.start();
     }
     private void transaccionesReader(){
-        
+        ArrayList<Transaccion> trans = new ArrayList<Transaccion>();
         File file = new File(".\\src\\Files\\Transacciones.txt"); // Direccion del archivo de los clientes
         
         try {
@@ -46,7 +53,16 @@ public class ClienteTrans extends javax.swing.JFrame {
                    // Flujos y lectura de archivos
                     FileInputStream fin = new FileInputStream(file);
                     ObjectInputStream oin = new ObjectInputStream(fin);
-                    transacciones = (ArrayList<Transaccion>) oin.readObject();
+                    trans = (ArrayList<Transaccion>) oin.readObject();
+                    cuentaReader(idc);
+                    for(Transaccion t: trans){
+                        if(isInCuentas(t.getDestino())){ // Comprobando si el destino está
+                            transacciones.add(t);
+                        }
+                        if(isInCuentas(t.getEmisora())){ // Comprobando si el destino está
+                            transacciones.add(t);
+                        }
+                    }
                     
                     oin.close();
                     fin.close();
@@ -55,6 +71,20 @@ public class ClienteTrans extends javax.swing.JFrame {
         } catch (Exception e) {
             e.printStackTrace(); 
         }    
+    }
+    private boolean isInCuentas(String numero){
+        for(Cuenta c: cuentas){
+            if(numero.equals(c.getClabe())){ // Comprobando si está entre las clabes
+                return true;
+            }
+            if(numero.equals(c.getTarjeta())){ // Comprobando si está entre las Tarjetas               
+                return true;
+            }            
+            if(numero.equals(c.getCuenta())){ // Comprobando si está entre las cuentas
+                return true;
+            }
+        }                
+        return false;
     }
     
     private void tabla(){ // Muestra la tabla normal
@@ -102,6 +132,38 @@ public class ClienteTrans extends javax.swing.JFrame {
             }
         } 
     }
+    
+    private boolean cuentaReader(int idc){
+        File file = new File(".\\src\\Files\\Cuentas.txt"); // dirección del archivo
+        ArrayList<Cliente.Cuenta> cuentascl = new ArrayList<Cliente.Cuenta>();
+        try {
+            if(file.exists()){ // Primero leemos
+                // Creamos los flujos de lectura del archivo con tipo objeto
+                FileInputStream fin = new FileInputStream(file);                
+                ObjectInputStream oin = new ObjectInputStream(fin);
+                cuentascl = (ArrayList<Cliente.Cuenta>) oin.readObject(); // Leemos el objeto del archivo y lo cargamos en clientes con su cast a ArrayList tipo clientes
+                cuentas = new ArrayList<Cliente.Cuenta>();
+                
+                for(Cliente.Cuenta c: cuentascl){
+                    if(c.getIdc() == idc){
+                        cuentas.add(c);
+                    }
+                }
+
+                oin.close();
+                fin.close();
+                return true;
+            }
+            else{
+                return false;
+            }
+            
+            } catch (Exception e) { // Manejo de la excepción de la lectura
+                e.printStackTrace(); 
+                return false;
+            }
+    }     
+    
     private void tabla(Date desde, Date hasta){
         DefaultTableModel model=(DefaultTableModel) tablaTransacciones.getModel();
         
@@ -166,7 +228,12 @@ public class ClienteTrans extends javax.swing.JFrame {
                 .addContainerGap(29, Short.MAX_VALUE))
         );
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         tablaTransacciones.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         tablaTransacciones.setModel(new javax.swing.table.DefaultTableModel(
@@ -330,6 +397,13 @@ public class ClienteTrans extends javax.swing.JFrame {
         Error.setVisible(false);
         Error.dispose();
     }//GEN-LAST:event_ErrorWindowClosing
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        cint.setVisible(true);
+        timer.stop();
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_formWindowClosing
       
     Timer trans_timer = new Timer (100, new ActionListener (){ // Encargado de mostrar la tabla normal
             public void actionPerformed(ActionEvent e) {
@@ -367,7 +441,7 @@ public class ClienteTrans extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ClienteTrans().setVisible(true);
+                new ClienteTrans(10, new ClienteInt(10)).setVisible(true);
             }
         });
     }

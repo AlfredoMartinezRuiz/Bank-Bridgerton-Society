@@ -497,7 +497,9 @@ public class ClienteInt extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
         
     private void btnVerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerActionPerformed
-        // TODO add your handling code here:
+       ClienteTrans ct = new ClienteTrans(idc, this);
+       ct.setVisible(true);
+       this.setVisible(false);       
     }//GEN-LAST:event_btnVerActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed

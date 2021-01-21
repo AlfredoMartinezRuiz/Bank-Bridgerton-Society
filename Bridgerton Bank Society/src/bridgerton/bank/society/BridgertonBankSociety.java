@@ -278,6 +278,7 @@ public class BridgertonBankSociety {
     
     public static float checarSaldo(String nocuenta, int clave){
         //Buscando el cliente
+        clienteReader();
         boolean cliente_nuestro = false;
         float aux_error = 0;
         
@@ -318,7 +319,7 @@ public class BridgertonBankSociety {
             return aux_error;
         }
         
-        return 0;       
+        return aux_error;       
     }
     
     public static int cambiarClave(String nocuenta, int cvv_atm, int clave_atm, int nclave){
