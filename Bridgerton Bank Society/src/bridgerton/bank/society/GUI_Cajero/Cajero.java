@@ -233,7 +233,7 @@ public class Cajero extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDepositoActionPerformed
 
     private void btnTransferenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferenciaActionPerformed
-        Transferencia tr = new Transferencia();
+        Transferencia tr = new Transferencia(noCajero);
         tr.setVisible(true);
         this.setVisible(false);
         this.dispose();

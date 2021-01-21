@@ -1,15 +1,48 @@
 
 package bridgerton.bank.society.GUI_Cajero;
 
+import bridgerton.bank.society.BridgertonBankSociety;
 import java.awt.Color;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 
 public class TransCon extends javax.swing.JFrame {
+     // herramientas para hacer la transferencia
+    private static int no_operacion;
+    private static int no_cajero;
+    private static String no_cuenta1;
+    private static String no_cuenta2;
+    private static float cantidad;
+    private static String motivo;
+    private static int clave;
+    private static String titular;
+    private static Deposito depo = null;
+    private static Transferencia tr = null;
 
-    public TransCon() {
+    TransCon(Transferencia trans, String num_emisor, int dato_clave, float dato_cantidad, String num_destino, String dato_motivo, int no_operacion,int no_cajero) {
+        tr = trans;
+        this.no_operacion = no_operacion;
+        this.no_cajero = no_cajero;
+        this.no_cuenta1 = num_emisor;
+        this.no_cuenta2 = num_destino;
+        this.cantidad = dato_cantidad;
+        this.motivo = dato_motivo;
+        this.clave = dato_clave;
+        
+        titular = BridgertonBankSociety.buscadorNombres(num_destino, 0);
+        
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
         this.getContentPane().setBackground(Color.WHITE);
+        mostrarDatos();
+    }
+    
+    private void mostrarDatos(){
+        lblNoRem.setText(no_cuenta1);
+        lblNoDest.setText(no_cuenta2);
+        lblTitular.setText(titular);
+        lblMotivo.setText(motivo);
+        lblMonto.setText(""+cantidad);
+        lblTrans.setText(""+no_operacion);
     }
 
     /**
@@ -47,46 +80,46 @@ public class TransCon extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("RESUMEN: TRANFERENCIA A CUENTA O TARJETA");
 
-        jLabel2.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel2.setText("CUENTA REMITENTE.");
 
-        jLabel4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         jLabel4.setText("Número de cuenta, clabe interbancaria o número de tarjeta:");
 
-        jLabel7.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel7.setText("CUENTA DESTINO.");
 
-        jLabel9.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         jLabel9.setText("Número de cuenta, clabe interbancaria o número de tarjeta:");
 
-        jLabel5.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         jLabel5.setText("Monto:");
 
-        jLabel6.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         jLabel6.setText("Motivo:");
 
-        jLabel8.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         jLabel8.setText("Titular de la cuenta:");
 
-        jLabel10.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         jLabel10.setText("No. de transacción:");
 
-        lblNoRem.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblNoRem.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         lblNoRem.setText("jLabel11");
 
-        lblNoDest.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblNoDest.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         lblNoDest.setText("jLabel12");
 
-        lblTitular.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblTitular.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         lblTitular.setText("jLabel13");
 
-        lblMotivo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblMotivo.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         lblMotivo.setText("jLabel14");
 
-        lblMonto.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblMonto.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         lblMonto.setText("jLabel15");
 
-        lblTrans.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblTrans.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         lblTrans.setText("jLabel16");
 
         btnConfi.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
@@ -107,10 +140,10 @@ public class TransCon extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(429, 429, 429)
+                        .addGap(435, 435, 435)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 487, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(389, 389, 389)
+                        .addGap(408, 408, 408)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel2)
                             .addComponent(jLabel9)
@@ -129,16 +162,16 @@ public class TransCon extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnConfi, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(398, 398, 398))
+                .addComponent(btnConfi, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(372, 372, 372))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel1)
-                .addGap(29, 29, 29)
+                .addGap(37, 37, 37)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel4)
@@ -166,16 +199,17 @@ public class TransCon extends javax.swing.JFrame {
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblTrans)
-                .addGap(18, 18, 18)
-                .addComponent(btnConfi, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(113, Short.MAX_VALUE))
+                .addGap(15, 15, 15)
+                .addComponent(btnConfi, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(92, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfiActionPerformed
-        // TODO add your handling code here:
+        //realizarTrans(String numero, String emisor, float cantidad, int numerotransferencia, String motivo, int noCajero, int clave)
+        BridgertonBankSociety.realizarTrans(no_cuenta1,no_cuenta2, cantidad, no_operacion, motivo, no_cajero, clave);
     }//GEN-LAST:event_btnConfiActionPerformed
 
     /**
@@ -208,7 +242,7 @@ public class TransCon extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TransCon().setVisible(true);
+                new TransCon(new Transferencia(5), "100000000", 10, 100, "200000000000", "xd", 10,15).setVisible(true);
             }
         });
     }
