@@ -3,6 +3,7 @@ package bridgerton.bank.society;
 
 import bridgerton.bank.society.GUI.BancoListaClientes;
 import bridgerton.bank.society.Cliente.Cuenta;
+import bridgerton.bank.society.Cliente;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,6 +21,7 @@ import java.util.logging.Logger;
 
 public class BridgertonBankSociety {
     public static ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+    
     public static ArrayList<Transaccion> transacciones = new ArrayList<Transaccion>();
     public static ArrayList<String>diccionario_errores = new ArrayList<String>();
     public static ArrayList<String> diccionario_nombres = new ArrayList<String>();
@@ -394,6 +396,7 @@ public class BridgertonBankSociety {
     
     public static String buscadorNombres(String numero, int causa){
         clienteReader();
+        clientes = (ArrayList<Cliente>) clientes;
         if(causa == 0){
             // Buscando cuenta destino
             if(numero.length() == 16){ // Si es no. de tarjeta bancaria
@@ -478,11 +481,11 @@ public class BridgertonBankSociety {
     
     private static boolean clienteReader(){ // Solo lee las clientes
             try {
-                if(filec.exists()){ 
+                if(file.exists()){ 
 
                     // Primero leemos si no está vacío
-                    if(filec.length() > 0){
-                        FileInputStream fin = new FileInputStream(filec);
+                    if(file.length() > 0){
+                        FileInputStream fin = new FileInputStream(file);
                         ObjectInputStream oin = new ObjectInputStream(fin);
                         clientes = (ArrayList<Cliente>) oin.readObject();                        
                         oin.close();
