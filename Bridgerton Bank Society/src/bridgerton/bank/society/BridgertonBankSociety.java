@@ -94,7 +94,7 @@ public class BridgertonBankSociety {
         
         return 0;       
     }
-    
+    // Para transferencias normales
     public static int realizarTrans(String numero, String emisor, float cantidad, int numerotransferencia, String motivo, int noCajero, int clave){
         // Buscando cuenta emisora
         boolean cliente_nuestro = false;
@@ -169,6 +169,7 @@ public class BridgertonBankSociety {
         return 0;          
     }
     
+    // Para donaciones
     public static int realizarTrans(String emisor, float cantidad, int numerotransferencia, String motivo, int noCajero, int clave, int causa){
         
         //Obteniendo cuenta
@@ -395,9 +396,9 @@ public class BridgertonBankSociety {
     }
     
     public static String buscadorNombres(String numero, int causa){
-        clienteReader();
-        clientes = (ArrayList<Cliente>) clientes;
+        
         if(causa == 0){
+            BridgertonBankSociety.clienteReader();
             // Buscando cuenta destino
             if(numero.length() == 16){ // Si es no. de tarjeta bancaria
                 for(Cliente c: clientes){
@@ -417,6 +418,7 @@ public class BridgertonBankSociety {
 
             if(numero.length() == 12){ // Si es no. de cuenta bancaria
                 for(Cliente c: clientes){
+                    System.out.println("Hola");
                     if(c.buscadorCuenta(numero) != null){
                         return c.getNombre();
                     }
