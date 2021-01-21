@@ -324,6 +324,7 @@ public class BridgertonBankSociety {
     
     public static int cambiarClave(String nocuenta, int cvv_atm, int clave_atm, int nclave){
         //Buscando el cliente
+        clienteReader();
         boolean cliente_nuestro = false;
         int aux_error = 0;
         

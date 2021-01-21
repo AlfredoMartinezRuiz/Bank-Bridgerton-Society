@@ -17,7 +17,10 @@ public class TransCon extends javax.swing.JFrame {
     private static String titular;
     private static Deposito depo = null;
     private static Transferencia tr = null;
-
+    
+    private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
+    private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
+    
     TransCon(Transferencia trans, String num_emisor, int dato_clave, float dato_cantidad, String num_destino, String dato_motivo, int no_operacion,int no_cajero) {
         tr = trans;
         this.no_operacion = no_operacion;
@@ -54,6 +57,8 @@ public class TransCon extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Error = new javax.swing.JDialog();
+        message = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -72,7 +77,43 @@ public class TransCon extends javax.swing.JFrame {
         lblTrans = new javax.swing.JLabel();
         btnConfi = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        Error.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        Error.setAlwaysOnTop(true);
+        Error.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        Error.setResizable(false);
+        Error.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                ErrorWindowClosing(evt);
+            }
+        });
+
+        message.setFont(new java.awt.Font("Microsoft New Tai Lue", 0, 14)); // NOI18N
+        message.setForeground(new java.awt.Color(255, 0, 0));
+        message.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        javax.swing.GroupLayout ErrorLayout = new javax.swing.GroupLayout(Error.getContentPane());
+        Error.getContentPane().setLayout(ErrorLayout);
+        ErrorLayout.setHorizontalGroup(
+            ErrorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ErrorLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(message, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        ErrorLayout.setVerticalGroup(
+            ErrorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ErrorLayout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(message, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(29, Short.MAX_VALUE))
+        );
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jLabel3.setText("encabezado");
 
@@ -209,8 +250,23 @@ public class TransCon extends javax.swing.JFrame {
 
     private void btnConfiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfiActionPerformed
         //realizarTrans(String numero, String emisor, float cantidad, int numerotransferencia, String motivo, int noCajero, int clave)
-        BridgertonBankSociety.realizarTrans(no_cuenta1,no_cuenta2, cantidad, no_operacion, motivo, no_cajero, clave);
+         
+        message.setText(""+BridgertonBankSociety.realizarTrans(no_cuenta1,no_cuenta2, cantidad, no_operacion, motivo, no_cajero, clave));
+        Error.setVisible(true);
+        Error.setSize(310, 90);
+        Error.setLocation(ancho/2 - 160, alto/2 - 45);
     }//GEN-LAST:event_btnConfiActionPerformed
+
+    private void ErrorWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_ErrorWindowClosing
+        Error.setVisible(false);
+        Error.dispose();
+    }//GEN-LAST:event_ErrorWindowClosing
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        tr.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -248,6 +304,7 @@ public class TransCon extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JDialog Error;
     private javax.swing.JButton btnConfi;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -265,5 +322,6 @@ public class TransCon extends javax.swing.JFrame {
     private javax.swing.JLabel lblNoRem;
     private javax.swing.JLabel lblTitular;
     private javax.swing.JLabel lblTrans;
+    private javax.swing.JLabel message;
     // End of variables declaration//GEN-END:variables
 }
