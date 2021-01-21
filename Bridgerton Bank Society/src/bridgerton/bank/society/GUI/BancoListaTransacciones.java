@@ -429,6 +429,7 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
         BancoListaClientes bcts = new BancoListaClientes();
         bcts.setVisible(true);
         timer.stop();
+        trans_timer.stop();
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnLClientesActionPerformed

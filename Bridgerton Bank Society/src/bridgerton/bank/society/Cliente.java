@@ -69,12 +69,14 @@ public class Cliente implements Serializable{
         return cuenta.cuentaWriter(cuenta);
     }
      public boolean agregarCuenta(Cuenta cta){
-         System.out.println(this.nombre +  "Cuenta");
          cuentas.add(cta);        
         return cta.cuentaWriter(cta);
     }
     public void asignarCuentas(ArrayList<Cuenta> n_cuentas){
         cuentas = n_cuentas;
+        for(Cuenta c: cuentas){
+            c.cuentaWriter(c);
+        }               
     }
     public boolean eliminarCuenta(String nocuenta){
         // Buscando cuenta
@@ -359,38 +361,40 @@ public class Cliente implements Serializable{
         }
         
         private boolean cuentaWriter(Cuenta cu){
-        ArrayList<Cuenta> cuentascl = new ArrayList<Cuenta>();
-        try {
-            if(filec.exists()){ 
-                
-                // Primero leemos si no está vacío
-                if(filec.length() > 0){
-                    FileInputStream fin = new FileInputStream(filec);
-                    ObjectInputStream oin = new ObjectInputStream(fin);
-                    cuentascl = (ArrayList<Cuenta>) oin.readObject();
-                    oin.close();
-                    fin.close();
+            ArrayList<Cuenta> cuentascl = new ArrayList<Cuenta>();
+            try {
+                if(filec.exists()){ 
+
+                    // Primero leemos si no está vacío
+                    if(filec.length() > 0){
+                        FileInputStream fin = new FileInputStream(filec);
+                        ObjectInputStream oin = new ObjectInputStream(fin);
+                        cuentascl = (ArrayList<Cuenta>) oin.readObject();
+                        oin.close();
+                        fin.close();
+                    }
+
+                    cuentascl.add(cu);
+
+                    // Después escribimos
+                    FileOutputStream fout = new FileOutputStream(filec);
+                    ObjectOutputStream out = new ObjectOutputStream(fout);
+                    out.writeObject(cuentascl);
+                    out.close();
+                    fout.close();
+                    return true;
                 }
-                
-                cuentascl.add(cu);
-                
-                // Después escribimos
-                FileOutputStream fout = new FileOutputStream(filec);
-                ObjectOutputStream out = new ObjectOutputStream(fout);
-                out.writeObject(cuentascl);
-                out.close();
-                fout.close();
-                return true;
-            }
-            else{
+                else{
+                    return false;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace(); 
                 return false;
             }
-            
-        } catch (Exception e) {
-            e.printStackTrace(); 
-            return false;
         }
-    }
+        public void limpiadorCuentas(){
+        }
     }
     
 }

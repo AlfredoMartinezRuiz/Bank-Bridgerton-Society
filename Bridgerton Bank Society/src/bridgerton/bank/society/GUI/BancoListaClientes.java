@@ -188,6 +188,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
                 if(idc != -1){ // Busqueda por IDC, checamos que no esté vacío              
                     ClienteInt clr = new ClienteInt(idc);
                     clr.setVisible(true);
+                    timer.stop();
                     blt.setVisible(false);
                     blt.dispose();
                 }    
@@ -511,6 +512,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
         // Botón para abrir la lista de transacciones
         BancoListaTransacciones blts= new BancoListaTransacciones();
         blts.setVisible(true);
+        timer.stop();
         this.setVisible(false);
         this.dispose();
 
@@ -583,14 +585,14 @@ public class BancoListaClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void btnSi1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSi1ActionPerformed
-        String ideC = String.valueOf(clientesT.getValueAt(clientesT.getSelectedRow(), 0));       
-        System.out.println(ideC);
+        String ideC = String.valueOf(clientesT.getValueAt(clientesT.getSelectedRow(), 0));
         if(ideC.equals("") == false){ // Busqueda por IDC, checamos que no esté vacío              
             int idc = Integer.valueOf(ideC);  
             if(idc != -1){
                 BridgertonBankSociety.eliminarCliente(idc);  
                 BancoListaClientes bcts= new BancoListaClientes();
                 bcts.setVisible(true);
+                timer.stop();
                 this.setVisible(false);
                 this.dispose();
                 Eliminar.setVisible(false);
