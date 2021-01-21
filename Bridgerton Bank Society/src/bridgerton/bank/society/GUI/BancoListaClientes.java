@@ -522,6 +522,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
         // Botón para buscar algún cliente en específico
         BusquedaCliente bc = new BusquedaCliente();
         bc.setVisible(true);
+        timer.stop();
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnBuscarActionPerformed
@@ -530,6 +531,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
         // Botón para agregar algún cliente
         AgregarCliente ac = new AgregarCliente();
         ac.setVisible(true);
+        timer.stop();
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnAgregarActionPerformed

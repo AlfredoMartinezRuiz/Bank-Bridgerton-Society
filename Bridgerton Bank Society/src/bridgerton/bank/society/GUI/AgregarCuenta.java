@@ -33,7 +33,7 @@ public class AgregarCuenta extends javax.swing.JFrame {
     private static String dato_tarjeta = "";
     private static String dato_clabe = "";
     private static int cvv = 0;
-    private static Cliente cliente = new Cliente(); // El cliente dueño de la cuenta
+    private static Cliente cliente = new Cliente(); // El cliente solo para crear una cuenta
     private static final Date fecha = new Date();
     private static AgregarCliente aclte = null; // Para la ventana que traemos de la invocación de agregar
     private static boolean invocador_cliente = false;
@@ -46,7 +46,6 @@ public class AgregarCuenta extends javax.swing.JFrame {
      * Creates new form AgregarCuenta
      */
     public AgregarCuenta(Cliente c, AgregarCliente a, ClienteInt cint, boolean invocador) {
-        cliente = c;
         // Traemos la ventana anterior para abrirla de nuevo si es la de agregar cliente
         aclte = a;
         // Traemos la ventana anterior para abrirla de nuevo si es la de cliente
