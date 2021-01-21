@@ -1,14 +1,34 @@
 
 package bridgerton.bank.society.GUI_Cajero;
 
+import bridgerton.bank.society.BridgertonBankSociety;
+import static bridgerton.bank.society.BridgertonBankSociety.diccionario_errores;
+import static bridgerton.bank.society.BridgertonBankSociety.diccionario_nombres;
 import java.awt.Color;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class ChecarMovimientos extends javax.swing.JFrame {
+    private static String no_cuenta;
+    private static int clave;
     
-
+    private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
+    private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
+    
+    
+    static{diccionario_errores.add(""); // 0
+        diccionario_errores.add("Clave de seguridad incorrecta"); // 1
+        diccionario_errores.add("CVV incorrecto"); // 2
+        diccionario_errores.add("Saldo insuficiente"); // 3
+        diccionario_errores.add("Crédito agotado");// 4
+        diccionario_errores.add("Longitud de la cuenta incorrecta"); // 5
+        diccionario_errores.add("Clave de seguridad incorrecta");// 6
+        diccionario_errores.add("Cuenta emisora no encontrada"); // 7
+        
+    }
+    
     public ChecarMovimientos() {
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
@@ -25,11 +45,13 @@ public class ChecarMovimientos extends javax.swing.JFrame {
         message = new javax.swing.JLabel();
         btnSi = new javax.swing.JButton();
         btnNo = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tMov = new javax.swing.JTable();
         jLabel5 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        fecha_label = new javax.swing.JLabel();
+        txtCuenta = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        txtClave = new javax.swing.JTextField();
+        btnConfi = new javax.swing.JButton();
 
         Error.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         Error.setAlwaysOnTop(true);
@@ -116,42 +138,44 @@ public class ChecarMovimientos extends javax.swing.JFrame {
                 .addContainerGap(31, Short.MAX_VALUE))
         );
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        tMov.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        tMov.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "No. Transacción", "Fecha", "Tipo", "Motivo", "No. Cuenta", "No. Cuenta (destino)", "Monto"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
             }
         });
-        tMov.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
-        jScrollPane1.setViewportView(tMov);
 
         jLabel5.setText("encabezado");
 
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        jLabel2.setText("Listado de Transacciones");
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        jLabel1.setText("CHECAR MOVIMIENTOS DE CUENTA.");
 
-        fecha_label.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        fecha_label.setText("Fecha");
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel2.setText("Ingrese el número de cuenta, clabe interbancaria, o No. de Cuenta:");
+
+        txtCuenta.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        txtCuenta.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(190, 109, 246), 2, true));
+
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel6.setText("Ingrese la clave de seguridad:");
+
+        txtClave.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        txtClave.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(190, 109, 246), 2));
+        txtClave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtClaveActionPerformed(evt);
+            }
+        });
+
+        btnConfi.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        btnConfi.setText("CONFIRMAR");
+        btnConfi.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(190, 109, 246), 1, true));
+        btnConfi.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnConfi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConfiActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -160,36 +184,46 @@ public class ChecarMovimientos extends javax.swing.JFrame {
             .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 1366, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(534, 534, 534))
+                .addComponent(btnConfi, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(381, 381, 381))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(988, 988, 988)
-                        .addComponent(fecha_label, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(378, 378, 378)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(txtCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6)
+                            .addComponent(txtClave, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(44, 44, 44)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1247, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(489, 489, 489)
+                        .addComponent(jLabel1)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(fecha_label)
-                .addGap(15, 15, 15)
+                .addGap(45, 45, 45)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
                 .addComponent(jLabel2)
-                .addGap(47, 47, 47)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(98, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(72, 72, 72)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(66, 66, 66)
+                .addComponent(btnConfi, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(193, 193, 193))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void ErrorWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_ErrorWindowClosing
-      
+        Error.setVisible(false);
     }//GEN-LAST:event_ErrorWindowClosing
 
     private void btnSiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiActionPerformed
@@ -203,6 +237,73 @@ public class ChecarMovimientos extends javax.swing.JFrame {
     private void ConfirmacionWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_ConfirmacionWindowClosing
   
     }//GEN-LAST:event_ConfirmacionWindowClosing
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        Cajero cj = new Cajero();
+        cj.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_formWindowClosing
+
+    private void btnConfiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfiActionPerformed
+        boolean errors = false; // Variable para identificar los errores del algun dato
+        // Para el no de cuenta
+        if(txtCuenta.getText().isBlank() == false){
+            try{
+                no_cuenta = Long.toString(Long.valueOf(txtCuenta.getText()));
+            }catch(Exception e){
+                message.setText("Falta no. cuenta o está mal");
+                errors = true;
+            }
+        }
+        else{
+            message.setText("Falta no. cuenta o está mal");
+            errors = true;
+        }
+
+        // Para la clave de seguridad
+        if(txtClave.getText().isBlank() == false){
+            try{
+                clave = Integer.valueOf(txtClave.getText());
+            }catch(Exception e){
+                message.setText("Falta clave o está mal");
+                errors = true;
+            }
+        }
+        else{
+            message.setText("Falta clave o está mal");
+            errors = true;
+        }
+        // Checamos si hubo algún error
+        if(errors){
+            Error.setVisible(true);
+            Error.setSize(310, 90);
+            Error.setLocation(ancho/2 - 160, alto/2 - 45);
+        }
+        else{
+            int result = BridgertonBankSociety.checarMovs(no_cuenta, clave, clave, clave);
+            if(result >= 0){
+                ClienteTrans cT = new ClienteTrans(result);
+                cT.setVisible(true);
+                this.setVisible(false);
+                this.dispose();
+            }
+            else{
+                messageError.setText(""+diccionario_errores.get(Math.abs(result)));
+                Error.setVisible(true);
+                Error.setSize(310, 90);
+                Error.setLocation(ancho/2 - 160, alto/2 - 45);
+            }
+                
+                    
+            
+        }
+
+    }//GEN-LAST:event_btnConfiActionPerformed
+
+    private void txtClaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClaveActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtClaveActionPerformed
 
     /**
      * @param args the command line arguments
@@ -242,14 +343,16 @@ public class ChecarMovimientos extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog Confirmacion;
     private javax.swing.JDialog Error;
+    private javax.swing.JButton btnConfi;
     private javax.swing.JButton btnNo;
     private javax.swing.JButton btnSi;
-    private javax.swing.JLabel fecha_label;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel message;
     private javax.swing.JLabel messageError;
-    private javax.swing.JTable tMov;
+    private javax.swing.JTextField txtClave;
+    private javax.swing.JTextField txtCuenta;
     // End of variables declaration//GEN-END:variables
 }

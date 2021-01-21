@@ -196,7 +196,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Arial" size="14" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="IDE:"/>
+        <Property name="text" type="java.lang.String" value="IDC:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblIDE">
@@ -301,7 +301,7 @@
                 <Column editable="false" title="Saldo" type="java.lang.String"/>
                 <Column editable="false" title="CVV" type="java.lang.String"/>
                 <Column editable="false" title="Clave" type="java.lang.String"/>
-                <Column editable="false" title="iidc(aux)" type="java.lang.String"/>
+                <Column editable="false" title="IDC" type="java.lang.String"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">

@@ -314,6 +314,26 @@ public class Cliente implements Serializable{
         else return -1;
     }
     
+    public int comprobarClave(String nocuenta, int clave_atm){
+        // Trabajando con la cuenta
+        // Buscando cuenta estando totalmente seguros que aquí está la cuenta
+        Cuenta cuenta = new Cuenta();
+        if(nocuenta.length() == 16){ // Si es no. de tarjeta bancaria
+            cuenta = this.buscadorTarjeta(nocuenta);
+        }
+        if(nocuenta.length() == 12){ // Si es no. de cuenta
+            cuenta = this.buscadorCuenta(nocuenta);
+        }
+        if(nocuenta.length() == 18){ // Si es no. de clabe
+            cuenta = this.buscadorClabe(nocuenta);
+        }
+        
+        if(cuenta.claveseg == clave_atm){ // Comprobando clave correcta                       
+            return cuenta.getIdc();
+        }
+        else return -1;
+    }
+    
     private boolean cuentaReader(){ // Solo lee las cuentas
             ArrayList<Cuenta> cuentas1 = new ArrayList<Cuenta>(); //
             try {

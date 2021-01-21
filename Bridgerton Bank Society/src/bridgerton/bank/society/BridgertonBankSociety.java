@@ -41,7 +41,7 @@ public class BridgertonBankSociety {
         diccionario_nombres.add("Lele Pons");
         
         
-        diccionario_errores.add(""); // 0
+        diccionario_errores.add(""); // Todo bien, todo correcto
         diccionario_errores.add("Clave de seguridad incorrecta"); // 1
         diccionario_errores.add("CVV incorrecto"); // 2
         diccionario_errores.add("Saldo insuficiente"); // 3
@@ -368,9 +368,50 @@ public class BridgertonBankSociety {
         return 0;        
     }
     
-    public static int checarMovs(){
-        // Imprimir transacciones tiempo real
-        return 0;        
+    public static int checarMovs(String nocuenta, int cvv_atm, int clave_atm, int nclave){ // Returna el idc del cliente
+        //Buscando el cliente
+        clienteReader();
+        boolean cliente_nuestro = false;
+        int aux_error = 0;
+        
+        if(nocuenta.length() == 16){ // Si es no. de tarjeta bancaria
+            for(Cliente c: clientes){
+                if(c.buscadorTarjeta(nocuenta) != null){
+                    aux_error = c.comprobarClave(nocuenta,clave_atm);
+                    cliente_nuestro = true;                    
+                }
+            }
+        }
+        
+        else if(nocuenta.length() == 18){ // Si es clabe interbancaria
+            for(Cliente c: clientes){
+                if(c.buscadorClabe(nocuenta) != null){
+                    aux_error = c.comprobarClave(nocuenta,clave_atm);
+                    cliente_nuestro = true;  
+                }
+            }
+        }
+        
+        else if(nocuenta.length() == 12){ // Si es no. de cuenta bancaria
+            for(Cliente c: clientes){
+                if(c.buscadorCuenta(nocuenta) != null){
+                    aux_error = c.comprobarClave(nocuenta,clave_atm);
+                    cliente_nuestro = true; 
+                }
+            }
+        }
+        else{
+            return -5;
+        }
+        
+        if(cliente_nuestro == false){
+            return -7;
+        }
+        else if(aux_error < 0){
+            return aux_error;
+        }
+        
+        return aux_error;       
     }
     
     public static int apoyarCausa(String emisor, float cantidad, int numerotransferencia, int noCajero, int clave, int causa){

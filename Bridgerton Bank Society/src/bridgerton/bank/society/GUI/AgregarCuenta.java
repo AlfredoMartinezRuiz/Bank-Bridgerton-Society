@@ -127,7 +127,7 @@ public class AgregarCuenta extends javax.swing.JFrame {
     }
     
     public boolean isInCuentas(String numero){
-        
+        cuentaReader();
         for(Cuenta c: cuentas){
             switch(numero.length()){
                 case 18:

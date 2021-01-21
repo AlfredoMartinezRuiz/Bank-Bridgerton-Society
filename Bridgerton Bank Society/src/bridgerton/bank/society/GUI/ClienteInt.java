@@ -152,6 +152,7 @@ public class ClienteInt extends javax.swing.JFrame {
     
     public boolean clienteReader(int idc){
         File file = new File(".\\src\\Files\\Clientes.txt"); // dirección del archivo
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy"); // formateamos la fecha para que se ingrese en número
         
         try {
             if(file.exists()){ // Primero leemos
@@ -165,9 +166,9 @@ public class ClienteInt extends javax.swing.JFrame {
                         lblNombre.setText(c.getNombre());
                         lblIDE.setText(String.valueOf(c.getIDC()));
                         lblCURP.setText(c.getCurp());
-                        lblFecha.setText(String.valueOf(c.getFechaN()));
+                        lblFecha.setText(String.valueOf(sdf.format(c.getFechaN())));
                         lblDir.setText(c.getDirec());
-                        lblFechI.setText(String.valueOf(c.getFechaI()));
+                        lblFechI.setText(String.valueOf(sdf.format(c.getFechaI())));
                         lblCel.setText(String.valueOf(c.getCelular()));
                         lblTel.setText(String.valueOf(c.getTelefono()));
                     }
@@ -293,7 +294,7 @@ public class ClienteInt extends javax.swing.JFrame {
         lblNombre.setText("Nombre");
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel1.setText("IDE:");
+        jLabel1.setText("IDC:");
 
         lblIDE.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblIDE.setText("ide");
@@ -331,7 +332,7 @@ public class ClienteInt extends javax.swing.JFrame {
 
             },
             new String [] {
-                "No.Cuenta", "No. Tarjeta", "Tipo de Cuenta", "CLABE", "Fecha de Apertura", "Saldo", "CVV", "Clave", "iidc(aux)"
+                "No.Cuenta", "No. Tarjeta", "Tipo de Cuenta", "CLABE", "Fecha de Apertura", "Saldo", "CVV", "Clave", "IDC"
             }
         ) {
             Class[] types = new Class [] {
