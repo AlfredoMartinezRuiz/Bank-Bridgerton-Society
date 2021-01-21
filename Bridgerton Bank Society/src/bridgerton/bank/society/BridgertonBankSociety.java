@@ -94,7 +94,7 @@ public class BridgertonBankSociety {
         
         return 0;       
     }
-    
+    // Para transferencias normales
     public static int realizarTrans(String numero, String emisor, float cantidad, int numerotransferencia, String motivo, int noCajero, int clave){
         // Buscando cuenta emisora
         boolean cliente_nuestro = false;
@@ -169,6 +169,7 @@ public class BridgertonBankSociety {
         return 0;          
     }
     
+    // Para donaciones
     public static int realizarTrans(String emisor, float cantidad, int numerotransferencia, String motivo, int noCajero, int clave, int causa){
         
         //Obteniendo cuenta
