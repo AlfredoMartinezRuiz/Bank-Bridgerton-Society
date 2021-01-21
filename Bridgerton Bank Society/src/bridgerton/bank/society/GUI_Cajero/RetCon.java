@@ -9,6 +9,13 @@ import bridgerton.bank.society.BridgertonBankSociety;
 import static bridgerton.bank.society.BridgertonBankSociety.diccionario_errores;
 import java.awt.Color;
 import static java.awt.Frame.MAXIMIZED_BOTH;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -24,12 +31,12 @@ public class RetCon extends javax.swing.JFrame {
     private static int clave;
     private static String titular;
     private static Retiro ret = null;
-    
+    private static ImageIcon header = null;
    // Variables de ayuda para la posición de las ventanas
     private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
     private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
     RetCon(Retiro reti, String numero, float dato_cantidad, int dato_clave, int no_retiro, int no_cajero) {
-        // Declaracion de los datos anteriores
+        toRelative("Header.jpg"); // lectura del header// Declaracion de los datos anteriores
         ret = reti;
         this.no_retiro = no_retiro;
         this.no_cajero = no_cajero;
@@ -45,7 +52,29 @@ public class RetCon extends javax.swing.JFrame {
         this.getContentPane().setBackground(Color.WHITE);
         mostrarDatos();
     }
-
+    // Función correctora de location 1
+    private String toRelative(String name){
+        URI p1 = null; // Variable de apoyo
+        String directory =".\\src\\Files"; 
+        File file = new File(directory);
+        File[] archivos = file.listFiles();
+        
+        for(int i = 0; i<archivos.length; i++){
+            if(archivos[i].getName().equals(name)){
+                p1 = archivos[i].toURI(); // Cambia a URI primero
+                URL p2 = null;
+                
+                try {
+                    p2 = p1.toURL(); // Después cambia a URL
+                } catch (MalformedURLException ex) {
+                    Logger.getLogger(Cajero.class.getName()).log(Level.SEVERE, null, ex);
+                }        
+                header = new ImageIcon(p2);
+                return archivos[i].getPath();
+            }
+        }
+        return "";
+    }
 
     private void mostrarDatos() {
         lblNo.setText(no_cuenta);
@@ -157,7 +186,7 @@ public class RetCon extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setText("encabezado");
+        jLabel3.setIcon(header);
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 20)); // NOI18N
         jLabel1.setText("RESUMEN: RETIRO DE CUENTA O TARJETA ");
@@ -200,7 +229,7 @@ public class RetCon extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 1366, Short.MAX_VALUE)
+            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 1400, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -226,7 +255,7 @@ public class RetCon extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29)
                 .addComponent(jLabel1)
                 .addGap(57, 57, 57)
@@ -247,7 +276,7 @@ public class RetCon extends javax.swing.JFrame {
                 .addComponent(lblNoT)
                 .addGap(47, 47, 47)
                 .addComponent(btnConfi, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 187, Short.MAX_VALUE))
+                .addGap(0, 192, Short.MAX_VALUE))
         );
 
         pack();

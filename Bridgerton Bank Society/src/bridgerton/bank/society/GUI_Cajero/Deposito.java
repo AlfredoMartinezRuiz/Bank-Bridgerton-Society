@@ -9,12 +9,16 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 
 public class Deposito extends javax.swing.JFrame {
     private static String numero = "";
@@ -27,8 +31,10 @@ public class Deposito extends javax.swing.JFrame {
     private static int no_operacion = 0;
     private static int no_cajero;
     private static int causa = 0;
+    private static ImageIcon header = null;
     
     public Deposito(int noCajero) {
+        toRelative("Header.jpg"); // lectura del header
         no_cajero = noCajero; // Asignamos el número de cajero
         initComponents();
         generarOperacion(); // Generamos el número de operación
@@ -36,7 +42,29 @@ public class Deposito extends javax.swing.JFrame {
         this.setExtendedState(MAXIMIZED_BOTH);
         this.getContentPane().setBackground(Color.WHITE);
     }
-    
+    // Función correctora de location 1
+    private String toRelative(String name){
+        URI p1 = null; // Variable de apoyo
+        String directory =".\\src\\Files"; 
+        File file = new File(directory);
+        File[] archivos = file.listFiles();
+        
+        for(int i = 0; i<archivos.length; i++){
+            if(archivos[i].getName().equals(name)){
+                p1 = archivos[i].toURI(); // Cambia a URI primero
+                URL p2 = null;
+                
+                try {
+                    p2 = p1.toURL(); // Después cambia a URL
+                } catch (MalformedURLException ex) {
+                    Logger.getLogger(Cajero.class.getName()).log(Level.SEVERE, null, ex);
+                }        
+                header = new ImageIcon(p2);
+                return archivos[i].getPath();
+            }
+        }
+        return "";
+    }
     public Deposito(int noCajero, int causa) {
         no_cajero = noCajero; // Asignamos el número de cajero
         initComponents();  
@@ -220,7 +248,7 @@ public class Deposito extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setText("encabezado");
+        jLabel3.setIcon(header);
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         jLabel1.setText("DEPÓSITO A CUENTA O TARJETA ");
@@ -283,7 +311,7 @@ public class Deposito extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31)
                 .addComponent(jLabel1)
                 .addGap(42, 42, 42)
@@ -302,7 +330,7 @@ public class Deposito extends javax.swing.JFrame {
                 .addComponent(txtMotivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(52, 52, 52)
                 .addComponent(btnSig, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 148, Short.MAX_VALUE))
+                .addGap(0, 153, Short.MAX_VALUE))
         );
 
         pack();

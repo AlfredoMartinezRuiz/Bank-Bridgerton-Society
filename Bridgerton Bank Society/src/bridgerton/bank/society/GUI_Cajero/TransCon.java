@@ -5,6 +5,13 @@ import bridgerton.bank.society.BridgertonBankSociety;
 import static bridgerton.bank.society.BridgertonBankSociety.diccionario_errores;
 import java.awt.Color;
 import static java.awt.Frame.MAXIMIZED_BOTH;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 
 public class TransCon extends javax.swing.JFrame {
      // herramientas para hacer la transferencia
@@ -19,11 +26,12 @@ public class TransCon extends javax.swing.JFrame {
     private static Deposito depo = null;
     private static Transferencia tr = null;
     
+    private static ImageIcon header = null;
     private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
     private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
     
     TransCon(Transferencia trans, String num_emisor, int dato_clave, float dato_cantidad, String num_destino, String dato_motivo, int no_operacion,int no_cajero) {
-        tr = trans;
+        toRelative("Header.jpg"); // lectura del headertr = trans;
         this.no_operacion = no_operacion;
         this.no_cajero = no_cajero;
         this.no_cuenta1 = num_emisor;
@@ -39,7 +47,29 @@ public class TransCon extends javax.swing.JFrame {
         this.getContentPane().setBackground(Color.WHITE);
         mostrarDatos();
     }
-    
+    // Función correctora de location 1
+    private String toRelative(String name){
+        URI p1 = null; // Variable de apoyo
+        String directory =".\\src\\Files"; 
+        File file = new File(directory);
+        File[] archivos = file.listFiles();
+        
+        for(int i = 0; i<archivos.length; i++){
+            if(archivos[i].getName().equals(name)){
+                p1 = archivos[i].toURI(); // Cambia a URI primero
+                URL p2 = null;
+                
+                try {
+                    p2 = p1.toURL(); // Después cambia a URL
+                } catch (MalformedURLException ex) {
+                    Logger.getLogger(Cajero.class.getName()).log(Level.SEVERE, null, ex);
+                }        
+                header = new ImageIcon(p2);
+                return archivos[i].getPath();
+            }
+        }
+        return "";
+    }
     private void mostrarDatos(){
         lblNoRem.setText(no_cuenta1);
         lblNoDest.setText(no_cuenta2);
@@ -162,7 +192,7 @@ public class TransCon extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setText("encabezado");
+        jLabel3.setIcon(header);
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 20)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -224,7 +254,7 @@ public class TransCon extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 1366, Short.MAX_VALUE)
+            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 1400, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -256,7 +286,7 @@ public class TransCon extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1)
                 .addGap(37, 37, 37)
@@ -289,7 +319,7 @@ public class TransCon extends javax.swing.JFrame {
                 .addComponent(lblTrans)
                 .addGap(15, 15, 15)
                 .addComponent(btnConfi, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(92, Short.MAX_VALUE))
+                .addContainerGap(97, Short.MAX_VALUE))
         );
 
         pack();

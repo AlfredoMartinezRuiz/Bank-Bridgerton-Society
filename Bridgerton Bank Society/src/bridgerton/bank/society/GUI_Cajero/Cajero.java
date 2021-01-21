@@ -16,6 +16,8 @@ import javax.swing.ImageIcon;
 public class Cajero extends javax.swing.JFrame {
     private static int noCajero; 
     private ImageIcon[] icons = new ImageIcon[5];
+    
+    private static ImageIcon header = null;
     /**
      * Creates new form Cajero
      */
@@ -25,7 +27,8 @@ public class Cajero extends javax.swing.JFrame {
         iconos(".\\src\\Imagenes\\ipn.png", 1); 
         iconos(".\\src\\Imagenes\\becalos.jpg", 2); 
         iconos(".\\src\\Imagenes\\teleton.png", 3); 
-        iconos(".\\src\\Imagenes\\asif.png", 4); 
+        iconos(".\\src\\Imagenes\\asif.png", 4);
+        toRelative("Header.jpg"); // lectura del header
         
         // Crear un nuevo número entero aleatorio
         Random r = new Random();
@@ -34,6 +37,30 @@ public class Cajero extends javax.swing.JFrame {
         this.setExtendedState(MAXIMIZED_BOTH);
         this.getContentPane().setBackground(Color.WHITE);
     }
+    // Función correctora de location 1
+    private String toRelative(String name){
+        URI p1 = null; // Variable de apoyo
+        String directory =".\\src\\Files"; 
+        File file = new File(directory);
+        File[] archivos = file.listFiles();
+        
+        for(int i = 0; i<archivos.length; i++){
+            if(archivos[i].getName().equals(name)){
+                p1 = archivos[i].toURI(); // Cambia a URI primero
+                URL p2 = null;
+                
+                try {
+                    p2 = p1.toURL(); // Después cambia a URL
+                } catch (MalformedURLException ex) {
+                    Logger.getLogger(Cajero.class.getName()).log(Level.SEVERE, null, ex);
+                }        
+                header = new ImageIcon(p2);
+                return archivos[i].getPath();
+            }
+        }
+        return "";
+    }
+    
     private void iconos(String location, int index){ // Arregla el problema de can't invoke
         // path(String) -> abrimos file -> URI -> URL -> Usamos para construir una ImageIcon
         URI p1 = null; // Variable de apoyo
@@ -73,7 +100,7 @@ public class Cajero extends javax.swing.JFrame {
         setTitle("Cajero");
         setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel3.setText("encabezado");
+        jLabel3.setIcon(header);
 
         btnDeposito.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         btnDeposito.setText("REALIZAR DEPÓSITO");
@@ -177,7 +204,7 @@ public class Cajero extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lblTeleton, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(lblAsif, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
