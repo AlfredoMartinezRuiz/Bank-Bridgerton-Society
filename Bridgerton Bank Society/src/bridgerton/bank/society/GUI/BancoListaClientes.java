@@ -50,6 +50,8 @@ public class BancoListaClientes extends javax.swing.JFrame {
         clienteReader();
         tabla(idc);
         timer.start();
+        blt = this;
+        popupTabla();
     }
     
     public BancoListaClientes(String curp) { // Filtro por búsqueda de curp
@@ -59,6 +61,8 @@ public class BancoListaClientes extends javax.swing.JFrame {
         clienteReader();
         tabla(curp);
         timer.start();
+        blt = this;
+        popupTabla();
     }
     
     public BancoListaClientes(String nombre, long celular) { // Filtro por búsqueda de nombre y número celular
@@ -68,6 +72,8 @@ public class BancoListaClientes extends javax.swing.JFrame {
         clienteReader();
         tabla(nombre, celular);
         timer.start();
+        blt = this;
+        popupTabla();
     }
     
     public void tabla(){ // Muestra la tabla normal con todos los clientes

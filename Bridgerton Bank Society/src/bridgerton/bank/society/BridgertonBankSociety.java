@@ -511,6 +511,16 @@ public class BridgertonBankSociety {
         System.out.println("Limpieza hecha");
     }
     
+    public static void limpiarCuentas(){
+        filec.delete();
+        try {            
+            filec.createNewFile();
+        } catch (IOException ex) {
+            Logger.getLogger(BridgertonBankSociety.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("Limpieza hecha");
+    }
+    
     public static boolean eliminarCliente(int idc){
         
         try {
@@ -524,6 +534,7 @@ public class BridgertonBankSociety {
                     
                     for(Cliente c: clientes){
                         if(c.getIDC() == idc){
+                            c.eliminarCuentas();
                             clientes.remove(c);
                             break;
                         }

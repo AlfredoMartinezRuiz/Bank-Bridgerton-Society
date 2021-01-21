@@ -34,7 +34,7 @@ public class ClienteInt extends javax.swing.JFrame {
     private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
     
     // Variable para tener el idc
-    public static int idc = 0;
+    public static int idc;
     // Herramienta para el icono
     
     
@@ -42,23 +42,25 @@ public class ClienteInt extends javax.swing.JFrame {
         imageDataReader(idc);
         
         this.idc = idc;
-        setLocation(ancho/2-375, 10);
+        setLocation(ancho/2-375, 0);
         initComponents();    
         clienteReader(idc);
+        cuentaReader(idc);
         tabla_cuentas();
         
         //lblNombre.setText(c.getNombre());
     }
     
-    public void agregarCuenta(Cliente.Cuenta cta) {
-        clienteWriter(idc, cta);
+    public void agregarCuenta(Cliente.Cuenta cta) {    
+        cuentaReader(idc);
+        cuentaWriter(idc, cta);
         //cuentas.add(cta);
+        cuentaReader(idc);
         tabla_cuentas();        
     }
     
-    public boolean clienteWriter(int idc, Cuenta cta){ // Para meter las cuentas a cliente una vez creadas todas
+    public boolean cuentaWriter(int idc, Cuenta cta){ // Para meter las cuentas a cliente una vez creadas todas
         File file = new File(".\\src\\Files\\Clientes.txt"); // dirección del archivo
-        
         try {
             if(file.exists()){ // Primero leemos
                 // Creamos los flujos de lectura del archivo con tipo objeto
@@ -67,12 +69,9 @@ public class ClienteInt extends javax.swing.JFrame {
                 clientes = (ArrayList<Cliente>) oin.readObject(); // Leemos el objeto del archivo y lo cargamos en clientes con su cast a ArrayList tipo clientes
                 // Cerramos flujos de lectura y devolvemos true porque fue exitoso
                 
-                for(Cliente c: clientes){
-                    if(c.getIDC() == idc){
-                        cuentas = c.getCuentas();
-                        cuentas.add(cta); // Para actualizar la tabla
-                        c.agregarCuenta(cta); // Agregar a cliente y archivo
-                        
+                for(Cliente cte: clientes){
+                    if(cte.getIDC() == idc){
+                        cte.agregarCuenta(cta);
                         break;
                     }
                 }
@@ -171,7 +170,6 @@ public class ClienteInt extends javax.swing.JFrame {
                         lblFechI.setText(String.valueOf(c.getFechaI()));
                         lblCel.setText(String.valueOf(c.getCelular()));
                         lblTel.setText(String.valueOf(c.getTelefono()));
-                        cuentas = c.getCuentas();
                     }
                 }
 
@@ -188,7 +186,39 @@ public class ClienteInt extends javax.swing.JFrame {
                 return false;
             }
     }
-        
+    
+    public boolean cuentaReader(int idc){
+        File file = new File(".\\src\\Files\\Cuentas.txt"); // dirección del archivo
+        ArrayList<Cuenta> cuentascl = new ArrayList<Cuenta>();
+        try {
+            if(file.exists()){ // Primero leemos
+                // Creamos los flujos de lectura del archivo con tipo objeto
+                FileInputStream fin = new FileInputStream(file);                
+                ObjectInputStream oin = new ObjectInputStream(fin);
+                cuentascl = (ArrayList<Cuenta>) oin.readObject(); // Leemos el objeto del archivo y lo cargamos en clientes con su cast a ArrayList tipo clientes
+                cuentas = new ArrayList<Cuenta>();
+                
+                for(Cuenta c: cuentascl){
+                    if(c.getIdc() == idc){
+                        cuentas.add(c);
+                    }
+                }
+
+                oin.close();
+                fin.close();
+                return true;
+            }
+            else{
+                return false;
+            }
+            
+            } catch (Exception e) { // Manejo de la excepción de la lectura
+                e.printStackTrace(); 
+                return false;
+            }
+    }
+     
+    
     public void tabla_cuentas(){ // Regenera las tablas a partir de las nuevas creadas
         String[] tipos = {"Débito", "Crédito Bronce", "Crédito plata", "Crédito oro"};
         // Para la fecha
@@ -205,7 +235,7 @@ public class ClienteInt extends javax.swing.JFrame {
         
         for(Cliente.Cuenta cuenta: cuentas)
         {
-            Object[] fila = new Object[8]; // Crea el objeto de celdas para agregar
+            Object[] fila = new Object[9]; // Crea el objeto de celdas para agregar
             fila[0] = ""+cuenta.getCuenta(); // Número de cuenta
             fila[1] = ""+cuenta.getTarjeta(); // Número de tarjeta
             fila[2] = tipos[cuenta.getTipo()-1]; // Tipo de cuenta 
@@ -214,6 +244,8 @@ public class ClienteInt extends javax.swing.JFrame {
             fila[5] = ""+cuenta.getSaldo(); // Saldo positivo de la cuenta
             fila[6] = ""+cuenta.getCVV(); // cvv de la tarjeta
             fila[7] = ""+cuenta.getClaveseg(); //clave de seguridad
+            
+            fila[8] = ""+cuenta.getIdc();
             model.addRow(fila); // Agrega la fila al modelo de la tabla
             tCuentas.setModel(model); // Reasigna el modelo pero ahora con los nuevos datos        
         }
@@ -299,14 +331,14 @@ public class ClienteInt extends javax.swing.JFrame {
 
             },
             new String [] {
-                "No.Cuenta", "No. Tarjeta", "Tipo de Cuenta", "CLABE", "Fecha de Apertura", "Saldo", "CVV", "Clave"
+                "No.Cuenta", "No. Tarjeta", "Tipo de Cuenta", "CLABE", "Fecha de Apertura", "Saldo", "CVV", "Clave", "iidc(aux)"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -391,23 +423,20 @@ public class ClienteInt extends javax.swing.JFrame {
                                     .addComponent(lblTel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(81, 81, 81))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(37, 37, 37)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(569, 569, 569)
-                                        .addComponent(btnVer))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(365, 365, 365)
-                                .addComponent(jLabel6)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(365, 365, 365)
+                        .addComponent(jLabel6)
+                        .addGap(0, 374, Short.MAX_VALUE)))
                 .addGap(12, 12, 12))
             .addGroup(layout.createSequentialGroup()
                 .addGap(29, 29, 29)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 759, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(27, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnVer)
+                .addGap(77, 77, 77))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -451,13 +480,17 @@ public class ClienteInt extends javax.swing.JFrame {
                     .addComponent(lblFechI))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel6)
-                .addGap(13, 13, 13)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnAgregar)
-                .addGap(22, 22, 22)
-                .addComponent(btnVer)
-                .addGap(19, 19, 19))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(13, 13, 13)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAgregar)
+                        .addGap(64, 64, 64))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnVer)
+                        .addGap(53, 53, 53))))
         );
 
         pack();

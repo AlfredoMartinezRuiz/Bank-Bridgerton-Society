@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -474,6 +475,7 @@ public class AgregarCliente extends javax.swing.JFrame {
         JFileChooser chooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "jpg", "png", "gif", "jpeg"); // Asignamos el nombre y el filtro de cada archivo a escoger (Sólo imágenes)
         chooser.setFileSelectionMode(0);
+        chooser.setCurrentDirectory(new File(".\\src\\Files"));
         chooser.setFileFilter(filter);// Ponemos el filtro de arriba el JFileChooser
         
         chooser.showOpenDialog(null); // Abrimos la ventana para escoger
