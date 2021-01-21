@@ -55,6 +55,8 @@ public class ClienteTrans extends javax.swing.JFrame {
                     ObjectInputStream oin = new ObjectInputStream(fin);
                     trans = (ArrayList<Transaccion>) oin.readObject();
                     cuentaReader(idc);
+                    transacciones =  new ArrayList<Transaccion>();
+                    
                     for(Transaccion t: trans){
                         if(isInCuentas(t.getDestino())){ // Comprobando si el destino está
                             transacciones.add(t);
@@ -96,7 +98,7 @@ public class ClienteTrans extends javax.swing.JFrame {
         while(index < model.getRowCount()){
                 model.removeRow(index); 
         }
-        
+        System.out.println(transacciones.size());
         for(Transaccion t: transacciones){ // Recorre todas las transacciones
             if(con_fecha){ // Hay filtro de fecha
                 fecha_dato = t.getFecha();
