@@ -142,7 +142,7 @@ public class Cliente implements Serializable{
     public Cuenta buscadorCuenta(String nocuenta){
         cuentaReader();
         for(Cuenta c: cuentas){ // Recorre todas las cuentas en búsqueda de la coincidencia con el número de cuenta
-            if(c.notarjeta.equals(nocuenta)) return c;               
+            if(c.getCuenta().equals(nocuenta)) return c;               
         }
         return null;
     }
@@ -150,7 +150,7 @@ public class Cliente implements Serializable{
     public Cuenta buscadorTarjeta(String notarjeta){
         cuentaReader();
         for(Cuenta c: cuentas){ // Recorre todas las cuentas en búsqueda de la coincidencia con el número de tarjeta
-            if(c.notarjeta.equals(notarjeta)) return c;               
+            if(c.getTarjeta().equals(notarjeta)) return c;               
         }
         return null;
     }
@@ -158,7 +158,7 @@ public class Cliente implements Serializable{
     public Cuenta buscadorClabe(String noclabe){
         cuentaReader();
         for(Cuenta c: cuentas){ // Recorre todas las cuentas en búsqueda de la coincidencia con el número de clabe
-            if(c.notarjeta.equals(noclabe)) return c;               
+            if(c.getClabe().equals(noclabe)) return c;               
         }
         return null;
     }

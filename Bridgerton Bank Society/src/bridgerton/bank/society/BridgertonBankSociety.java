@@ -395,9 +395,9 @@ public class BridgertonBankSociety {
     }
     
     public static String buscadorNombres(String numero, int causa){
-        clienteReader();
-        clientes = (ArrayList<Cliente>) clientes;
+        
         if(causa == 0){
+            BridgertonBankSociety.clienteReader();
             // Buscando cuenta destino
             if(numero.length() == 16){ // Si es no. de tarjeta bancaria
                 for(Cliente c: clientes){
@@ -417,6 +417,7 @@ public class BridgertonBankSociety {
 
             if(numero.length() == 12){ // Si es no. de cuenta bancaria
                 for(Cliente c: clientes){
+                    System.out.println("Hola");
                     if(c.buscadorCuenta(numero) != null){
                         return c.getNombre();
                     }
