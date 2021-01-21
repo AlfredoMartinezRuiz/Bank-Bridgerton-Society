@@ -293,10 +293,7 @@ public class ChecarMovimientos extends javax.swing.JFrame {
                 Error.setVisible(true);
                 Error.setSize(310, 90);
                 Error.setLocation(ancho/2 - 160, alto/2 - 45);
-            }
-                
-                    
-            
+            }   
         }
 
     }//GEN-LAST:event_btnConfiActionPerformed

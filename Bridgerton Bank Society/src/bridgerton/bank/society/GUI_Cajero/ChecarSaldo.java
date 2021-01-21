@@ -2,6 +2,7 @@
 package bridgerton.bank.society.GUI_Cajero;
 
 import bridgerton.bank.society.BridgertonBankSociety;
+import static bridgerton.bank.society.BridgertonBankSociety.diccionario_errores;
 import java.awt.Color;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 
@@ -41,6 +42,13 @@ public class ChecarSaldo extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         txtClave = new javax.swing.JTextField();
         btnConfi = new javax.swing.JButton();
+
+        frmSaldo.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        frmSaldo.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                frmSaldoWindowClosing(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 20)); // NOI18N
         jLabel4.setText("CHECAR SALDO DE CUENTA.");
@@ -246,11 +254,20 @@ public class ChecarSaldo extends javax.swing.JFrame {
         }
         else{
             saldo = BridgertonBankSociety.checarSaldo(no_cuenta, clave);  
-            frmSaldo.setVisible(true);
-            frmSaldo.setSize(790, 506);
-            lblSaldo.setText(""+saldo);
-            this.setVisible(false);
-            this.dispose();
+            
+            if(saldo >= 0){
+                frmSaldo.setVisible(true);
+                frmSaldo.setSize(790, 506);
+                lblSaldo.setText(""+saldo);
+                this.setVisible(false);
+                this.dispose();
+            }
+            else{
+                message.setText(""+diccionario_errores.get(Math.abs((int)saldo)));
+                Error.setVisible(true);
+                Error.setSize(310, 90);
+                Error.setLocation(ancho/2 - 160, alto/2 - 45);
+            } 
         }
         
         
@@ -261,12 +278,9 @@ public class ChecarSaldo extends javax.swing.JFrame {
         caj.setVisible(true);
         frmSaldo.setVisible(false);
         frmSaldo.dispose();
+        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_btnMenuActionPerformed
-
-    private void ErrorWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_ErrorWindowClosing
-        Error.setVisible(false);
-        Error.dispose();
-    }//GEN-LAST:event_ErrorWindowClosing
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         Cajero cj = new Cajero();
@@ -274,6 +288,19 @@ public class ChecarSaldo extends javax.swing.JFrame {
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_formWindowClosing
+
+    private void ErrorWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_ErrorWindowClosing
+        Error.setVisible(false);
+    }//GEN-LAST:event_ErrorWindowClosing
+
+    private void frmSaldoWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frmSaldoWindowClosing
+        Cajero caj = new Cajero();    
+        caj.setVisible(true);
+        frmSaldo.setVisible(false);
+        frmSaldo.dispose();
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_frmSaldoWindowClosing
 
     /**
      * @param args the command line arguments

@@ -2,6 +2,7 @@
 package bridgerton.bank.society.GUI_Cajero;
 
 import bridgerton.bank.society.BridgertonBankSociety;
+import static bridgerton.bank.society.BridgertonBankSociety.diccionario_errores;
 import java.awt.Color;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 
@@ -57,8 +58,11 @@ public class TransCon extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        Error = new javax.swing.JDialog();
+        Confirmacion = new javax.swing.JDialog();
         message = new javax.swing.JLabel();
+        btnSi = new javax.swing.JButton();
+        Error = new javax.swing.JDialog();
+        messageE = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -77,6 +81,49 @@ public class TransCon extends javax.swing.JFrame {
         lblTrans = new javax.swing.JLabel();
         btnConfi = new javax.swing.JButton();
 
+        Confirmacion.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        Confirmacion.setMinimumSize(new java.awt.Dimension(0, 150));
+        Confirmacion.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                ConfirmacionWindowClosing(evt);
+            }
+        });
+
+        message.setFont(new java.awt.Font("Microsoft New Tai Lue", 0, 14)); // NOI18N
+        message.setForeground(new java.awt.Color(51, 51, 255));
+        message.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        message.setText("!Operación exitosa!");
+
+        btnSi.setText("OK");
+        btnSi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSiActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout ConfirmacionLayout = new javax.swing.GroupLayout(Confirmacion.getContentPane());
+        Confirmacion.getContentPane().setLayout(ConfirmacionLayout);
+        ConfirmacionLayout.setHorizontalGroup(
+            ConfirmacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ConfirmacionLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(message, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(ConfirmacionLayout.createSequentialGroup()
+                .addGap(102, 102, 102)
+                .addComponent(btnSi, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        ConfirmacionLayout.setVerticalGroup(
+            ConfirmacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ConfirmacionLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(message, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnSi)
+                .addContainerGap(31, Short.MAX_VALUE))
+        );
+
         Error.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         Error.setAlwaysOnTop(true);
         Error.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -87,9 +134,9 @@ public class TransCon extends javax.swing.JFrame {
             }
         });
 
-        message.setFont(new java.awt.Font("Microsoft New Tai Lue", 0, 14)); // NOI18N
-        message.setForeground(new java.awt.Color(255, 0, 0));
-        message.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        messageE.setFont(new java.awt.Font("Microsoft New Tai Lue", 0, 14)); // NOI18N
+        messageE.setForeground(new java.awt.Color(255, 0, 0));
+        messageE.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout ErrorLayout = new javax.swing.GroupLayout(Error.getContentPane());
         Error.getContentPane().setLayout(ErrorLayout);
@@ -97,14 +144,14 @@ public class TransCon extends javax.swing.JFrame {
             ErrorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ErrorLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(message, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                .addComponent(messageE, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
                 .addContainerGap())
         );
         ErrorLayout.setVerticalGroup(
             ErrorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ErrorLayout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addComponent(message, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(messageE, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(29, Short.MAX_VALUE))
         );
 
@@ -251,22 +298,53 @@ public class TransCon extends javax.swing.JFrame {
     private void btnConfiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfiActionPerformed
         //realizarTrans(String numero, String emisor, float cantidad, int numerotransferencia, String motivo, int noCajero, int clave)
          
-        message.setText(""+BridgertonBankSociety.realizarTrans(no_cuenta1,no_cuenta2, cantidad, no_operacion, motivo, no_cajero, clave));
-        Error.setVisible(true);
-        Error.setSize(310, 90);
-        Error.setLocation(ancho/2 - 160, alto/2 - 45);
+        int result = BridgertonBankSociety.realizarTrans(no_cuenta1,no_cuenta2, cantidad, no_operacion, motivo, no_cajero, clave);        
+            if(result >= 0){
+                Confirmacion.setAlwaysOnTop(true);
+                Confirmacion.setVisible(true);
+                Confirmacion.setSize(310, 90);
+                Confirmacion.setLocation(ancho/2 - 160, alto/2 - 45);
+            }
+            else{
+                messageE.setText(""+diccionario_errores.get(Math.abs(result)));
+                Error.setVisible(true);
+                Error.setSize(310, 90);
+                Error.setLocation(ancho/2 - 160, alto/2 - 45);
+            }
+        
+        
     }//GEN-LAST:event_btnConfiActionPerformed
-
-    private void ErrorWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_ErrorWindowClosing
-        Error.setVisible(false);
-        Error.dispose();
-    }//GEN-LAST:event_ErrorWindowClosing
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         tr.setVisible(true);
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_formWindowClosing
+
+    private void btnSiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiActionPerformed
+        // Si se confirma, entonces se cerrará todo
+        Cajero cj = new Cajero();
+        cj.setVisible(true);
+        Confirmacion.setVisible(false);
+        Confirmacion.dispose();
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_btnSiActionPerformed
+
+    private void ConfirmacionWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_ConfirmacionWindowClosing
+        // Si se confirma, entonces se cerrará todo
+        Cajero cj = new Cajero();
+        cj.setVisible(true);
+        Confirmacion.setVisible(false);
+        Confirmacion.dispose();
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_ConfirmacionWindowClosing
+
+    private void ErrorWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_ErrorWindowClosing
+        Error.setVisible(false);
+        Error.dispose();
+    }//GEN-LAST:event_ErrorWindowClosing
 
     /**
      * @param args the command line arguments
@@ -304,8 +382,10 @@ public class TransCon extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JDialog Confirmacion;
     private javax.swing.JDialog Error;
     private javax.swing.JButton btnConfi;
+    private javax.swing.JButton btnSi;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -323,5 +403,6 @@ public class TransCon extends javax.swing.JFrame {
     private javax.swing.JLabel lblTitular;
     private javax.swing.JLabel lblTrans;
     private javax.swing.JLabel message;
+    private javax.swing.JLabel messageE;
     // End of variables declaration//GEN-END:variables
 }

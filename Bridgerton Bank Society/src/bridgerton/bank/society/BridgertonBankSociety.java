@@ -72,7 +72,7 @@ public class BridgertonBankSociety {
             }
             Deposito depo = new Deposito(nocuenta, noCajero, cantidad, motivo, numerodeposito);
         }        
-        if(nocuenta.length() == 18){ // Si es clabe interbancaria
+        else if(nocuenta.length() == 18){ // Si es clabe interbancaria
             for(Cliente c: clientes){
                 if(c.buscadorClabe(nocuenta) != null){
                     return c.recibirDeposito(nocuenta, cantidad, numerodeposito, motivo, noCajero);
@@ -80,7 +80,7 @@ public class BridgertonBankSociety {
             }
             Deposito depo = new Deposito(nocuenta, noCajero, cantidad, motivo, numerodeposito);
         }        
-        if(nocuenta.length() == 12){ // Si es no. de cuenta bancaria
+        else if(nocuenta.length() == 12){ // Si es no. de cuenta bancaria
             for(Cliente c: clientes){
                 if(c.buscadorCuenta(nocuenta) != null){
                     return c.recibirDeposito(nocuenta, cantidad, numerodeposito, motivo, noCajero);
@@ -110,7 +110,7 @@ public class BridgertonBankSociety {
             }
         }
         
-        if(emisor.length() == 18){ // Si es clabe interbancaria
+        else if(emisor.length() == 18){ // Si es clabe interbancaria
             for(Cliente c: clientes){
                 if(c.buscadorClabe(emisor) != null){
                     aux_error = c.realizarTransferencia(numero, emisor, cantidad, numerotransferencia, motivo, noCajero, clave);
@@ -119,7 +119,7 @@ public class BridgertonBankSociety {
             }
         }
         
-        if(emisor.length() == 12){ // Si es no. de cuenta bancaria
+        else if(emisor.length() == 12){ // Si es no. de cuenta bancaria
             for(Cliente c: clientes){
                 if(c.buscadorCuenta(emisor) != null){
                     aux_error = c.realizarTransferencia(numero, emisor, cantidad, numerotransferencia, motivo, noCajero, clave);
@@ -148,7 +148,7 @@ public class BridgertonBankSociety {
             }
         }
         
-        if(numero.length() == 18){ // Si es clabe interbancaria
+        else if(numero.length() == 18){ // Si es clabe interbancaria
             for(Cliente c: clientes){
                 if(c.buscadorClabe(numero) != null){
                     c.recibirTransferencia(numero, emisor, cantidad, numerotransferencia, motivo, noCajero);
@@ -156,7 +156,7 @@ public class BridgertonBankSociety {
             }
         }
         
-        if(numero.length() == 12){ // Si es no. de cuenta bancaria
+        else if(numero.length() == 12){ // Si es no. de cuenta bancaria
             for(Cliente c: clientes){
                 if(c.buscadorCuenta(numero) != null){
                     c.recibirTransferencia(numero, emisor, cantidad, numerotransferencia, motivo, noCajero);
@@ -199,7 +199,7 @@ public class BridgertonBankSociety {
             }
         }
         
-        if(emisor.length() == 18){ // Si es clabe interbancaria
+        else if(emisor.length() == 18){ // Si es clabe interbancaria
             for(Cliente c: clientes){
                 if(c.buscadorClabe(emisor) != null){
                     aux_error = c.realizarTransferencia(numero, emisor, cantidad, numerotransferencia, motivo, noCajero, clave);
@@ -208,7 +208,7 @@ public class BridgertonBankSociety {
             }
         }
         
-        if(emisor.length() == 12){ // Si es no. de cuenta bancaria
+        else if(emisor.length() == 12){ // Si es no. de cuenta bancaria
             for(Cliente c: clientes){
                 if(c.buscadorCuenta(emisor) != null){
                     aux_error = c.realizarTransferencia(numero, emisor, cantidad, numerotransferencia, motivo, noCajero, clave);
@@ -245,7 +245,7 @@ public class BridgertonBankSociety {
             }
         }
         
-        if(nocuenta.length() == 18){ // Si es clabe interbancaria
+        else if(nocuenta.length() == 18){ // Si es clabe interbancaria
             for(Cliente c: clientes){
                 if(c.buscadorClabe(nocuenta) != null){
                     aux_error = c.realizarRetiro(nocuenta, cantidad, numeroretiro, noCajero, clave);
@@ -254,7 +254,7 @@ public class BridgertonBankSociety {
             }
         }
         
-        if(nocuenta.length() == 12){ // Si es no. de cuenta bancaria
+        else if(nocuenta.length() == 12){ // Si es no. de cuenta bancaria
             for(Cliente c: clientes){
                 if(c.buscadorCuenta(nocuenta) != null){
                     aux_error = c.realizarRetiro(nocuenta, cantidad, numeroretiro, noCajero, clave);
@@ -291,7 +291,7 @@ public class BridgertonBankSociety {
             }
         }
         
-        if(nocuenta.length() == 18){ // Si es clabe interbancaria
+        else if(nocuenta.length() == 18){ // Si es clabe interbancaria
             for(Cliente c: clientes){
                 if(c.buscadorClabe(nocuenta) != null){
                     aux_error = c.saldo(nocuenta, clave);
@@ -300,7 +300,7 @@ public class BridgertonBankSociety {
             }
         }
         
-        if(nocuenta.length() == 12){ // Si es no. de cuenta bancaria
+        else if(nocuenta.length() == 12){ // Si es no. de cuenta bancaria
             for(Cliente c: clientes){
                 if(c.buscadorCuenta(nocuenta) != null){
                     aux_error = c.saldo(nocuenta, clave);
@@ -337,7 +337,7 @@ public class BridgertonBankSociety {
             }
         }
         
-        if(nocuenta.length() == 18){ // Si es clabe interbancaria
+        else if(nocuenta.length() == 18){ // Si es clabe interbancaria
             for(Cliente c: clientes){
                 if(c.buscadorClabe(nocuenta) != null){
                     aux_error = c.cambiarClave(nocuenta, cvv_atm, clave_atm, nclave);
@@ -346,7 +346,7 @@ public class BridgertonBankSociety {
             }
         }
         
-        if(nocuenta.length() == 12){ // Si es no. de cuenta bancaria
+        else if(nocuenta.length() == 12){ // Si es no. de cuenta bancaria
             for(Cliente c: clientes){
                 if(c.buscadorCuenta(nocuenta) != null){
                     aux_error = c.cambiarClave(nocuenta, cvv_atm, clave_atm, nclave);
