@@ -30,6 +30,7 @@ public class Transferencia extends javax.swing.JFrame {
         this.setExtendedState(MAXIMIZED_BOTH);
         this.getContentPane().setBackground(Color.WHITE);
     }
+    
 
     private void generarOperacion(){
         // Para Número de depósito

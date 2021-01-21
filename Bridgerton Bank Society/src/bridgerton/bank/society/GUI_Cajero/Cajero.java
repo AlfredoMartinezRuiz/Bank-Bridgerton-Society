@@ -107,10 +107,25 @@ public class Cajero extends javax.swing.JFrame {
         });
 
         lblTeleton.setIcon(icons[3]);
+        lblTeleton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblTeletonMouseClicked(evt);
+            }
+        });
 
         lblBecalos.setIcon(icons[2]);
+        lblBecalos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblBecalosMouseClicked(evt);
+            }
+        });
 
         lblAsif.setIcon(icons[4]);
+        lblAsif.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblAsifMouseClicked(evt);
+            }
+        });
 
         jLabel6.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel6.setText("¡APOYA UNA CAUSA!");
@@ -143,6 +158,11 @@ public class Cajero extends javax.swing.JFrame {
         });
 
         jLabel8.setIcon(icons[1]);
+        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel8MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -268,8 +288,39 @@ public class Cajero extends javax.swing.JFrame {
     }//GEN-LAST:event_btnClaveActionPerformed
 
     private void lblUNAMMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblUNAMMouseClicked
-        // TODO add your handling code here:
+        Deposito dep = new Deposito(noCajero, 1);
+        dep.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_lblUNAMMouseClicked
+
+    private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
+        Deposito dep = new Deposito(noCajero, 2);
+        dep.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_jLabel8MouseClicked
+
+    private void lblBecalosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBecalosMouseClicked
+        Deposito dep = new Deposito(noCajero, 3);
+        dep.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_lblBecalosMouseClicked
+
+    private void lblTeletonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTeletonMouseClicked
+        Deposito dep = new Deposito(noCajero, 4);
+        dep.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_lblTeletonMouseClicked
+
+    private void lblAsifMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblAsifMouseClicked
+        Deposito dep = new Deposito(noCajero, 5);
+        dep.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_lblAsifMouseClicked
 
     /**
      * @param args the command line arguments

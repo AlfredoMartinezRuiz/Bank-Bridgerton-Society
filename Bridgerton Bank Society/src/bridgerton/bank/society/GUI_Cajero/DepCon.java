@@ -31,7 +31,7 @@ public class DepCon extends javax.swing.JFrame {
         
     }       
     
-    public DepCon(Deposito depto, String numero, float dato_cantidad, int no_operacion, String dato_motivo, int no_cajero) {
+    public DepCon(Deposito depto, String numero, float dato_cantidad, int no_operacion, String dato_motivo, int no_cajero, int causa) {
         // Declaracion de los datos anteriores
         depo = depto;
         this.no_operacion = no_operacion;
@@ -39,7 +39,7 @@ public class DepCon extends javax.swing.JFrame {
         this.no_cuenta = numero;
         this.cantidad = dato_cantidad;
         this.motivo = dato_motivo;
-        titular = BridgertonBankSociety.buscadorNombres(numero, 0);
+        titular = BridgertonBankSociety.buscadorNombres(numero, causa);
         
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
@@ -345,7 +345,7 @@ public class DepCon extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new DepCon(new Deposito(10), "100000000000", 10, 10, "porque sí", 15).setVisible(true);
+                new DepCon(new Deposito(10), "100000000000", 10, 10, "porque sí", 15, 0).setVisible(true);
             }
         });
     }

@@ -26,12 +26,40 @@ public class Deposito extends javax.swing.JFrame {
     private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
     private static int no_operacion = 0;
     private static int no_cajero;
+    private static int causa = 0;
     
     public Deposito(int noCajero) {
         no_cajero = noCajero; // Asignamos el número de cajero
         initComponents();
         generarOperacion(); // Generamos el número de operación
         
+        this.setExtendedState(MAXIMIZED_BOTH);
+        this.getContentPane().setBackground(Color.WHITE);
+    }
+    
+    public Deposito(int noCajero, int causa) {
+        no_cajero = noCajero; // Asignamos el número de cajero
+        initComponents();  
+        this.causa = causa;
+        switch(causa){ // Pone la cuenta y demás en el textflied
+            case 1:
+                txtCuenta.setText("125987546325");
+                break;
+            case 2:
+                txtCuenta.setText("125988813582");
+                break;
+            case 3:
+                txtCuenta.setText("154654146325");
+                break;
+            case 4:
+                txtCuenta.setText("156479841354");
+                break;
+            case 5:
+                txtCuenta.setText("546574513225");
+                break;
+        }
+        txtCuenta.setEditable(false);
+        generarOperacion(); // Generamos el número de operación
         this.setExtendedState(MAXIMIZED_BOTH);
         this.getContentPane().setBackground(Color.WHITE);
     }
@@ -333,7 +361,7 @@ public class Deposito extends javax.swing.JFrame {
             Error.setLocation(ancho/2 - 160, alto/2 - 45);
         }
         else{
-            DepCon depc = new DepCon(this, numero, dato_cantidad, no_operacion, dato_motivo, no_cajero);
+            DepCon depc = new DepCon(this, numero, dato_cantidad, no_operacion, dato_motivo, no_cajero, causa);
             depc.setVisible(true);
             this.setVisible(false);
             this.dispose();            

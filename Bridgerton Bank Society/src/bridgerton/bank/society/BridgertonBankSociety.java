@@ -422,18 +422,23 @@ public class BridgertonBankSociety {
             case 1:
                 motivo = "Apoyo puma";
                 aux_error = realizarTrans(emisor, cantidad, numerotransferencia, motivo, noCajero, clave, causa);
+                break;
             case 2:
                 motivo = "Apoyo guinda";
                 aux_error = realizarTrans(emisor, cantidad, numerotransferencia, motivo, noCajero, clave, causa);
+                break;
             case 3:
                 motivo = "Bécalos y cambia a México";
                 aux_error = realizarTrans(emisor, cantidad, numerotransferencia, motivo, noCajero, clave, causa);
+                break;
             case 4:
                 motivo = "Apoyo teletón";
                 aux_error = realizarTrans(emisor, cantidad, numerotransferencia, motivo, noCajero, clave, causa);
+                break;
             case 5:
                 motivo = "Apoyo ASIF";
-                aux_error = realizarTrans(emisor, cantidad, numerotransferencia, motivo, noCajero, clave, causa);         
+                aux_error = realizarTrans(emisor, cantidad, numerotransferencia, motivo, noCajero, clave, causa);
+                break;
         }
         return aux_error;
     }
