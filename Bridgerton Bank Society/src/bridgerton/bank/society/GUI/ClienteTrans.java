@@ -400,7 +400,7 @@ public class ClienteTrans extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         cint.setVisible(true);
-        timer.stop();
+        trans_timer.stop();
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_formWindowClosing
