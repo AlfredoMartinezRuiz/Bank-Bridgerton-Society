@@ -188,7 +188,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
                 if(idc != -1){ // Busqueda por IDC, checamos que no esté vacío              
                     ClienteInt clr = new ClienteInt(idc);
                     clr.setVisible(true);
-                    timer.stop();
+                    timer.stop();                    
                     blt.setVisible(false);
                     blt.dispose();
                 }    

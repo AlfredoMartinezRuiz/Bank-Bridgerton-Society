@@ -24,6 +24,7 @@ public class BridgertonBankSociety {
     public static ArrayList<String>diccionario_errores = new ArrayList<String>();
     public static ArrayList<String> diccionario_nombres = new ArrayList<String>();
     private static File file = new File(".\\src\\Files\\Clientes.txt"); // Direccion del archivo de los clientes
+    private static File filec = new File(".\\src\\Files\\Cuentas.txt"); // Direccion del archivo de los clientes
     
     static{
         diccionario_nombres.add("Javier Santaolalla");
@@ -392,7 +393,7 @@ public class BridgertonBankSociety {
     }
     
     public static String buscadorNombres(String numero, int causa){
-        clienteWriter(null);
+        clienteReader();
         if(causa == 0){
             // Buscando cuenta destino
             if(numero.length() == 16){ // Si es no. de tarjeta bancaria
@@ -444,7 +445,6 @@ public class BridgertonBankSociety {
     }
     
     private static boolean clienteWriter(Cliente c){
-           
         try {
             if(file.exists()){ 
                 
@@ -456,16 +456,14 @@ public class BridgertonBankSociety {
                     oin.close();
                     fin.close();
                 }
-                else if(c != null){
-                    clientes.add(c);                
-                    // Después escribimos
-                    FileOutputStream fout = new FileOutputStream(file);
-                    ObjectOutputStream out = new ObjectOutputStream(fout);
-                    out.writeObject(clientes);
-                    out.close();
-                    fout.close();
-                    return true;
-                }
+                clientes.add(c);  
+                
+                // Después escribimos
+                FileOutputStream fout = new FileOutputStream(file);
+                ObjectOutputStream out = new ObjectOutputStream(fout);
+                out.writeObject(clientes);
+                out.close();
+                fout.close();
                 return true;
             }
             else{
@@ -478,9 +476,34 @@ public class BridgertonBankSociety {
         }
     }
     
+    private static boolean clienteReader(){ // Solo lee las clientes
+            try {
+                if(filec.exists()){ 
+
+                    // Primero leemos si no está vacío
+                    if(filec.length() > 0){
+                        FileInputStream fin = new FileInputStream(filec);
+                        ObjectInputStream oin = new ObjectInputStream(fin);
+                        clientes = (ArrayList<Cliente>) oin.readObject();                        
+                        oin.close();
+                        fin.close();
+                    }
+                    return true;
+                }
+                else{
+                    return false;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace(); 
+                return false;
+            }
+        }
+    
     public static void limpiarClientes(){
         file.delete();
         try {
+            
             file.createNewFile();
         } catch (IOException ex) {
             Logger.getLogger(BridgertonBankSociety.class.getName()).log(Level.SEVERE, null, ex);
@@ -507,9 +530,8 @@ public class BridgertonBankSociety {
                     }                    
                     oin.close();
                     fin.close();
-                    // Limpieza de archivo
-                    
                 }
+                // Limpieza de archivo
                 BridgertonBankSociety.limpiarClientes();                   
                 
                 // Después escribimos

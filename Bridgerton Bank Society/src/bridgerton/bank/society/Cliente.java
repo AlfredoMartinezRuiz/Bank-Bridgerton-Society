@@ -317,7 +317,7 @@ public class Cliente implements Serializable{
                         FileInputStream fin = new FileInputStream(filec);
                         ObjectInputStream oin = new ObjectInputStream(fin);
                         cuentas1 = (ArrayList<Cuenta>) oin.readObject();
-                        cuentas = null; // Inicializamos para evitar errores
+                        cuentas = new ArrayList<Cuenta>(); // Inicializamos para evitar errores
                         for(Cuenta cta: cuentas1){
                             if(cta.getIdc() == this.idc){
                                 cuentas.add(cta); // Agregamos cuenta al areglo

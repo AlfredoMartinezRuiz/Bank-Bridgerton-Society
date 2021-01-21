@@ -343,6 +343,7 @@ public class AgregarCliente extends javax.swing.JFrame {
             }
         });
 
+        txtIdc.setEditable(false);
         txtIdc.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

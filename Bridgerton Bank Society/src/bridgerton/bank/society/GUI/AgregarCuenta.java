@@ -25,8 +25,9 @@ import javax.swing.Timer;
  * @author Aurora
  */
 public class AgregarCuenta extends javax.swing.JFrame {
-    private static ArrayList<Cliente> clientes = new ArrayList<Cliente>(); // Lista de clientes para verificar que no haya curp
     //o idc repetidos
+    private static ArrayList<Cuenta> cuentas = new ArrayList<Cuenta>(); //
+    private static File filec = new File(".\\src\\Files\\Cuentas.txt"); // Direccion del archivo de los clientes
     
 // Datos del usuario para manejo de los métodos
     private static String dato_cuenta = "";
@@ -54,12 +55,12 @@ public class AgregarCuenta extends javax.swing.JFrame {
         invocador_cliente = invocador;
         
         initComponents();
-        clienteReader();
         generadorCuentas();
     }
    
     public void generadorCuentas(){
         // Variables para omprobar que sean correctas antes de terminar con el método
+        cuentaReader();
         boolean clabe_correcta = false;
         boolean tarjeta_corecta = false;
         boolean cuenta_corecta = false;
@@ -127,48 +128,46 @@ public class AgregarCuenta extends javax.swing.JFrame {
     
     public boolean isInCuentas(String numero){
         
-        for(Cliente c: clientes){
+        for(Cuenta c: cuentas){
             switch(numero.length()){
                 case 18:
-                    if(c.buscadorClabe(numero)!= null) return true; // Si enontró la cuenta entonces retorna verdadero
+                    if(c.getClabe().equals(numero)) return true; // Si enontró la cuenta entonces retorna verdadero
                     else return false;
                 case 16:
-                    if(c.buscadorTarjeta(numero)!= null) return true; // Si enontró la cuenta entonces retorna verdadero
+                    if(c.getTarjeta().equals(numero)) return true; // Si enontró la cuenta entonces retorna verdadero
                     else return false;
                 case 12:
-                    if(c.buscadorCuenta(numero)!= null) return true; // Si enontró la cuenta entonces retorna verdadero
+                    if(c.getCuenta().equals(numero)) return true; // Si enontró la cuenta entonces retorna verdadero
                     else return false;
             }
         }
         return false;
     }
     
-    public boolean clienteReader(){ // Se encarga de leer los clientes del arhivo y cargarlos en memoria
-        File file = new File(".\\src\\Files\\Clientes.txt"); // La tura del archivo de clientes
-        
-        try {
-            if(file.exists()){ 
-                
-                // Primero leemos si no está vacío
-                if(file.length() > 0){
-                    FileInputStream fin = new FileInputStream(file);
-                    ObjectInputStream oin = new ObjectInputStream(fin);
-                    clientes = (ArrayList<Cliente>) oin.readObject(); // Creamos flujos y después leemos el array de clientes
-                    
-                    oin.close();
-                    fin.close();
+    private boolean cuentaReader(){ // Solo lee las cuentas
+            try {
+                if(filec.exists()){ 
+
+                    // Primero leemos si no está vacío
+                    if(filec.length() > 0){
+                        FileInputStream fin = new FileInputStream(filec);
+                        ObjectInputStream oin = new ObjectInputStream(fin);
+                        cuentas = (ArrayList<Cuenta>) oin.readObject();
+                        oin.close();
+                        fin.close();
+                    }
+                    return true;
                 }
+                else{
+                    return false;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace(); 
                 return false;
             }
-            else{
-                return false;
-            }
-            
-        } catch (Exception e) {
-            e.printStackTrace(); 
-            return false;
         }
-    }
+    
     
     
     /**

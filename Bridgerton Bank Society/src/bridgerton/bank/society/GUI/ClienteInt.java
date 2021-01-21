@@ -135,7 +135,6 @@ public class ClienteInt extends javax.swing.JFrame {
                     if(c.getIDC() == idc){
                         String name = c.getFotoCliente().getName();
                         toRelative(name);
-                        cuentas = c.getCuentas();
                     }
                 }
                 oin.close();
