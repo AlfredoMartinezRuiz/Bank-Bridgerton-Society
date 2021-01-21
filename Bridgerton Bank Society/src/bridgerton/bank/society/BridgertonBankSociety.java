@@ -3,6 +3,7 @@ package bridgerton.bank.society;
 
 import bridgerton.bank.society.GUI.BancoListaClientes;
 import bridgerton.bank.society.Cliente.Cuenta;
+import bridgerton.bank.society.Cliente;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,10 +21,12 @@ import java.util.logging.Logger;
 
 public class BridgertonBankSociety {
     public static ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+    
     public static ArrayList<Transaccion> transacciones = new ArrayList<Transaccion>();
     public static ArrayList<String>diccionario_errores = new ArrayList<String>();
     public static ArrayList<String> diccionario_nombres = new ArrayList<String>();
     private static File file = new File(".\\src\\Files\\Clientes.txt"); // Direccion del archivo de los clientes
+    private static File filec = new File(".\\src\\Files\\Cuentas.txt"); // Direccion del archivo de los clientes
     
     static{
         diccionario_nombres.add("Javier Santaolalla");
@@ -392,7 +395,8 @@ public class BridgertonBankSociety {
     }
     
     public static String buscadorNombres(String numero, int causa){
-        clienteWriter(null);
+        clienteReader();
+        clientes = (ArrayList<Cliente>) clientes;
         if(causa == 0){
             // Buscando cuenta destino
             if(numero.length() == 16){ // Si es no. de tarjeta bancaria
@@ -444,7 +448,6 @@ public class BridgertonBankSociety {
     }
     
     private static boolean clienteWriter(Cliente c){
-           
         try {
             if(file.exists()){ 
                 
@@ -456,16 +459,14 @@ public class BridgertonBankSociety {
                     oin.close();
                     fin.close();
                 }
-                else if(c != null){
-                    clientes.add(c);                
-                    // Después escribimos
-                    FileOutputStream fout = new FileOutputStream(file);
-                    ObjectOutputStream out = new ObjectOutputStream(fout);
-                    out.writeObject(clientes);
-                    out.close();
-                    fout.close();
-                    return true;
-                }
+                clientes.add(c);  
+                
+                // Después escribimos
+                FileOutputStream fout = new FileOutputStream(file);
+                ObjectOutputStream out = new ObjectOutputStream(fout);
+                out.writeObject(clientes);
+                out.close();
+                fout.close();
                 return true;
             }
             else{
@@ -477,10 +478,46 @@ public class BridgertonBankSociety {
             return false;
         }
     }
+    
+    private static boolean clienteReader(){ // Solo lee las clientes
+            try {
+                if(file.exists()){ 
+
+                    // Primero leemos si no está vacío
+                    if(file.length() > 0){
+                        FileInputStream fin = new FileInputStream(file);
+                        ObjectInputStream oin = new ObjectInputStream(fin);
+                        clientes = (ArrayList<Cliente>) oin.readObject();                        
+                        oin.close();
+                        fin.close();
+                    }
+                    return true;
+                }
+                else{
+                    return false;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace(); 
+                return false;
+            }
+        }
+    
     public static void limpiarClientes(){
         file.delete();
         try {
+            
             file.createNewFile();
+        } catch (IOException ex) {
+            Logger.getLogger(BridgertonBankSociety.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("Limpieza hecha");
+    }
+    
+    public static void limpiarCuentas(){
+        filec.delete();
+        try {            
+            filec.createNewFile();
         } catch (IOException ex) {
             Logger.getLogger(BridgertonBankSociety.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -500,15 +537,15 @@ public class BridgertonBankSociety {
                     
                     for(Cliente c: clientes){
                         if(c.getIDC() == idc){
+                            c.eliminarCuentas();
                             clientes.remove(c);
                             break;
                         }
                     }                    
                     oin.close();
                     fin.close();
-                    // Limpieza de archivo
-                    
                 }
+                // Limpieza de archivo
                 BridgertonBankSociety.limpiarClientes();                   
                 
                 // Después escribimos

@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -31,9 +32,10 @@ import javax.swing.table.DefaultTableModel;
 public class AgregarCliente extends javax.swing.JFrame {
     private static ArrayList<Cliente> clientes = new ArrayList<Cliente>(); // Lista de clientes para verificar que no haya curp
     // o idc repetidos
+    
     private static ArrayList<Cliente.Cuenta> cuentas = new ArrayList<Cliente.Cuenta>(); // Lista de cuentas para agregar al cliente
     private static File imagen = null;  // Imagen e idc para usarlos más fácilmente con el usuario 
-    private static int dato_idc = 0; 
+    private static int dato_idc = 0; // idc creado aleatoriamente sin repetir
     
     // Herramientas para calcular la posición de la ventana
     private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
@@ -43,6 +45,7 @@ public class AgregarCliente extends javax.swing.JFrame {
     public AgregarCliente() {
         setLocation(ancho/2-375, 10);
         initComponents();
+        
         generarIDC();// Generamos el IDC primero para poder mostrarlo en el formulario como dato no editable   
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // formateamos la fecha para que se ingrese en número
         Date fecha = new Date();
@@ -341,6 +344,7 @@ public class AgregarCliente extends javax.swing.JFrame {
             }
         });
 
+        txtIdc.setEditable(false);
         txtIdc.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -466,14 +470,12 @@ public class AgregarCliente extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public static ArrayList<Cliente.Cuenta> getCuentas() {
-        return cuentas;
-    }
-
+    
     private void archivosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_archivosActionPerformed
         JFileChooser chooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "jpg", "png", "gif", "jpeg"); // Asignamos el nombre y el filtro de cada archivo a escoger (Sólo imágenes)
         chooser.setFileSelectionMode(0);
+        chooser.setCurrentDirectory(new File(".\\src\\Files"));
         chooser.setFileFilter(filter);// Ponemos el filtro de arriba el JFileChooser
         
         chooser.showOpenDialog(null); // Abrimos la ventana para escoger

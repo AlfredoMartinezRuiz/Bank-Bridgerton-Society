@@ -42,8 +42,9 @@ public class Cliente implements Serializable{
     private long telefono;
     private long celular;
     private File foto_cliente; /*temporal*/
-    private static ArrayList<Cuenta> cuentas = new ArrayList<Cuenta>();
     private static ArrayList<Transaccion> transacciones = new ArrayList<Transaccion>();
+    private static ArrayList<Cuenta> cuentas = new ArrayList<Cuenta>(); //
+    
     private static File filec = new File(".\\src\\Files\\Cuentas.txt"); // Direccion del archivo de los clientes
     
     Cliente(int idc,String nombre, String curp, Date fecha_nac, String direc, long telefono, long celular, File foto_cliente ){
@@ -65,21 +66,24 @@ public class Cliente implements Serializable{
    
     public boolean agregarCuenta(String nocuenta, String notarjeta, int tipo, String clabe, Date fecha, int cvv, int claveseg){
         Cuenta cuenta = new Cuenta(nocuenta, notarjeta, tipo, clabe, fecha, cvv, claveseg);
-        cuentas.add(cuenta);        
-        return cuenta.cuentaWriter(cuenta);
+        cuenta.setIdc(this.idc);
+        return cuentaWriter(cuenta);
     }
-     public boolean agregarCuenta(Cuenta cta){
-         cuentas.add(cta);        
-        return cta.cuentaWriter(cta);
+    
+    public boolean agregarCuenta(Cuenta cta){
+        cta.setIdc(this.idc);
+        return cuentaWriter(cta);
     }
+    
     public void asignarCuentas(ArrayList<Cuenta> n_cuentas){
-        cuentas = n_cuentas;
-        for(Cuenta c: cuentas){
-            c.cuentaWriter(c);
+        for(Cuenta c: n_cuentas){
+            c.setIdc(this.idc);
+            cuentaWriter(c);
         }               
     }
-    public boolean eliminarCuenta(String nocuenta){
-        // Buscando cuenta
+    
+    public boolean eliminarCuenta(String nocuenta){ // Falta implementar
+        // Buscando cuenta        
         int size = cuentas.size();
         Cuenta aux = this.buscadorCuenta(nocuenta);       
         cuentas.remove(aux);
@@ -87,8 +91,15 @@ public class Cliente implements Serializable{
         if(size < cuentas.size()) return true;
         else return false;
     }
+    public void eliminarCuentas(){ // Falta implementar
+        cuentaReader();
+        for(Cuenta cta: cuentas){
+            cuentaRemover(cta.getCuenta());
+        }
+    }
 
     public ArrayList<Cuenta> getCuentas() {
+        cuentaReader();
         return cuentas;
     }
     
@@ -129,6 +140,7 @@ public class Cliente implements Serializable{
     }
     
     public Cuenta buscadorCuenta(String nocuenta){
+        cuentaReader();
         for(Cuenta c: cuentas){ // Recorre todas las cuentas en búsqueda de la coincidencia con el número de cuenta
             if(c.notarjeta.equals(nocuenta)) return c;               
         }
@@ -136,6 +148,7 @@ public class Cliente implements Serializable{
     }
     
     public Cuenta buscadorTarjeta(String notarjeta){
+        cuentaReader();
         for(Cuenta c: cuentas){ // Recorre todas las cuentas en búsqueda de la coincidencia con el número de tarjeta
             if(c.notarjeta.equals(notarjeta)) return c;               
         }
@@ -143,6 +156,7 @@ public class Cliente implements Serializable{
     }
     
     public Cuenta buscadorClabe(String noclabe){
+        cuentaReader();
         for(Cuenta c: cuentas){ // Recorre todas las cuentas en búsqueda de la coincidencia con el número de clabe
             if(c.notarjeta.equals(noclabe)) return c;               
         }
@@ -150,7 +164,7 @@ public class Cliente implements Serializable{
     }
     
     public int realizarTransferencia(String numero, String emisor, float cantidad, int numerotransferencia, String motivo, int noCajero, int clave){
-    // Trabajando con la cuenta
+// Trabajando con la cuenta
         // Buscando cuenta estando totalmente seguros que aquí está la cuenta
         Cuenta cuenta = new Cuenta();
         if(emisor.length() == 16){ // Si es no. de tarjeta bancaria
@@ -166,6 +180,7 @@ public class Cliente implements Serializable{
         if(cuenta.claveseg == clave){ // Comprobando clave correcta
             if(cuenta.compararSaldo(cantidad)){ // Comprobando el saldo
                 cuenta.saldopositivo = cuenta.saldopositivo - cantidad;
+                cuentaRewriter(cuenta); // Modifica la cuenta en el archivo
 
             // Trabajando con la transaccion
                 Transferencia transferencia = new Transferencia(numero, emisor, motivo, noCajero, cantidad, numerotransferencia);
@@ -192,6 +207,7 @@ public class Cliente implements Serializable{
             cuenta = this.buscadorClabe(numero);
         }
         cuenta.saldopositivo = cuenta.saldopositivo + cantidad;
+        cuentaRewriter(cuenta); // Modifica la cuenta en el archivo
 
         // Trabajando con la transaccion
         Transferencia transferencia = new Transferencia(numero, emisor, motivo, noCajero, cantidad, numerotransferencia);
@@ -217,6 +233,7 @@ public class Cliente implements Serializable{
         if(cuenta.claveseg == clave){ // Comprobando clave correcta
             if(cuenta.compararSaldo(cantidad)){ // Comprobando el saldo
                 cuenta.saldopositivo = cuenta.saldopositivo - cantidad;
+                cuentaRewriter(cuenta); // Modifica la cuenta en el archivo
 
             // Trabajando con la transaccion
                 Retiro retiro = new Retiro(nocuenta, noCajero, cantidad, numeroretiro);
@@ -242,6 +259,7 @@ public class Cliente implements Serializable{
             cuenta = this.buscadorClabe(nocuenta);
         }
         cuenta.saldopositivo = cuenta.saldopositivo + cantidad;
+        cuentaRewriter(cuenta); // Modifica la cuenta en el archivo
 
         // Trabajando con la transaccion
         Deposito deposito = new Deposito(nocuenta, noCajero, cantidad, motivo, numerodeposito);
@@ -287,6 +305,7 @@ public class Cliente implements Serializable{
         if(cuenta.claveseg == clave_atm){ // Comprobando clave correcta
             if(cuenta.cvv == cvv_atm){
                 cuenta.claveseg = nclave;
+                cuentaRewriter(cuenta); // Modifica la cuenta en el archivo
                 return 0;
             }
             return -2;
@@ -294,73 +313,76 @@ public class Cliente implements Serializable{
         else return -1;
     }
     
-    public class Cuenta implements Serializable{
-        private String nocuenta;
-        private String notarjeta;
-        private TipoTarjeta tipotarjeta;
-        private String clabe;
-        private Date fecha_apertura;
-        private float saldopositivo;
-        private int cvv;
-        private int claveseg;
-        
-        Cuenta(){
-            
-        }
-        
-        public Cuenta(String nocuenta, String notarjeta, int tipo, String clabe, Date fecha, int cvv, int claveseg){
-            this.nocuenta = nocuenta;
-            this.notarjeta = notarjeta;
-            this.clabe = clabe;
-            this.fecha_apertura = fecha;
-            this.cvv = cvv;
-            this.claveseg = claveseg;
-            
-            switch(tipo){
-                case 1:
-                    tipotarjeta = TipoTarjeta.DEBITO;
-                    break;
-                case 2:
-                    tipotarjeta = TipoTarjeta.CREDITO_BRONCE;
-                    break;
-                case 3:
-                    tipotarjeta = TipoTarjeta.CREDITO_PLATA;
-                    break;
-                case 4:
-                    tipotarjeta = TipoTarjeta.CREDITO_ORO;
-                    break;
+    private boolean cuentaReader(){ // Solo lee las cuentas
+            ArrayList<Cuenta> cuentas1 = new ArrayList<Cuenta>(); //
+            try {
+                if(filec.exists()){ 
+
+                    // Primero leemos si no está vacío
+                    if(filec.length() > 0){
+                        FileInputStream fin = new FileInputStream(filec);
+                        ObjectInputStream oin = new ObjectInputStream(fin);
+                        cuentas1 = (ArrayList<Cuenta>) oin.readObject();
+                        cuentas = new ArrayList<Cuenta>(); // Inicializamos para evitar errores
+                        for(Cuenta cta: cuentas1){
+                            if(cta.getIdc() == this.idc){
+                                cuentas.add(cta); // Agregamos cuenta al areglo
+                            }
+                        }
+                        oin.close();
+                        fin.close();
+                    }
+                    return true;
+                }
+                else{
+                    return false;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace(); 
+                return false;
             }
-            this.saldopositivo = tipotarjeta.getSaldo();
         }
-        public String getCuenta(){
-            return this.nocuenta;
-        }
-        public String getTarjeta(){
-            return this.notarjeta;
-        }
-        public int getTipo(){
-            return this.tipotarjeta.getTipo();
-        }
-        public String getClabe(){
-            return this.clabe;
-        }
-        public Date getApertura(){
-            return this.fecha_apertura;
-        }
-        public float getSaldo(){
-            return this.saldopositivo;
-        }
-        public int getCVV(){
-            return this.cvv;
-        }
-        public int getClaveseg(){
-            return this.claveseg;
-        }
-        private boolean compararSaldo(float costo){
-            return this.saldopositivo > costo;
-        }
-        
-        private boolean cuentaWriter(Cuenta cu){
+    
+    private boolean cuentaRewriter(Cuenta cu){
+        ArrayList<Cuenta> cuentascl = new ArrayList<Cuenta>();
+            try {
+                if(filec.exists()){ 
+
+                    // Primero leemos si no está vacío
+                    if(filec.length() > 0){
+                        FileInputStream fin = new FileInputStream(filec);
+                        ObjectInputStream oin = new ObjectInputStream(fin);
+                        cuentascl = (ArrayList<Cuenta>) oin.readObject();
+                        
+                        for(Cuenta c: cuentascl){
+                            if(c.getTarjeta().equals(cu.getTarjeta())){// Si encuentra por su numero de tarjeta
+                                    c.saldopositivo = cu.saldopositivo;
+                                    c.claveseg = cu.claveseg;
+                            }
+                        }
+                        oin.close();
+                        fin.close();
+                    }
+                    // Después escribimos
+                    FileOutputStream fout = new FileOutputStream(filec);
+                    ObjectOutputStream out = new ObjectOutputStream(fout);
+                    out.writeObject(cuentascl);
+                    out.close();
+                    fout.close();
+                    return true;
+                }
+                else{
+                    return false;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace(); 
+                return false;
+            }
+    }
+    
+    private boolean cuentaWriter(Cuenta cu){
             ArrayList<Cuenta> cuentascl = new ArrayList<Cuenta>();
             try {
                 if(filec.exists()){ 
@@ -393,8 +415,121 @@ public class Cliente implements Serializable{
                 return false;
             }
         }
-        public void limpiadorCuentas(){
+    
+    private boolean cuentaRemover(String numero){
+            ArrayList<Cuenta> cuentascl = new ArrayList<Cuenta>();
+            try {
+                if(filec.exists()){ 
+
+                    // Primero leemos si no está vacío
+                    if(filec.length() > 0){
+                        FileInputStream fin = new FileInputStream(filec);
+                        ObjectInputStream oin = new ObjectInputStream(fin);
+                        cuentascl = (ArrayList<Cuenta>) oin.readObject();
+                        for(Cuenta c: cuentascl){
+                            if(c.getCuenta().equals(numero)){
+                                cuentascl.remove(c);
+                                break;
+                            }
+                        }
+                        oin.close();
+                        fin.close();
+                    }
+                    BridgertonBankSociety.limpiarCuentas();
+                    // Después escribimos
+                    FileOutputStream fout = new FileOutputStream(filec);
+                    ObjectOutputStream out = new ObjectOutputStream(fout);
+                    out.writeObject(cuentascl);
+                    out.close();
+                    fout.close();
+                    return true;
+                }
+                else{
+                    return false;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace(); 
+                return false;
+            }
         }
+    
+    
+    public class Cuenta implements Serializable{
+        private String nocuenta;
+        private String notarjeta;
+        private TipoTarjeta tipotarjeta;
+        private String clabe;
+        private Date fecha_apertura;
+        private float saldopositivo;
+        private int cvv;
+        private int claveseg;
+        private int idc; // idc del cliente
+        
+        Cuenta(){
+            
+        }
+        
+        public Cuenta(String nocuenta, String notarjeta, int tipo, String clabe, Date fecha, int cvv, int claveseg){
+            this.nocuenta = nocuenta;
+            this.notarjeta = notarjeta;
+            this.clabe = clabe;
+            this.fecha_apertura = fecha;
+            this.cvv = cvv;
+            this.claveseg = claveseg;
+            
+            switch(tipo){
+                case 1:
+                    tipotarjeta = TipoTarjeta.DEBITO;
+                    break;
+                case 2:
+                    tipotarjeta = TipoTarjeta.CREDITO_BRONCE;
+                    break;
+                case 3:
+                    tipotarjeta = TipoTarjeta.CREDITO_PLATA;
+                    break;
+                case 4:
+                    tipotarjeta = TipoTarjeta.CREDITO_ORO;
+                    break;
+            }
+            this.saldopositivo = tipotarjeta.getSaldo();
+        }
+
+        public void setIdc(int idc) {
+            this.idc = idc;
+        }
+        public String getCuenta(){
+            return this.nocuenta;
+        }
+        public String getTarjeta(){
+            return this.notarjeta;
+        }
+        public int getTipo(){
+            return this.tipotarjeta.getTipo();
+        }
+        public String getClabe(){
+            return this.clabe;
+        }
+        public Date getApertura(){
+            return this.fecha_apertura;
+        }
+        public float getSaldo(){
+            return this.saldopositivo;
+        }
+        public int getCVV(){
+            return this.cvv;
+        }
+        public int getClaveseg(){
+            return this.claveseg;
+        }
+
+        public int getIdc() {
+            return idc;
+        }
+        private boolean compararSaldo(float costo){
+            return this.saldopositivo > costo;
+        } 
+        
     }
     
 }

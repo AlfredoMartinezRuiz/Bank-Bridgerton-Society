@@ -50,6 +50,8 @@ public class BancoListaClientes extends javax.swing.JFrame {
         clienteReader();
         tabla(idc);
         timer.start();
+        blt = this;
+        popupTabla();
     }
     
     public BancoListaClientes(String curp) { // Filtro por búsqueda de curp
@@ -59,6 +61,8 @@ public class BancoListaClientes extends javax.swing.JFrame {
         clienteReader();
         tabla(curp);
         timer.start();
+        blt = this;
+        popupTabla();
     }
     
     public BancoListaClientes(String nombre, long celular) { // Filtro por búsqueda de nombre y número celular
@@ -68,6 +72,8 @@ public class BancoListaClientes extends javax.swing.JFrame {
         clienteReader();
         tabla(nombre, celular);
         timer.start();
+        blt = this;
+        popupTabla();
     }
     
     public void tabla(){ // Muestra la tabla normal con todos los clientes
@@ -188,7 +194,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
                 if(idc != -1){ // Busqueda por IDC, checamos que no esté vacío              
                     ClienteInt clr = new ClienteInt(idc);
                     clr.setVisible(true);
-                    timer.stop();
+                    timer.stop();                    
                     blt.setVisible(false);
                     blt.dispose();
                 }    
@@ -522,6 +528,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
         // Botón para buscar algún cliente en específico
         BusquedaCliente bc = new BusquedaCliente();
         bc.setVisible(true);
+        timer.stop();
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnBuscarActionPerformed
@@ -530,6 +537,7 @@ public class BancoListaClientes extends javax.swing.JFrame {
         // Botón para agregar algún cliente
         AgregarCliente ac = new AgregarCliente();
         ac.setVisible(true);
+        timer.stop();
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnAgregarActionPerformed
