@@ -7,6 +7,7 @@ package bridgerton.bank.society.GUI;
 
 import static bridgerton.bank.society.BridgertonBankSociety.clientes;
 import bridgerton.bank.society.Cliente;
+import bridgerton.bank.society.GUI_Cajero.Cajero;
 import bridgerton.bank.society.GUI_Cajero.Transferencia;
 import bridgerton.bank.society.Transaccion;
 import static java.awt.Frame.MAXIMIZED_BOTH;
@@ -17,6 +18,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,6 +31,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DateFormatter;
@@ -39,18 +44,43 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
     private static Date desde = new Date();
     private static Date hasta = new Date();
     private static boolean con_fecha = false;
-    
+    private static ImageIcon header = null;
     
     // Variables de ayuda para la posición de las ventanas
     private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
     private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
     
     public BancoListaTransacciones() {
+        toRelative("Header.jpg"); // lectura del header
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
         fecha_label.setText("Fecha: " + new Date()); // Fecha actual
         timer.start();
         trans_timer.start();
+    }
+    
+    // Función correctora de location 1
+    private String toRelative(String name){
+        URI p1 = null; // Variable de apoyo
+        String directory =".\\src\\Files"; 
+        File file = new File(directory);
+        File[] archivos = file.listFiles();
+        
+        for(int i = 0; i<archivos.length; i++){
+            if(archivos[i].getName().equals(name)){
+                p1 = archivos[i].toURI(); // Cambia a URI primero
+                URL p2 = null;
+                
+                try {
+                    p2 = p1.toURL(); // Después cambia a URL
+                } catch (MalformedURLException ex) {
+                    Logger.getLogger(Cajero.class.getName()).log(Level.SEVERE, null, ex);
+                }        
+                header = new ImageIcon(p2);
+                return archivos[i].getPath();
+            }
+        }
+        return "";
     }
     
     private void transaccionesReader(){
@@ -245,6 +275,7 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("BancoListaTransacciones");
         setBackground(new java.awt.Color(206, 147, 216));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -252,7 +283,7 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("encabezado");
+        jLabel1.setIcon(header);
 
         btnLClientes.setBackground(new java.awt.Color(77, 182, 172));
         btnLClientes.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -370,14 +401,13 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(47, 47, 47)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnLClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 630, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnLTrans, javax.swing.GroupLayout.PREFERRED_SIZE, 630, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(66, 66, 66)
+                        .addGap(19, 19, 19)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1247, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
@@ -394,11 +424,12 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(btn_elfilltro)))))))
                 .addGap(66, 66, 66))
+            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1379, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLClientes, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
@@ -418,7 +449,7 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
                         .addComponent(btnBuscar)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 85, Short.MAX_VALUE))
+                .addGap(0, 35, Short.MAX_VALUE))
         );
 
         pack();

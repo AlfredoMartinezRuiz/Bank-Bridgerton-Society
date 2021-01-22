@@ -127,7 +127,7 @@ public class AgregarCuenta extends javax.swing.JFrame {
     }
     
     public boolean isInCuentas(String numero){
-        
+        cuentaReader();
         for(Cuenta c: cuentas){
             switch(numero.length()){
                 case 18:
@@ -230,6 +230,7 @@ public class AgregarCuenta extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("Agregar Cuenta");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {

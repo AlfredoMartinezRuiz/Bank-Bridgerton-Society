@@ -16,6 +16,8 @@ import javax.swing.ImageIcon;
 public class Cajero extends javax.swing.JFrame {
     private static int noCajero; 
     private ImageIcon[] icons = new ImageIcon[5];
+    
+    private static ImageIcon header = null;
     /**
      * Creates new form Cajero
      */
@@ -25,7 +27,8 @@ public class Cajero extends javax.swing.JFrame {
         iconos(".\\src\\Imagenes\\ipn.png", 1); 
         iconos(".\\src\\Imagenes\\becalos.jpg", 2); 
         iconos(".\\src\\Imagenes\\teleton.png", 3); 
-        iconos(".\\src\\Imagenes\\asif.png", 4); 
+        iconos(".\\src\\Imagenes\\asif.png", 4);
+        toRelative("Header.jpg"); // lectura del header
         
         // Crear un nuevo número entero aleatorio
         Random r = new Random();
@@ -34,6 +37,30 @@ public class Cajero extends javax.swing.JFrame {
         this.setExtendedState(MAXIMIZED_BOTH);
         this.getContentPane().setBackground(Color.WHITE);
     }
+    // Función correctora de location 1
+    private String toRelative(String name){
+        URI p1 = null; // Variable de apoyo
+        String directory =".\\src\\Files"; 
+        File file = new File(directory);
+        File[] archivos = file.listFiles();
+        
+        for(int i = 0; i<archivos.length; i++){
+            if(archivos[i].getName().equals(name)){
+                p1 = archivos[i].toURI(); // Cambia a URI primero
+                URL p2 = null;
+                
+                try {
+                    p2 = p1.toURL(); // Después cambia a URL
+                } catch (MalformedURLException ex) {
+                    Logger.getLogger(Cajero.class.getName()).log(Level.SEVERE, null, ex);
+                }        
+                header = new ImageIcon(p2);
+                return archivos[i].getPath();
+            }
+        }
+        return "";
+    }
+    
     private void iconos(String location, int index){ // Arregla el problema de can't invoke
         // path(String) -> abrimos file -> URI -> URL -> Usamos para construir una ImageIcon
         URI p1 = null; // Variable de apoyo
@@ -73,26 +100,32 @@ public class Cajero extends javax.swing.JFrame {
         setTitle("Cajero");
         setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel3.setText("encabezado");
+        jLabel3.setIcon(header);
 
-        btnDeposito.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        btnDeposito.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
         btnDeposito.setText("REALIZAR DEPÓSITO");
+        btnDeposito.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204), 2));
+        btnDeposito.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDeposito.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDepositoActionPerformed(evt);
             }
         });
 
-        btnTransferencia.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        btnTransferencia.setText("REALIZAR TRANSFERENCIA");
+        btnTransferencia.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
+        btnTransferencia.setText("TRANSFERENCIA");
+        btnTransferencia.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204), 2));
+        btnTransferencia.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnTransferencia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTransferenciaActionPerformed(evt);
             }
         });
 
-        btnRetiro.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        btnRetiro.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
         btnRetiro.setText("REALIZAR RETIRO");
+        btnRetiro.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204), 2));
+        btnRetiro.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRetiro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRetiroActionPerformed(evt);
@@ -107,35 +140,56 @@ public class Cajero extends javax.swing.JFrame {
         });
 
         lblTeleton.setIcon(icons[3]);
+        lblTeleton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblTeletonMouseClicked(evt);
+            }
+        });
 
         lblBecalos.setIcon(icons[2]);
+        lblBecalos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblBecalosMouseClicked(evt);
+            }
+        });
 
         lblAsif.setIcon(icons[4]);
+        lblAsif.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblAsifMouseClicked(evt);
+            }
+        });
 
-        jLabel6.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
         jLabel6.setText("¡APOYA UNA CAUSA!");
 
         jLabel7.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel7.setText("Puedes apoyar a diferentes causas y poder sumarte al tren de la solidaridad:");
 
-        btnSaldo.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        btnSaldo.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
         btnSaldo.setText("CHECAR SALDO");
+        btnSaldo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204), 2));
+        btnSaldo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSaldo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaldoActionPerformed(evt);
             }
         });
 
-        btnMov.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        btnMov.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
         btnMov.setText("CHECAR MOVIMIENTOS");
+        btnMov.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 153, 204), 2, true));
+        btnMov.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnMov.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMovActionPerformed(evt);
             }
         });
 
-        btnClave.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        btnClave.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
         btnClave.setText("CAMBIAR CLAVE");
+        btnClave.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204), 2));
+        btnClave.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnClave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnClaveActionPerformed(evt);
@@ -143,6 +197,11 @@ public class Cajero extends javax.swing.JFrame {
         });
 
         jLabel8.setIcon(icons[1]);
+        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel8MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -151,37 +210,35 @@ public class Cajero extends javax.swing.JFrame {
             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(btnDeposito, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnRetiro, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnTransferencia, javax.swing.GroupLayout.Alignment.LEADING))
+                    .addComponent(btnTransferencia, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnDeposito, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
+                    .addComponent(btnRetiro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
-                            .addComponent(lblTeleton, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(lblAsif, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(109, 109, 109))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(89, 89, 89)
-                            .addComponent(lblUNAM, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(47, 47, 47)
-                            .addComponent(lblBecalos, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(0, 0, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(295, 295, 295)
-                        .addComponent(jLabel6)
-                        .addGap(101, 101, 101)))
+                        .addGap(51, 51, 51)
+                        .addComponent(jLabel7)
+                        .addGap(77, 77, 77))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(lblTeleton, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblAsif, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(66, 66, 66))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(lblUNAM, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblBecalos, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(53, 53, 53)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnSaldo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnMov, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)
-                    .addComponent(btnClave, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(370, 370, 370)
-                .addComponent(jLabel7)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnSaldo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnClave, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnMov, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel6)
+                .addGap(580, 580, 580))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -189,37 +246,39 @@ public class Cajero extends javax.swing.JFrame {
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(76, 76, 76)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnDeposito, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 171, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnTransferencia, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnMov, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(110, 110, 110)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnRetiro, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnClave, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(110, 110, 110))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
+                        .addGap(28, 28, 28)
                         .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel7)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblBecalos, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addGap(4, 4, 4)
-                                    .addComponent(lblUNAM, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
+                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblUNAM, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblBecalos, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lblTeleton, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
-                            .addComponent(lblAsif, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(lblTeleton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblAsif, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(76, 76, 76)
+                                .addComponent(btnSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(77, 77, 77)
+                                .addComponent(btnDeposito, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnMov, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(136, 136, 136)
+                                .addComponent(btnClave, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnTransferencia, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(145, 145, 145)
+                                .addComponent(btnRetiro, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(94, Short.MAX_VALUE))
         );
 
         pack();
@@ -268,8 +327,39 @@ public class Cajero extends javax.swing.JFrame {
     }//GEN-LAST:event_btnClaveActionPerformed
 
     private void lblUNAMMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblUNAMMouseClicked
-        // TODO add your handling code here:
+        Deposito dep = new Deposito(noCajero, 1);
+        dep.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_lblUNAMMouseClicked
+
+    private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
+        Deposito dep = new Deposito(noCajero, 2);
+        dep.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_jLabel8MouseClicked
+
+    private void lblBecalosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBecalosMouseClicked
+        Deposito dep = new Deposito(noCajero, 3);
+        dep.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_lblBecalosMouseClicked
+
+    private void lblTeletonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTeletonMouseClicked
+        Deposito dep = new Deposito(noCajero, 4);
+        dep.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_lblTeletonMouseClicked
+
+    private void lblAsifMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblAsifMouseClicked
+        Deposito dep = new Deposito(noCajero, 5);
+        dep.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_lblAsifMouseClicked
 
     /**
      * @param args the command line arguments

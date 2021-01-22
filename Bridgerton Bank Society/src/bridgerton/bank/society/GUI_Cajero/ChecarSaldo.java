@@ -2,8 +2,16 @@
 package bridgerton.bank.society.GUI_Cajero;
 
 import bridgerton.bank.society.BridgertonBankSociety;
+import static bridgerton.bank.society.BridgertonBankSociety.diccionario_errores;
 import java.awt.Color;
 import static java.awt.Frame.MAXIMIZED_BOTH;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 
 public class ChecarSaldo extends javax.swing.JFrame {
 
@@ -12,8 +20,9 @@ public class ChecarSaldo extends javax.swing.JFrame {
     
     private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
     private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
-    
+    private static ImageIcon header = null;
     public ChecarSaldo() {
+        toRelative("Header.jpg"); // lectura del header
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
         this.getContentPane().setBackground(Color.WHITE);
@@ -21,7 +30,29 @@ public class ChecarSaldo extends javax.swing.JFrame {
         no_cuenta = null;
         clave = 0;
     }
-
+    // Función correctora de location 1
+    private String toRelative(String name){
+        URI p1 = null; // Variable de apoyo
+        String directory =".\\src\\Files"; 
+        File file = new File(directory);
+        File[] archivos = file.listFiles();
+        
+        for(int i = 0; i<archivos.length; i++){
+            if(archivos[i].getName().equals(name)){
+                p1 = archivos[i].toURI(); // Cambia a URI primero
+                URL p2 = null;
+                
+                try {
+                    p2 = p1.toURL(); // Después cambia a URL
+                } catch (MalformedURLException ex) {
+                    Logger.getLogger(Cajero.class.getName()).log(Level.SEVERE, null, ex);
+                }        
+                header = new ImageIcon(p2);
+                return archivos[i].getPath();
+            }
+        }
+        return "";
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -41,6 +72,13 @@ public class ChecarSaldo extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         txtClave = new javax.swing.JTextField();
         btnConfi = new javax.swing.JButton();
+
+        frmSaldo.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        frmSaldo.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                frmSaldoWindowClosing(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 20)); // NOI18N
         jLabel4.setText("CHECAR SALDO DE CUENTA.");
@@ -130,29 +168,37 @@ public class ChecarSaldo extends javax.swing.JFrame {
                 .addContainerGap(29, Short.MAX_VALUE))
         );
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("Saldo");
+        setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
-        jLabel3.setText("encabezado");
+        jLabel3.setIcon(header);
 
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         jLabel1.setText("CHECAR SALDO DE CUENTA.");
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel2.setText("Ingrese el número de cuenta, clabe interbancaria, o No. de Cuenta:");
 
         txtCuenta.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        txtCuenta.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(190, 109, 246), 2, true));
+        txtCuenta.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 153, 204), 2, true));
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel6.setText("Ingrese la clave de seguridad:");
 
         txtClave.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        txtClave.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(190, 109, 246), 2));
+        txtClave.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 153, 204), 2, true));
 
         btnConfi.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         btnConfi.setText("CONFIRMAR");
-        btnConfi.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(190, 109, 246), 1, true));
-        btnConfi.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnConfi.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 153, 204), 2, true));
+        btnConfi.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnConfi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConfiActionPerformed(evt);
@@ -163,41 +209,40 @@ public class ChecarSaldo extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 1366, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(492, 492, 492)
-                .addComponent(jLabel1)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnConfi, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(377, 377, 377))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(379, 379, 379)
+                .addContainerGap(397, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(txtCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6)
-                    .addComponent(txtClave, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(510, 510, 510))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnConfi, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel2)
+                                .addComponent(txtCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel6)
+                                .addComponent(txtClave, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(369, 369, 369))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(59, 59, 59)
                 .addComponent(jLabel1)
-                .addGap(80, 80, 80)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 123, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(70, 70, 70)
+                .addGap(92, 92, 92)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 93, Short.MAX_VALUE)
+                .addGap(103, 103, 103)
                 .addComponent(btnConfi, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(189, 189, 189))
+                .addGap(142, 142, 142))
         );
 
         pack();
@@ -241,11 +286,20 @@ public class ChecarSaldo extends javax.swing.JFrame {
         }
         else{
             saldo = BridgertonBankSociety.checarSaldo(no_cuenta, clave);  
-            frmSaldo.setVisible(true);
-            frmSaldo.setSize(790, 506);
-            lblSaldo.setText(""+saldo);
-            this.setVisible(false);
-            this.dispose();
+            
+            if(saldo >= 0){
+                frmSaldo.setVisible(true);
+                frmSaldo.setSize(790, 506);
+                lblSaldo.setText(""+saldo);
+                this.setVisible(false);
+                this.dispose();
+            }
+            else{
+                message.setText(""+diccionario_errores.get(Math.abs((int)saldo)));
+                Error.setVisible(true);
+                Error.setSize(310, 90);
+                Error.setLocation(ancho/2 - 160, alto/2 - 45);
+            } 
         }
         
         
@@ -256,12 +310,29 @@ public class ChecarSaldo extends javax.swing.JFrame {
         caj.setVisible(true);
         frmSaldo.setVisible(false);
         frmSaldo.dispose();
+        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_btnMenuActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        Cajero cj = new Cajero();
+        cj.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_formWindowClosing
 
     private void ErrorWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_ErrorWindowClosing
         Error.setVisible(false);
-        Error.dispose();
     }//GEN-LAST:event_ErrorWindowClosing
+
+    private void frmSaldoWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_frmSaldoWindowClosing
+        Cajero caj = new Cajero();    
+        caj.setVisible(true);
+        frmSaldo.setVisible(false);
+        frmSaldo.dispose();
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_frmSaldoWindowClosing
 
     /**
      * @param args the command line arguments

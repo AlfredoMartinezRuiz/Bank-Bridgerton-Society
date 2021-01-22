@@ -2,18 +2,23 @@
 package bridgerton.bank.society.GUI_Cajero;
 
 import bridgerton.bank.society.BridgertonBankSociety;
+import static bridgerton.bank.society.BridgertonBankSociety.diccionario_errores;
 import bridgerton.bank.society.Cliente;
 import bridgerton.bank.society.Transaccion;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 
 public class Deposito extends javax.swing.JFrame {
     private static String numero = "";
@@ -25,12 +30,64 @@ public class Deposito extends javax.swing.JFrame {
     private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
     private static int no_operacion = 0;
     private static int no_cajero;
+    private static int causa = 0;
+    private static ImageIcon header = null;
     
     public Deposito(int noCajero) {
+        toRelative("Header.jpg"); // lectura del header
         no_cajero = noCajero; // Asignamos el número de cajero
         initComponents();
         generarOperacion(); // Generamos el número de operación
         
+        this.setExtendedState(MAXIMIZED_BOTH);
+        this.getContentPane().setBackground(Color.WHITE);
+    }
+    // Función correctora de location 1
+    private String toRelative(String name){
+        URI p1 = null; // Variable de apoyo
+        String directory =".\\src\\Files"; 
+        File file = new File(directory);
+        File[] archivos = file.listFiles();
+        
+        for(int i = 0; i<archivos.length; i++){
+            if(archivos[i].getName().equals(name)){
+                p1 = archivos[i].toURI(); // Cambia a URI primero
+                URL p2 = null;
+                
+                try {
+                    p2 = p1.toURL(); // Después cambia a URL
+                } catch (MalformedURLException ex) {
+                    Logger.getLogger(Cajero.class.getName()).log(Level.SEVERE, null, ex);
+                }        
+                header = new ImageIcon(p2);
+                return archivos[i].getPath();
+            }
+        }
+        return "";
+    }
+    public Deposito(int noCajero, int causa) {
+        no_cajero = noCajero; // Asignamos el número de cajero
+        initComponents();  
+        this.causa = causa;
+        switch(causa){ // Pone la cuenta y demás en el textflied
+            case 1:
+                txtCuenta.setText("125987546325");
+                break;
+            case 2:
+                txtCuenta.setText("125988813582");
+                break;
+            case 3:
+                txtCuenta.setText("154654146325");
+                break;
+            case 4:
+                txtCuenta.setText("156479841354");
+                break;
+            case 5:
+                txtCuenta.setText("546574513225");
+                break;
+        }
+        txtCuenta.setEditable(false);
+        generarOperacion(); // Generamos el número de operación
         this.setExtendedState(MAXIMIZED_BOTH);
         this.getContentPane().setBackground(Color.WHITE);
     }
@@ -82,7 +139,11 @@ public class Deposito extends javax.swing.JFrame {
     private void initComponents() {
 
         Error = new javax.swing.JDialog();
+        messageError = new javax.swing.JLabel();
+        Confirmacion = new javax.swing.JDialog();
         message = new javax.swing.JLabel();
+        btnSi = new javax.swing.JButton();
+        btnNo = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -104,9 +165,9 @@ public class Deposito extends javax.swing.JFrame {
             }
         });
 
-        message.setFont(new java.awt.Font("Microsoft New Tai Lue", 0, 14)); // NOI18N
-        message.setForeground(new java.awt.Color(255, 0, 0));
-        message.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        messageError.setFont(new java.awt.Font("Microsoft New Tai Lue", 0, 14)); // NOI18N
+        messageError.setForeground(new java.awt.Color(255, 0, 0));
+        messageError.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout ErrorLayout = new javax.swing.GroupLayout(Error.getContentPane());
         Error.getContentPane().setLayout(ErrorLayout);
@@ -114,30 +175,89 @@ public class Deposito extends javax.swing.JFrame {
             ErrorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ErrorLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(message, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                .addComponent(messageError, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
                 .addContainerGap())
         );
         ErrorLayout.setVerticalGroup(
             ErrorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ErrorLayout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addComponent(message, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(messageError, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(29, Short.MAX_VALUE))
         );
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        Confirmacion.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        Confirmacion.setMinimumSize(new java.awt.Dimension(0, 150));
+        Confirmacion.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                ConfirmacionWindowClosing(evt);
+            }
+        });
+
+        message.setFont(new java.awt.Font("Microsoft New Tai Lue", 0, 14)); // NOI18N
+        message.setForeground(new java.awt.Color(255, 0, 0));
+        message.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        message.setText("¿Está seguro?");
+
+        btnSi.setText("SÍ");
+        btnSi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSiActionPerformed(evt);
+            }
+        });
+
+        btnNo.setText("NO");
+        btnNo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNoActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout ConfirmacionLayout = new javax.swing.GroupLayout(Confirmacion.getContentPane());
+        Confirmacion.getContentPane().setLayout(ConfirmacionLayout);
+        ConfirmacionLayout.setHorizontalGroup(
+            ConfirmacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ConfirmacionLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(message, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ConfirmacionLayout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addComponent(btnSi, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnNo, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37))
+        );
+        ConfirmacionLayout.setVerticalGroup(
+            ConfirmacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ConfirmacionLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(message, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(ConfirmacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnNo)
+                    .addComponent(btnSi))
+                .addContainerGap(31, Short.MAX_VALUE))
+        );
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Depósito");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
-        jLabel3.setText("encabezado");
+        jLabel3.setIcon(header);
 
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         jLabel1.setText("DEPÓSITO A CUENTA O TARJETA ");
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel2.setText("Ingrese el número de cuenta, clabe interbancaria, o No. de Cuenta:");
 
         txtCuenta.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        txtCuenta.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(190, 109, 246), 2, true));
+        txtCuenta.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 153, 204), 2, true));
 
         jLabel4.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel4.setText("*Comisión de 10.00 MXN en cualquier depósito de otro banco.  ");
@@ -145,7 +265,7 @@ public class Deposito extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel5.setText("Ingrese la cantidad a depósitar en MXN:");
 
-        txtCantidad.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(190, 109, 246), 2));
+        txtCantidad.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204), 2));
         txtCantidad.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#.00"))));
         txtCantidad.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
 
@@ -153,12 +273,12 @@ public class Deposito extends javax.swing.JFrame {
         jLabel6.setText("Motivo (32 carácteres máx.):");
 
         txtMotivo.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        txtMotivo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(190, 109, 246), 2));
+        txtMotivo.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 153, 204), 2, true));
 
         btnSig.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         btnSig.setText("SIGUIENTE");
-        btnSig.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(190, 109, 246), 1, true));
-        btnSig.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnSig.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 153, 204), 1, true));
+        btnSig.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSig.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSigActionPerformed(evt);
@@ -177,7 +297,7 @@ public class Deposito extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(396, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnSig, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSig, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtMotivo, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -191,10 +311,10 @@ public class Deposito extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(62, 62, 62)
                 .addComponent(jLabel1)
-                .addGap(42, 42, 42)
+                .addGap(48, 48, 48)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -208,9 +328,9 @@ public class Deposito extends javax.swing.JFrame {
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtMotivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(52, 52, 52)
-                .addComponent(btnSig, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 148, Short.MAX_VALUE))
+                .addGap(54, 54, 54)
+                .addComponent(btnSig, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 107, Short.MAX_VALUE))
         );
 
         pack();
@@ -269,19 +389,37 @@ public class Deposito extends javax.swing.JFrame {
             Error.setLocation(ancho/2 - 160, alto/2 - 45);
         }
         else{
-            DepCon depc = new DepCon(this, numero, dato_cantidad, no_operacion, dato_motivo, no_cajero);
+            DepCon depc = new DepCon(this, numero, dato_cantidad, no_operacion, dato_motivo, no_cajero, causa);
             depc.setVisible(true);
             this.setVisible(false);
-            this.dispose();
+            this.dispose();            
             
         }
       
     }//GEN-LAST:event_btnSigActionPerformed
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        Cajero cj = new Cajero();
+        cj.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_formWindowClosing
+
     private void ErrorWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_ErrorWindowClosing
         Error.setVisible(false);
-        Error.dispose();
     }//GEN-LAST:event_ErrorWindowClosing
+
+    private void btnSiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiActionPerformed
+
+    }//GEN-LAST:event_btnSiActionPerformed
+
+    private void btnNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNoActionPerformed
+
+    }//GEN-LAST:event_btnNoActionPerformed
+
+    private void ConfirmacionWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_ConfirmacionWindowClosing
+
+    }//GEN-LAST:event_ConfirmacionWindowClosing
 
     /**
      * @param args the command line arguments
@@ -319,7 +457,10 @@ public class Deposito extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JDialog Confirmacion;
     private javax.swing.JDialog Error;
+    private javax.swing.JButton btnNo;
+    private javax.swing.JButton btnSi;
     private javax.swing.JButton btnSig;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -328,6 +469,7 @@ public class Deposito extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel message;
+    private javax.swing.JLabel messageError;
     private javax.swing.JFormattedTextField txtCantidad;
     private javax.swing.JTextField txtCuenta;
     private javax.swing.JTextField txtMotivo;

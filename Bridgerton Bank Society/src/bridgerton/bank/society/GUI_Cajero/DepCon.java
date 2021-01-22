@@ -2,8 +2,16 @@
 package bridgerton.bank.society.GUI_Cajero;
 
 import bridgerton.bank.society.BridgertonBankSociety;
+import static bridgerton.bank.society.BridgertonBankSociety.diccionario_errores;
 import java.awt.Color;
 import static java.awt.Frame.MAXIMIZED_BOTH;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 
 public class DepCon extends javax.swing.JFrame {
     // herramientas para hacer el depósito
@@ -14,17 +22,33 @@ public class DepCon extends javax.swing.JFrame {
     private static String motivo;
     private static String titular;
     private static Deposito depo = null;
-            
     
-    public DepCon(Deposito depto, String numero, float dato_cantidad, int no_operacion, String dato_motivo, int no_cajero) {
+    private static ImageIcon header = null;
+    // Variables de ayuda para la posición de las ventanas
+    private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
+    private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
+    
+    static{diccionario_errores.add(""); // 0
+        diccionario_errores.add("Clave de seguridad incorrecta"); // 1
+        diccionario_errores.add("CVV incorrecto"); // 2
+        diccionario_errores.add("Saldo insuficiente"); // 3
+        diccionario_errores.add("Crédito agotado");// 4
+        diccionario_errores.add("Longitud de la cuenta incorrecta"); // 5
+        diccionario_errores.add("Clave de seguridad incorrecta");// 6
+        diccionario_errores.add("Cuenta emisora no encontrada"); // 7
+        
+    }       
+    
+    public DepCon(Deposito depto, String numero, float dato_cantidad, int no_operacion, String dato_motivo, int no_cajero, int causa) {
         // Declaracion de los datos anteriores
+        toRelative("Header.jpg"); // lectura del header
         depo = depto;
         this.no_operacion = no_operacion;
         this.no_cajero = no_cajero;
         this.no_cuenta = numero;
         this.cantidad = dato_cantidad;
         this.motivo = dato_motivo;
-        titular = BridgertonBankSociety.buscadorNombres(numero, 0);
+        titular = BridgertonBankSociety.buscadorNombres(numero, causa);
         
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
@@ -38,12 +62,39 @@ public class DepCon extends javax.swing.JFrame {
         lblMonto.setText(""+cantidad);
         lblNoT.setText(""+no_operacion);
     }
-    
+     // Función correctora de location 1
+    private String toRelative(String name){
+        URI p1 = null; // Variable de apoyo
+        String directory =".\\src\\Files"; 
+        File file = new File(directory);
+        File[] archivos = file.listFiles();
+        
+        for(int i = 0; i<archivos.length; i++){
+            if(archivos[i].getName().equals(name)){
+                p1 = archivos[i].toURI(); // Cambia a URI primero
+                URL p2 = null;
+                
+                try {
+                    p2 = p1.toURL(); // Después cambia a URL
+                } catch (MalformedURLException ex) {
+                    Logger.getLogger(Cajero.class.getName()).log(Level.SEVERE, null, ex);
+                }        
+                header = new ImageIcon(p2);
+                return archivos[i].getPath();
+            }
+        }
+        return "";
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Confirmacion = new javax.swing.JDialog();
+        message = new javax.swing.JLabel();
+        btnSi = new javax.swing.JButton();
+        Error = new javax.swing.JDialog();
+        messageE = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -58,16 +109,91 @@ public class DepCon extends javax.swing.JFrame {
         lblNoT = new javax.swing.JLabel();
         btnConfi = new javax.swing.JButton();
 
+        Confirmacion.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        Confirmacion.setMinimumSize(new java.awt.Dimension(0, 150));
+        Confirmacion.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                ConfirmacionWindowClosing(evt);
+            }
+        });
+
+        message.setFont(new java.awt.Font("Microsoft New Tai Lue", 0, 14)); // NOI18N
+        message.setForeground(new java.awt.Color(51, 51, 255));
+        message.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        message.setText("!Operación exitosa!");
+
+        btnSi.setText("OK");
+        btnSi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSiActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout ConfirmacionLayout = new javax.swing.GroupLayout(Confirmacion.getContentPane());
+        Confirmacion.getContentPane().setLayout(ConfirmacionLayout);
+        ConfirmacionLayout.setHorizontalGroup(
+            ConfirmacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ConfirmacionLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(message, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(ConfirmacionLayout.createSequentialGroup()
+                .addGap(102, 102, 102)
+                .addComponent(btnSi, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        ConfirmacionLayout.setVerticalGroup(
+            ConfirmacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ConfirmacionLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(message, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnSi)
+                .addContainerGap(31, Short.MAX_VALUE))
+        );
+
+        Error.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        Error.setAlwaysOnTop(true);
+        Error.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        Error.setResizable(false);
+        Error.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                ErrorWindowClosing(evt);
+            }
+        });
+
+        messageE.setFont(new java.awt.Font("Microsoft New Tai Lue", 0, 14)); // NOI18N
+        messageE.setForeground(new java.awt.Color(255, 0, 0));
+        messageE.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        javax.swing.GroupLayout ErrorLayout = new javax.swing.GroupLayout(Error.getContentPane());
+        Error.getContentPane().setLayout(ErrorLayout);
+        ErrorLayout.setHorizontalGroup(
+            ErrorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ErrorLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(messageE, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        ErrorLayout.setVerticalGroup(
+            ErrorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ErrorLayout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(messageE, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(29, Short.MAX_VALUE))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("Depósito");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
         });
 
-        jLabel3.setText("encabezado");
+        jLabel3.setIcon(header);
 
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 20)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
         jLabel1.setText("RESUMEN: DEPÓSITO A CUENTA O TARJETA ");
 
         jLabel2.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
@@ -102,8 +228,8 @@ public class DepCon extends javax.swing.JFrame {
 
         btnConfi.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         btnConfi.setText("CONFIRMAR");
-        btnConfi.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(190, 109, 246), 1, true));
-        btnConfi.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnConfi.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 153, 204), 2, true));
+        btnConfi.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnConfi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConfiActionPerformed(evt);
@@ -114,7 +240,7 @@ public class DepCon extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 1366, Short.MAX_VALUE)
+            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 1400, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
@@ -136,16 +262,16 @@ public class DepCon extends javax.swing.JFrame {
                 .addGap(425, 425, 425))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnConfi, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(382, 382, 382))
+                .addComponent(btnConfi, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(411, 411, 411))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(55, 55, 55)
                 .addComponent(jLabel1)
-                .addGap(50, 50, 50)
+                .addGap(55, 55, 55)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblNo)
@@ -165,9 +291,9 @@ public class DepCon extends javax.swing.JFrame {
                 .addComponent(jLabel13)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblNoT)
-                .addGap(18, 18, 18)
-                .addComponent(btnConfi, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(169, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnConfi, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(135, Short.MAX_VALUE))
         );
 
         pack();
@@ -175,7 +301,19 @@ public class DepCon extends javax.swing.JFrame {
 
     private void btnConfiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfiActionPerformed
         /* sokets por defatul pero probamos funcionalidades */
-        BridgertonBankSociety.hacerDeposito(no_cuenta, cantidad, no_operacion, motivo, no_cajero);
+        int result = BridgertonBankSociety.hacerDeposito(no_cuenta, cantidad, no_operacion, motivo, no_cajero);        
+            if(result >= 0){
+                Confirmacion.setAlwaysOnTop(true);
+                Confirmacion.setVisible(true);
+                Confirmacion.setSize(310, 90);
+                Confirmacion.setLocation(ancho/2 - 160, alto/2 - 45);
+            }
+            else{
+                messageE.setText(""+diccionario_errores.get(Math.abs(result)));
+                Error.setVisible(true);
+                Error.setSize(310, 90);
+                Error.setLocation(ancho/2 - 160, alto/2 - 45);
+            }
     }//GEN-LAST:event_btnConfiActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -183,6 +321,31 @@ public class DepCon extends javax.swing.JFrame {
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_formWindowClosing
+
+    private void btnSiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiActionPerformed
+        // Si se confirma, entonces se cerrará todo
+        Cajero cj = new Cajero();
+        cj.setVisible(true);
+        Confirmacion.setVisible(false);
+        Confirmacion.dispose();
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_btnSiActionPerformed
+
+    private void ConfirmacionWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_ConfirmacionWindowClosing
+        // Si se confirma, entonces se cerrará todo
+        Cajero cj = new Cajero();
+        cj.setVisible(true);
+        Confirmacion.setVisible(false);
+        Confirmacion.dispose();
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_ConfirmacionWindowClosing
+
+    private void ErrorWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_ErrorWindowClosing
+        Error.setVisible(false);
+        Error.dispose();        
+    }//GEN-LAST:event_ErrorWindowClosing
 
     /**
      * @param args the command line arguments
@@ -214,13 +377,16 @@ public class DepCon extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new DepCon(new Deposito(10), "100000000000", 10, 10, "porque sí", 15).setVisible(true);
+                new DepCon(new Deposito(10), "100000000000", 10, 10, "porque sí", 15, 0).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JDialog Confirmacion;
+    private javax.swing.JDialog Error;
     private javax.swing.JButton btnConfi;
+    private javax.swing.JButton btnSi;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel13;
@@ -233,5 +399,7 @@ public class DepCon extends javax.swing.JFrame {
     private javax.swing.JLabel lblNo;
     private javax.swing.JLabel lblNoT;
     private javax.swing.JLabel lblTitular;
+    private javax.swing.JLabel message;
+    private javax.swing.JLabel messageE;
     // End of variables declaration//GEN-END:variables
 }
