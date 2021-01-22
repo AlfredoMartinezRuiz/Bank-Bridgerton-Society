@@ -7,6 +7,7 @@ package bridgerton.bank.society.GUI;
 
 import bridgerton.bank.society.BridgertonBankSociety;
 import bridgerton.bank.society.Cliente;
+import bridgerton.bank.society.Cliente.Cuenta;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -33,7 +34,7 @@ public class AgregarCliente extends javax.swing.JFrame {
     private static ArrayList<Cliente> clientes = new ArrayList<Cliente>(); // Lista de clientes para verificar que no haya curp
     // o idc repetidos
     
-    private static ArrayList<Cliente.Cuenta> cuentas = new ArrayList<Cliente.Cuenta>(); // Lista de cuentas para agregar al cliente
+    private static ArrayList<Cuenta> cuentas = new ArrayList<Cuenta>(); // Lista de cuentas para agregar al cliente
     private static File imagen = null;  // Imagen e idc para usarlos más fácilmente con el usuario 
     private static int dato_idc = 0; // idc creado aleatoriamente sin repetir
     
@@ -43,9 +44,10 @@ public class AgregarCliente extends javax.swing.JFrame {
     
     
     public AgregarCliente() {
+        cuentas.removeAll(cuentas);
+        System.out.println(cuentas.size());
         setLocation(ancho/2-375, 10);
         initComponents();
-        
         generarIDC();// Generamos el IDC primero para poder mostrarlo en el formulario como dato no editable   
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // formateamos la fecha para que se ingrese en número
         Date fecha = new Date();
@@ -147,6 +149,7 @@ public class AgregarCliente extends javax.swing.JFrame {
     }
     
     public void agregarCuenta(Cliente.Cuenta cta) { // Para agregar a la lista las cuentas creadas 
+        
         cuentas.add(cta);
         tabla_cuentas(cta);
     }

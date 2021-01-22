@@ -31,6 +31,7 @@ public class TransCon extends javax.swing.JFrame {
     private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
     
     TransCon(Transferencia trans, String num_emisor, int dato_clave, float dato_cantidad, String num_destino, String dato_motivo, int no_operacion,int no_cajero) {
+        this.tr = trans;
         toRelative("Header.jpg"); // lectura del headertr = trans;
         this.no_operacion = no_operacion;
         this.no_cajero = no_cajero;
@@ -330,7 +331,7 @@ public class TransCon extends javax.swing.JFrame {
     private void btnConfiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfiActionPerformed
         //realizarTrans(String numero, String emisor, float cantidad, int numerotransferencia, String motivo, int noCajero, int clave)
          
-        int result = BridgertonBankSociety.realizarTrans(no_cuenta1,no_cuenta2, cantidad, no_operacion, motivo, no_cajero, clave);        
+        int result = BridgertonBankSociety.realizarTrans(no_cuenta2,no_cuenta1, cantidad, no_operacion, motivo, no_cajero, clave);        
             if(result >= 0){
                 Confirmacion.setAlwaysOnTop(true);
                 Confirmacion.setVisible(true);

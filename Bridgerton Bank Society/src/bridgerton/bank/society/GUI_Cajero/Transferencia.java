@@ -340,7 +340,7 @@ public class Transferencia extends javax.swing.JFrame {
         // Para el no de cuenta receptora
         if(txtCuenta2.getText().isBlank() == false){
             try{
-                num_destino =Long.toString(Long.valueOf(txtCuenta.getText()));
+                num_destino =Long.toString(Long.valueOf(txtCuenta2.getText()));
             }catch(Exception e){
                 message.setText("Falta no. cuenta destino o está mal");
                 errors = true;

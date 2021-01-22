@@ -59,7 +59,6 @@ public class ChecarSaldo extends javax.swing.JFrame {
 
         frmSaldo = new javax.swing.JFrame();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         btnMenu = new javax.swing.JButton();
         lblSaldo = new javax.swing.JLabel();
@@ -83,8 +82,6 @@ public class ChecarSaldo extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Arial", 0, 20)); // NOI18N
         jLabel4.setText("CHECAR SALDO DE CUENTA.");
 
-        jLabel5.setText("encabezado");
-
         jLabel7.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         jLabel7.setText("Saldo en MXN:");
 
@@ -105,7 +102,6 @@ public class ChecarSaldo extends javax.swing.JFrame {
         frmSaldo.getContentPane().setLayout(frmSaldoLayout);
         frmSaldoLayout.setHorizontalGroup(
             frmSaldoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 790, Short.MAX_VALUE)
             .addGroup(frmSaldoLayout.createSequentialGroup()
                 .addGroup(frmSaldoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(frmSaldoLayout.createSequentialGroup()
@@ -120,13 +116,12 @@ public class ChecarSaldo extends javax.swing.JFrame {
                     .addGroup(frmSaldoLayout.createSequentialGroup()
                         .addGap(344, 344, 344)
                         .addComponent(lblSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(231, Short.MAX_VALUE))
         );
         frmSaldoLayout.setVerticalGroup(
             frmSaldoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(frmSaldoLayout.createSequentialGroup()
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
+                .addGap(152, 152, 152)
                 .addComponent(jLabel4)
                 .addGap(63, 63, 63)
                 .addComponent(jLabel7)
@@ -378,7 +373,6 @@ public class ChecarSaldo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel lblSaldo;

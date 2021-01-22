@@ -71,8 +71,11 @@ public class Cliente implements Serializable{
     }
     
     public boolean agregarCuenta(Cuenta cta){
-        cta.setIdc(this.idc);
-        return cuentaWriter(cta);
+        if(cta != null){
+            cta.setIdc(this.idc);
+            return cuentaWriter(cta);
+        }
+        return false;        
     }
     
     public void asignarCuentas(ArrayList<Cuenta> n_cuentas){

@@ -101,8 +101,13 @@ public class CambiarClave extends javax.swing.JFrame {
                 .addContainerGap(29, Short.MAX_VALUE))
         );
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("CambiarClave");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jLabel3.setIcon(header);
 
@@ -242,12 +247,18 @@ public class CambiarClave extends javax.swing.JFrame {
             Error.setLocation(ancho/2 - 160, alto/2 - 45);
         }
         else{
-            ClaveCon cc = new ClaveCon(no_cuenta, cvv, clave);
+            ClaveCon cc = new ClaveCon(no_cuenta, cvv, clave, this);
             cc.setVisible(true);
             this.setVisible(false);
-            this.dispose();
         }
     }//GEN-LAST:event_btnConfiActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        Cajero cj = new Cajero();
+        cj.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments

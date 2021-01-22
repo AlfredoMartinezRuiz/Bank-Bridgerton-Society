@@ -22,11 +22,17 @@ public class ClaveCon extends javax.swing.JFrame {
     private static int cvv;
     private static ImageIcon header = null;
     
+    private static CambiarClave cb = null;
+    
     private static int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
     private static int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
 
-    ClaveCon(String no_cuenta, int cvv, int clave) {
+    ClaveCon(String no_cuenta, int cvv, int clave, CambiarClave cb) {
+        this.cb = cb;
          toRelative("Header.jpg"); // lectura del header
+        this.no_cuenta = no_cuenta;
+        this.clave = clave;
+        this.cvv = cvv;
         
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
@@ -148,8 +154,13 @@ public class ClaveCon extends javax.swing.JFrame {
                 .addContainerGap(31, Short.MAX_VALUE))
         );
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("CambiarClave");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jLabel3.setIcon(header);
 
@@ -182,9 +193,9 @@ public class ClaveCon extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 1366, Short.MAX_VALUE)
+            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(438, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -226,7 +237,7 @@ public class ClaveCon extends javax.swing.JFrame {
         boolean errors = false; // Variable para identificar los errores del algun dato
         float saldo=0;
 
-
+        
         // Para la clave de seguridad
         if(txtClaveN.getText().isBlank() == false){
             try{
@@ -263,7 +274,7 @@ public class ClaveCon extends javax.swing.JFrame {
         else{
             //cambiarClave(String nocuenta, int cvv_atm, int clave_atm, int nclave)
             int result = BridgertonBankSociety.cambiarClave(no_cuenta, cvv, clave, claveN);
-            
+            System.out.println(result);
             if(result >= 0){
                 Confirmacion.setAlwaysOnTop(true);
                 Confirmacion.setVisible(true);
@@ -303,6 +314,12 @@ public class ClaveCon extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_ConfirmacionWindowClosing
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        this.setVisible(false);
+        this.dispose();
+        cb.setVisible(true);
+    }//GEN-LAST:event_formWindowClosing
+
     /**
      * @param args the command line arguments
      */
@@ -333,7 +350,7 @@ public class ClaveCon extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ClaveCon("100000",10,101).setVisible(true);
+                new ClaveCon("100000",10,101, new CambiarClave()).setVisible(true);
             }
         });
     }

@@ -48,7 +48,7 @@ public class BridgertonBankSociety {
         diccionario_errores.add("Crédito agotado");// 4
         diccionario_errores.add("Longitud de la cuenta incorrecta"); // 5
         diccionario_errores.add("Clave de seguridad incorrecta");// 6
-        diccionario_errores.add("Cuenta emisora no encontrada"); // 7
+        diccionario_errores.add("Cuenta no es posible manejarla"); // 7
         
     }
     
@@ -57,39 +57,49 @@ public class BridgertonBankSociety {
     
     public static Cliente crearCliente(int idc, String nombre, String curp, Date fecha_nac, String direc, long telefono, long celular, File foto_cliente, ArrayList<Cuenta> cuentas){
         Cliente nuevo = new Cliente(idc, nombre, curp, fecha_nac, direc, telefono, celular, foto_cliente);
-        nuevo.asignarCuentas(cuentas); // Mandamos a asignarle sus cuentas
+        if(cuentas != null){
+            nuevo.asignarCuentas(cuentas); // Mandamos a asignarle sus cuentas
+        }        
         clienteWriter(nuevo);
         return nuevo; // Mandamos a escribir el cliente y regresamos el resultado
     }
     
     public static int hacerDeposito(String nocuenta, float cantidad, int numerodeposito, String motivo, int noCajero){
         // Buscando cuenta 
-        if(nocuenta.length() == 16){ // Si es no. de tarjeta bancaria
-            for(Cliente c: clientes){
-                if(c.buscadorTarjeta(nocuenta) != null){
-                    return c.recibirDeposito(nocuenta, cantidad, numerodeposito, motivo, noCajero);
+        System.out.println(nocuenta.length());
+        switch (nocuenta.length()) {
+            case 16:
+                {
+                    // Si es no. de tarjeta bancaria
+                    for(Cliente c: clientes){
+                        if(c.buscadorTarjeta(nocuenta) != null){
+                            return c.recibirDeposito(nocuenta, cantidad, numerodeposito, motivo, noCajero);
+                        }
+                    }       Deposito depo = new Deposito(nocuenta, noCajero, cantidad, motivo, numerodeposito);
+                    break;
                 }
-            }
-            Deposito depo = new Deposito(nocuenta, noCajero, cantidad, motivo, numerodeposito);
-        }        
-        else if(nocuenta.length() == 18){ // Si es clabe interbancaria
-            for(Cliente c: clientes){
-                if(c.buscadorClabe(nocuenta) != null){
-                    return c.recibirDeposito(nocuenta, cantidad, numerodeposito, motivo, noCajero);
+            case 18:
+                {
+                    // Si es clabe interbancaria
+                    for(Cliente c: clientes){
+                        if(c.buscadorClabe(nocuenta) != null){
+                            return c.recibirDeposito(nocuenta, cantidad, numerodeposito, motivo, noCajero);
+                        }
+                    }       Deposito depo = new Deposito(nocuenta, noCajero, cantidad, motivo, numerodeposito);
+                    break;
                 }
-            }
-            Deposito depo = new Deposito(nocuenta, noCajero, cantidad, motivo, numerodeposito);
-        }        
-        else if(nocuenta.length() == 12){ // Si es no. de cuenta bancaria
-            for(Cliente c: clientes){
-                if(c.buscadorCuenta(nocuenta) != null){
-                    return c.recibirDeposito(nocuenta, cantidad, numerodeposito, motivo, noCajero);
+            case 12:
+                {
+                    // Si es no. de cuenta bancaria
+                    for(Cliente c: clientes){
+                        if(c.buscadorCuenta(nocuenta) != null){
+                            return c.recibirDeposito(nocuenta, cantidad, numerodeposito, motivo, noCajero);
+                        }
+                    }       Deposito depo = new Deposito(nocuenta, noCajero, cantidad, motivo, numerodeposito);
+                    break;
                 }
-            }
-            Deposito depo = new Deposito(nocuenta, noCajero, cantidad, motivo, numerodeposito);
-        }
-        else{
-            return -5;
+            default:
+                return -5;
         }
         
         return 0;       
@@ -101,34 +111,33 @@ public class BridgertonBankSociety {
         String nombre = "";
         int aux_error = 0;
         
-        if(emisor.length() == 16){ // Si es no. de tarjeta bancaria
-            for(Cliente c: clientes){
-                if(c.buscadorTarjeta(emisor) != null){
-                    aux_error = c.realizarTransferencia(numero, emisor, cantidad, numerotransferencia, motivo, noCajero, clave);
-                    cliente_nuestro = true;                    
-                }
-            }
-        }
-        
-        else if(emisor.length() == 18){ // Si es clabe interbancaria
-            for(Cliente c: clientes){
-                if(c.buscadorClabe(emisor) != null){
-                    aux_error = c.realizarTransferencia(numero, emisor, cantidad, numerotransferencia, motivo, noCajero, clave);
-                    cliente_nuestro = true;
-                }
-            }
-        }
-        
-        else if(emisor.length() == 12){ // Si es no. de cuenta bancaria
-            for(Cliente c: clientes){
-                if(c.buscadorCuenta(emisor) != null){
-                    aux_error = c.realizarTransferencia(numero, emisor, cantidad, numerotransferencia, motivo, noCajero, clave);
-                    cliente_nuestro = true;
-                }
-            }
-        }
-        else{
-            return -5;
+        switch (emisor.length()) {
+            case 16:
+                // Si es no. de tarjeta bancaria
+                for(Cliente c: clientes){
+                    if(c.buscadorTarjeta(emisor) != null){
+                        aux_error = c.realizarTransferencia(numero, emisor, cantidad, numerotransferencia, motivo, noCajero, clave);
+                        cliente_nuestro = true;
+                    }
+                }   break;
+            case 18:
+                // Si es clabe interbancaria
+                for(Cliente c: clientes){
+                    if(c.buscadorClabe(emisor) != null){
+                        aux_error = c.realizarTransferencia(numero, emisor, cantidad, numerotransferencia, motivo, noCajero, clave);
+                        cliente_nuestro = true;
+                    }
+                }   break;
+            case 12:
+                // Si es no. de cuenta bancaria
+                for(Cliente c: clientes){
+                    if(c.buscadorCuenta(emisor) != null){
+                        aux_error = c.realizarTransferencia(numero, emisor, cantidad, numerotransferencia, motivo, noCajero, clave);
+                        cliente_nuestro = true;
+                    }
+                }   break;
+            default:
+                return -5;
         }
         
         if(cliente_nuestro == false){
@@ -140,31 +149,30 @@ public class BridgertonBankSociety {
         }
         
         // Buscando cuenta destino
-        if(numero.length() == 16){ // Si es no. de tarjeta bancaria
-            for(Cliente c: clientes){
-                if(c.buscadorTarjeta(numero) != null){
-                    c.recibirTransferencia(numero, emisor, cantidad, numerotransferencia, motivo, noCajero);   
-                }
-            }
-        }
-        
-        else if(numero.length() == 18){ // Si es clabe interbancaria
-            for(Cliente c: clientes){
-                if(c.buscadorClabe(numero) != null){
-                    c.recibirTransferencia(numero, emisor, cantidad, numerotransferencia, motivo, noCajero);
-                }
-            }
-        }
-        
-        else if(numero.length() == 12){ // Si es no. de cuenta bancaria
-            for(Cliente c: clientes){
-                if(c.buscadorCuenta(numero) != null){
-                    c.recibirTransferencia(numero, emisor, cantidad, numerotransferencia, motivo, noCajero);
-                }
-            }
-        }
-        else{
-            return -5;
+        switch (numero.length()) {
+            case 16:
+                // Si es no. de tarjeta bancaria
+                for(Cliente c: clientes){
+                    if(c.buscadorTarjeta(numero) != null){
+                        return c.recibirTransferencia(numero, emisor, cantidad, numerotransferencia, motivo, noCajero);
+                    }
+                }   break;
+            case 18:
+                // Si es clabe interbancaria
+                for(Cliente c: clientes){
+                    if(c.buscadorClabe(numero) != null){
+                        return c.recibirTransferencia(numero, emisor, cantidad, numerotransferencia, motivo, noCajero);
+                    }
+                }   break;
+            case 12:
+                // Si es no. de cuenta bancaria
+                for(Cliente c: clientes){
+                    if(c.buscadorCuenta(numero) != null){
+                       return c.recibirTransferencia(numero, emisor, cantidad, numerotransferencia, motivo, noCajero);
+                    }
+                }   break;
+            default:
+                return -5;
         }
         return 0;          
     }
@@ -190,34 +198,33 @@ public class BridgertonBankSociety {
         boolean cliente_nuestro = false;
         int aux_error = 0;
         
-        if(emisor.length() == 16){ // Si es no. de tarjeta bancaria
-            for(Cliente c: clientes){
-                if(c.buscadorTarjeta(emisor) != null){
-                    aux_error = c.realizarTransferencia(numero, emisor, cantidad, numerotransferencia, motivo, noCajero, clave);
-                    cliente_nuestro = true;                    
-                }
-            }
-        }
-        
-        else if(emisor.length() == 18){ // Si es clabe interbancaria
-            for(Cliente c: clientes){
-                if(c.buscadorClabe(emisor) != null){
-                    aux_error = c.realizarTransferencia(numero, emisor, cantidad, numerotransferencia, motivo, noCajero, clave);
-                    cliente_nuestro = true;
-                }
-            }
-        }
-        
-        else if(emisor.length() == 12){ // Si es no. de cuenta bancaria
-            for(Cliente c: clientes){
-                if(c.buscadorCuenta(emisor) != null){
-                    aux_error = c.realizarTransferencia(numero, emisor, cantidad, numerotransferencia, motivo, noCajero, clave);
-                    cliente_nuestro = true;
-                }
-            }
-        }
-        else{
-            return -5;
+        switch (emisor.length()) {
+            case 16:
+                // Si es no. de tarjeta bancaria
+                for(Cliente c: clientes){
+                    if(c.buscadorTarjeta(emisor) != null){
+                        aux_error = c.realizarTransferencia(numero, emisor, cantidad, numerotransferencia, motivo, noCajero, clave);
+                        cliente_nuestro = true;
+                    }
+                }   break;
+            case 18:
+                // Si es clabe interbancaria
+                for(Cliente c: clientes){
+                    if(c.buscadorClabe(emisor) != null){
+                        aux_error = c.realizarTransferencia(numero, emisor, cantidad, numerotransferencia, motivo, noCajero, clave);
+                        cliente_nuestro = true;
+                    }
+                }   break;
+            case 12:
+                // Si es no. de cuenta bancaria
+                for(Cliente c: clientes){
+                    if(c.buscadorCuenta(emisor) != null){
+                        aux_error = c.realizarTransferencia(numero, emisor, cantidad, numerotransferencia, motivo, noCajero, clave);
+                        cliente_nuestro = true;
+                    }
+                }   break;
+            default:
+                return -5;
         }
         
         if(cliente_nuestro == false){
@@ -236,34 +243,33 @@ public class BridgertonBankSociety {
         boolean cliente_nuestro = false;
         int aux_error = 0;
         
-        if(nocuenta.length() == 16){ // Si es no. de tarjeta bancaria
-            for(Cliente c: clientes){
-                if(c.buscadorTarjeta(nocuenta) != null){
-                    aux_error = c.realizarRetiro(nocuenta, cantidad, numeroretiro, noCajero, clave);
-                    cliente_nuestro = true;                    
-                }
-            }
-        }
-        
-        else if(nocuenta.length() == 18){ // Si es clabe interbancaria
-            for(Cliente c: clientes){
-                if(c.buscadorClabe(nocuenta) != null){
-                    aux_error = c.realizarRetiro(nocuenta, cantidad, numeroretiro, noCajero, clave);
-                    cliente_nuestro = true;
-                }
-            }
-        }
-        
-        else if(nocuenta.length() == 12){ // Si es no. de cuenta bancaria
-            for(Cliente c: clientes){
-                if(c.buscadorCuenta(nocuenta) != null){
-                    aux_error = c.realizarRetiro(nocuenta, cantidad, numeroretiro, noCajero, clave);
-                    cliente_nuestro = true;
-                }
-            }
-        }
-        else{
-            return -5;
+        switch (nocuenta.length()) {
+            case 16:
+                // Si es no. de tarjeta bancaria
+                for(Cliente c: clientes){
+                    if(c.buscadorTarjeta(nocuenta) != null){
+                        aux_error = c.realizarRetiro(nocuenta, cantidad, numeroretiro, noCajero, clave);
+                        cliente_nuestro = true;
+                    }
+                }   break;
+            case 18:
+                // Si es clabe interbancaria
+                for(Cliente c: clientes){
+                    if(c.buscadorClabe(nocuenta) != null){
+                        aux_error = c.realizarRetiro(nocuenta, cantidad, numeroretiro, noCajero, clave);
+                        cliente_nuestro = true;
+                    }
+                }   break;
+            case 12:
+                // Si es no. de cuenta bancaria
+                for(Cliente c: clientes){
+                    if(c.buscadorCuenta(nocuenta) != null){
+                        aux_error = c.realizarRetiro(nocuenta, cantidad, numeroretiro, noCajero, clave);
+                        cliente_nuestro = true;
+                    }
+                }   break;
+            default:
+                return -5;
         }
         
         if(cliente_nuestro == false){
@@ -282,34 +288,33 @@ public class BridgertonBankSociety {
         boolean cliente_nuestro = false;
         float aux_error = 0;
         
-        if(nocuenta.length() == 16){ // Si es no. de tarjeta bancaria
-            for(Cliente c: clientes){
-                if(c.buscadorTarjeta(nocuenta) != null){
-                    aux_error = c.saldo(nocuenta, clave);
-                    cliente_nuestro = true;                    
-                }
-            }
-        }
-        
-        else if(nocuenta.length() == 18){ // Si es clabe interbancaria
-            for(Cliente c: clientes){
-                if(c.buscadorClabe(nocuenta) != null){
-                    aux_error = c.saldo(nocuenta, clave);
-                    cliente_nuestro = true;
-                }
-            }
-        }
-        
-        else if(nocuenta.length() == 12){ // Si es no. de cuenta bancaria
-            for(Cliente c: clientes){
-                if(c.buscadorCuenta(nocuenta) != null){
-                    aux_error = c.saldo(nocuenta, clave);
-                    cliente_nuestro = true;
-                }
-            }
-        }
-        else{
-            return -5;
+        switch (nocuenta.length()) {
+            case 16:
+                // Si es no. de tarjeta bancaria
+                for(Cliente c: clientes){
+                    if(c.buscadorTarjeta(nocuenta) != null){
+                        aux_error = c.saldo(nocuenta, clave);
+                        cliente_nuestro = true;
+                    }
+                }   break;
+            case 18:
+                // Si es clabe interbancaria
+                for(Cliente c: clientes){
+                    if(c.buscadorClabe(nocuenta) != null){
+                        aux_error = c.saldo(nocuenta, clave);
+                        cliente_nuestro = true;
+                    }
+                }   break;
+            case 12:
+                // Si es no. de cuenta bancaria
+                for(Cliente c: clientes){
+                    if(c.buscadorCuenta(nocuenta) != null){
+                        aux_error = c.saldo(nocuenta, clave);
+                        cliente_nuestro = true;
+                    }
+                }   break;
+            default:
+                return -5;
         }
         
         if(cliente_nuestro == false){
@@ -327,35 +332,33 @@ public class BridgertonBankSociety {
         clienteReader();
         boolean cliente_nuestro = false;
         int aux_error = 0;
-        
-        if(nocuenta.length() == 16){ // Si es no. de tarjeta bancaria
-            for(Cliente c: clientes){
-                if(c.buscadorTarjeta(nocuenta) != null){
-                    aux_error = c.cambiarClave(nocuenta, cvv_atm, clave_atm, nclave);
-                    cliente_nuestro = true;                    
-                }
-            }
-        }
-        
-        else if(nocuenta.length() == 18){ // Si es clabe interbancaria
-            for(Cliente c: clientes){
-                if(c.buscadorClabe(nocuenta) != null){
-                    aux_error = c.cambiarClave(nocuenta, cvv_atm, clave_atm, nclave);
-                    cliente_nuestro = true;
-                }
-            }
-        }
-        
-        else if(nocuenta.length() == 12){ // Si es no. de cuenta bancaria
-            for(Cliente c: clientes){
-                if(c.buscadorCuenta(nocuenta) != null){
-                    aux_error = c.cambiarClave(nocuenta, cvv_atm, clave_atm, nclave);
-                    cliente_nuestro = true;
-                }
-            }
-        }
-        else{
-            return -5;
+        switch (nocuenta.length()) {
+            case 16:
+                // Si es no. de tarjeta bancaria
+                for(Cliente c: clientes){
+                    if(c.buscadorTarjeta(nocuenta) != null){
+                        aux_error = c.cambiarClave(nocuenta, cvv_atm, clave_atm, nclave);
+                        cliente_nuestro = true;
+                    }
+                }   break;
+            case 18:
+                // Si es clabe interbancaria
+                for(Cliente c: clientes){
+                    if(c.buscadorClabe(nocuenta) != null){
+                        aux_error = c.cambiarClave(nocuenta, cvv_atm, clave_atm, nclave);
+                        cliente_nuestro = true;
+                    }
+                }   break;
+            case 12:
+                // Si es no. de cuenta bancaria
+                for(Cliente c: clientes){
+                    if(c.buscadorCuenta(nocuenta) != null){
+                        aux_error = c.cambiarClave(nocuenta, cvv_atm, clave_atm, nclave);
+                        cliente_nuestro = true;
+                    }
+                }   break;
+            default:
+                return -5;
         }
         
         if(cliente_nuestro == false){
@@ -364,7 +367,6 @@ public class BridgertonBankSociety {
         else if(aux_error < 0){
             return aux_error;
         }
-        
         return 0;        
     }
     
@@ -374,34 +376,33 @@ public class BridgertonBankSociety {
         boolean cliente_nuestro = false;
         int aux_error = 0;
         
-        if(nocuenta.length() == 16){ // Si es no. de tarjeta bancaria
-            for(Cliente c: clientes){
-                if(c.buscadorTarjeta(nocuenta) != null){
-                    aux_error = c.comprobarClave(nocuenta,clave_atm);
-                    cliente_nuestro = true;                    
-                }
-            }
-        }
-        
-        else if(nocuenta.length() == 18){ // Si es clabe interbancaria
-            for(Cliente c: clientes){
-                if(c.buscadorClabe(nocuenta) != null){
-                    aux_error = c.comprobarClave(nocuenta,clave_atm);
-                    cliente_nuestro = true;  
-                }
-            }
-        }
-        
-        else if(nocuenta.length() == 12){ // Si es no. de cuenta bancaria
-            for(Cliente c: clientes){
-                if(c.buscadorCuenta(nocuenta) != null){
-                    aux_error = c.comprobarClave(nocuenta,clave_atm);
-                    cliente_nuestro = true; 
-                }
-            }
-        }
-        else{
-            return -5;
+        switch (nocuenta.length()) {
+            case 16:
+                // Si es no. de tarjeta bancaria
+                for(Cliente c: clientes){
+                    if(c.buscadorTarjeta(nocuenta) != null){
+                        aux_error = c.comprobarClave(nocuenta,clave_atm);
+                        cliente_nuestro = true;
+                    }
+                }   break;
+            case 18:
+                // Si es clabe interbancaria
+                for(Cliente c: clientes){
+                    if(c.buscadorClabe(nocuenta) != null){
+                        aux_error = c.comprobarClave(nocuenta,clave_atm);
+                        cliente_nuestro = true;
+                    }
+                }   break;
+            case 12:
+                // Si es no. de cuenta bancaria
+                for(Cliente c: clientes){
+                    if(c.buscadorCuenta(nocuenta) != null){
+                        aux_error = c.comprobarClave(nocuenta,clave_atm);
+                        cliente_nuestro = true;
+                    }
+                }   break;
+            default:
+                return -5;
         }
         
         if(cliente_nuestro == false){
@@ -448,32 +449,31 @@ public class BridgertonBankSociety {
         if(causa == 0){
             BridgertonBankSociety.clienteReader();
             // Buscando cuenta destino
-            if(numero.length() == 16){ // Si es no. de tarjeta bancaria
-                for(Cliente c: clientes){
-                    if(c.buscadorTarjeta(numero) != null){
-                        return c.getNombre();                  
-                    }
-                }
-            }
-
-            if(numero.length() == 18){ // Si es clabe interbancaria
-                for(Cliente c: clientes){
-                    if(c.buscadorClabe(numero) != null){
-                        return c.getNombre();
-                    }
-                }
-            }
-
-            if(numero.length() == 12){ // Si es no. de cuenta bancaria
-                for(Cliente c: clientes){
-                    System.out.println("Hola");
-                    if(c.buscadorCuenta(numero) != null){
-                        return c.getNombre();
-                    }
-                }
-            }
-            else{
-                return "-5";
+            switch (numero.length()) {
+                case 16:
+                    // Si es no. de tarjeta bancaria
+                    for(Cliente c: clientes){
+                        if(c.buscadorTarjeta(numero) != null){
+                            return c.getNombre();
+                        }
+                    }   break;
+                case 18:
+                    // Si es clabe interbancaria
+                    for(Cliente c: clientes){
+                        if(c.buscadorClabe(numero) != null){
+                            return c.getNombre();
+                        }
+                    }   break;
+                case 12:
+                    // Si es no. de cuenta bancaria
+                    for(Cliente c: clientes){
+                        System.out.println("Hola");
+                        if(c.buscadorCuenta(numero) != null){
+                            return c.getNombre();
+                        }
+                    }   break;
+                default:
+                    return "-5";
             }
 
             Random rand = new Random();
