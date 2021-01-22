@@ -275,6 +275,7 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("BancoListaTransacciones");
         setBackground(new java.awt.Color(206, 147, 216));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
