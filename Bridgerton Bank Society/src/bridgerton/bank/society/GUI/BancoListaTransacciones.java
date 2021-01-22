@@ -381,7 +381,6 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tablaTransacciones.setColumnSelectionAllowed(false);
         jScrollPane1.setViewportView(tablaTransacciones);
 
         btn_elfilltro.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -443,8 +442,8 @@ public class BancoListaTransacciones extends javax.swing.JFrame {
                     .addComponent(btnBuscar)
                     .addComponent(btn_elfilltro, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(8, 8, 8)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 26, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 67, Short.MAX_VALUE))
         );
 
         pack();

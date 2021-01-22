@@ -44,3 +44,34 @@ Antonio Montoya Hernández
 5594682516
 SUR 69 A 404, BANJIDAL , IZTAPALAPA , DF
 MOHA011001HDFNRNE9
+
+
+Referencia a cada tema usado:
+- Clases:
+	En todo el proyecto se usó encapsulamiento.
+	Constructores en todas las ventanas y clases así como la sobrecarga de método
+	Usamos objetos para todas las ventanas y cliente, cuentas.
+- Agregación de clases:
+	Usamos agregación de clases en Banco - Cliente, ya que banco agrega a cliente.
+- Jerarquía de clases:
+	Se usó su con Transacción y todas sus clases hijas para administrar el tipo de cada una.
+	Se usó super en la declaración de cada clase hija de Transferencia.
+- Clase abstracta:
+	-
+- Interfaces:
+	- Uso de Comparable para la comparación de las fechas en el buscador de transacciones.
+	- Uso de Serializable para la escritura y lectura de archivos.
+	- Uso de Runnable para las ventanas.
+- Forzamiento: 
+	- Upcasting en el caso de todas las clases hijas tratarlas como la clase Transacción cuando las pasamos al ArrayList
+- Poliformismo:
+	-
+- Manejo de excepciones:
+	- En la mayoría de captura de datos, pero sobre todo en las que usan fecha y SimpleDateFormat.
+- Flujos de E/S:
+	- En toda la lectura y escritura, tanto de cliente, cuenta y transacción.
+- Hilos y Sockets:
+	- Uso de hilos en el manejo de las ventanas.
+	- Uso de hilos en el manejo de los eventos en tiempo real y la fecha con hora.
+- Uso de la interfaz gráfica:
+	- Todas las interfaces.
